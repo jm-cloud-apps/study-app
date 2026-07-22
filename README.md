@@ -106,5 +106,5 @@ This repo is designed to be extended by AI coding assistants. If you're an AI (o
 
 ## Tech
 
-**Frontend:** React 18 · Vite 5 · Tailwind CSS 3 · react-markdown + rehype-highlight · react-router.
+**Frontend:** React 18 · Vite 8 · Tailwind CSS 3 · react-markdown + rehype-highlight · react-router.
 **Backend:** a tiny Express + better-sqlite3 progress API (no cloud, no telemetry — the SQLite file stays on your machine and is gitignored).

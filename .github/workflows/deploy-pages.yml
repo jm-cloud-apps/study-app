@@ -27,7 +27,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Gate the deploy on the two checks this repo actually has: the dependency
+  # audit (SECURITY.md commits to keeping this clean) and the content contract
+  # (a malformed topic is silently dropped from the UI rather than erroring).
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Fail on high/critical advisories. Lows are reported but don't block a
+      # content push; review them via the job log.
+      - name: Dependency audit
+        run: |
+          npm audit || true
+          npm audit --audit-level=high
+
+      - name: Validate content contract
+        run: npm run validate:content
+
   build:
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

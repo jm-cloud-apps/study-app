@@ -78,7 +78,9 @@ Cross-link sibling topics where it helps learning (e.g. Nginx's HTTPS lesson ref
 
 ### Length & depth
 
-Aim for **~600–1,200 words per lesson** — substantial enough to teach a real concept, short enough to finish in one sitting. Split big subjects into multiple lessons rather than one giant page. A topic of **4–8 lessons** is a good target.
+Aim for **~600–1,300 words per lesson** — substantial enough to teach a real concept, short enough to finish in one sitting. Split big subjects into multiple lessons rather than one giant page.
+
+**Topic size follows the subject, not a quota.** Most topics settle at **6–8 lessons**, which is the right shape for a subject you want a working grasp of. A topic you're going deep on — studying for a role or an exam — legitimately grows past that: **OpenShift** is currently 24 lessons and 114 cards, organized as a fundamentals track, a networking track, and a Day-2 operations track. Don't trim a deep topic back toward the median; do keep each individual lesson to one concept.
 
 ---
 
@@ -110,7 +112,7 @@ An array of card objects:
 - **Test understanding, not trivia.** Prefer "why/how" and "what's the difference" over rote facts.
 - **Self-contained questions.** A card shown in isolation (cards are shuffled!) must make sense without its neighbors.
 - **Answers should stand on their own** — enough that a learner can self-grade honestly.
-- Aim for **~15–30 cards per topic**, covering each lesson's key takeaways.
+- Aim for **roughly 4–6 cards per lesson**, covering each lesson's key takeaways — so ~15–30 for a typical topic, and proportionally more for a deep one.
 
 ---
 
@@ -160,6 +162,13 @@ This is teaching material, so correctness is paramount:
 
 ## 7. Pre-publish checklist
 
+Start by running the validator — it mechanically checks the structural items below, so you only have to judge the ones about quality:
+
+```bash
+npm run validate:content
+```
+
+- [ ] `npm run validate:content` passes with no errors.
 - [ ] `topic.json` is valid JSON with `id` matching the folder name.
 - [ ] Lessons are named `NN-slug.md`, each with a single top `# H1`.
 - [ ] Each lesson has a hook, progressive content, **Check yourself**, and **Key takeaways**.
