@@ -1,0 +1,125 @@
+[
+  {
+    "category": "Introducing Yourself",
+    "q": "Introduce yourself out loud: your name, where you're from, and one thing about you.",
+    "a": "A natural version:\n\n> **Kumusta po! Ako si ___. Taga-___ ako. Nag-aaral akong mag-Tagalog.**\n>\n> *Hello! I'm ___. I'm from ___. I'm learning Tagalog.*\n\nBreaking it down:\n- **Ako si ___** — *si* because a name follows (lesson 2).\n- **Taga-___ ako** — *taga-* + place = 'from'.\n- **Nag-aaral akong mag-Tagalog** — *nag-aaral* is the progressive of *mag-aral*, and **ako + -ng** takes the linker before the second verb.\n\nAdd **po** if you're speaking to anyone older. And expect the reply *'Ang galing mo!'* ('You're so good at this!') even if you've said four words — Filipinos are generous with learners.",
+    "tags": [
+      "basics"
+    ]
+  },
+  {
+    "category": "Introducing Yourself",
+    "q": "Someone asks you **'Kumusta ka?'** — give two different natural replies, and then turn the question back.",
+    "a": "**Mabuti naman.** — 'I'm well.' The standard, slightly fuller answer.\n\n**Okay lang.** — 'I'm fine.' More casual, and honestly more common in everyday speech.\n\nTurning it back: **Ikaw?** or **Ikaw naman?** — 'And you?'\n\nNote **ikaw** rather than *ka*, because it comes first in the sentence (lesson 3). And **naman** here is doing its contrast job — 'and *you*?'\n\nPolite version to an elder: **Mabuti naman po. Kayo po?** — using plural **kayo** as a mark of respect.",
+    "tags": [
+      "basics",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You're at a sari-sari store and want to buy water. Ask for it, ask the price, and react to it being expensive.",
+    "a": "> **Pabili po ng tubig.** — 'I'd like to buy water.'\n> **Magkano po?** — 'How much?'\n> **Mahal naman!** — 'That's expensive!'\n\nThings worth noticing:\n- **Pabili po ng ___** is the standard opener at any small store. Its cousin **Pahingi po ng ___** is 'could I have some ___'.\n- **ng tubig** — the water isn't the spotlight of the sentence, so it takes **ng** (lesson 4).\n- **naman** in *Mahal naman!* softens the complaint into something closer to playful than rude.\n\nIf you're in a **palengke** you could follow with **Tawad naman po** ('a discount, please') — but not in a mall, where haggling isn't done.",
+    "tags": [
+      "shopping"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You're on a jeepney. Narrate what you say when you board, pay, and get off.",
+    "a": "**Boarding and paying:** you hand your fare forward — often through two or three strangers, who pass it along without being asked — and say:\n\n> **Bayad po.** — 'Here's my fare.'\n\nIf you need change: **Sukli po.**\n\n**Getting off**, called out loud so the driver hears:\n\n> **Para po!** — 'Stop, please!'\n\nOr more specifically: **Sa tabi lang po.** — 'Just at the side, please.'\n\n**Para** comes from Spanish *parar* (to stop) — one of hundreds of Spanish survivals in daily Tagalog. And **po** in all three: you're speaking to a stranger doing you a service, which is exactly when it belongs.",
+    "tags": [
+      "travel"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You arrive at a friend's house while the family is eating. What will they say, and how do you respond?",
+    "a": "They will say — always, whether or not there's enough food:\n\n> **Kain tayo!** or **Tara, kain!** — 'Let's eat!'\n\nTwo good replies:\n\n> **Sige, salamat po!** — accepting.\n> **Salamat po, busog pa ako.** — 'Thank you, I'm still full.' — declining warmly.\n\nThe important part: **answer it**. The offer is an invitation to be part of things rather than a literal question about hunger, and letting it pass unacknowledged is the only real misstep. Note also **tayo**, not *kami* — the inclusive 'we', which is the whole point of the invitation (lesson 3).",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Explain the difference between **Kumain ako ng mangga** and **Kinain ko ang mangga** as if teaching a friend.",
+    "a": "Same event — I ate a mango — filmed from two camera angles.\n\n**Kumain ako ng mangga** — 'I ate a mango.' The verb *kumain* carries **-um-**, which is **actor focus**, so the spotlight is on me. I'm **ako** (ANG set) and the mango is background, marked **ng**. The mango is unspecific — *a* mango.\n\n**Kinain ko ang mangga** — 'I ate the mango.' The verb *kinain* carries the object-focus affix, so the spotlight moves to the mango: **ang mangga**. I get demoted to background doer, so I become **ko** (NG set). The mango is now specific — *the* mango we both know about.\n\nThe key: **the verb's affix and the ang-marker always agree.** They're two halves of one signal. And English speakers under-use the second pattern badly, because English almost always keeps the doer as subject.",
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Your friend says **'Kakain na kami.'** Why might you feel slightly left out?",
+    "a": "Because **kami** is the *exclusive* 'we' — it means 'we, but not you'. They've just said 'We're going to eat' in a way that pointedly doesn't include you.\n\nThe inclusive form is **tayo**: **Kakain na tayo!** — 'Let's eat!' — which invites you along.\n\nThe **t-** forms all include the listener: *tayo, natin, atin*. The others (*kami, namin, amin*) exclude them.\n\nIn fairness, it's often not a slight — they may simply be reporting their plans. But it's the one grammar point in Tagalog with genuine emotional weight, and when in doubt with people you like, **tayo** is the kinder error.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Someone asks **'May kotse ka ba?'** and you don't have one. What do you answer, and what's the trap?",
+    "a": "**Wala.** — or more fully, **Wala akong kotse.**\n\nThe trap is answering **Hindi**, which is what English instinct suggests. Tagalog has three separate negatives with three separate jobs:\n\n| Negative | Negates |\n|---|---|\n| **hindi** | statements — *Hindi ako Filipino* |\n| **huwag** ('wag) | commands — *Huwag kang mag-alala* |\n| **wala** | having and existing — *Wala akong pera* |\n\nQuestions built on **may/mayroon** are about existence or possession, so they're answered with **meron** or **wala**. Using *hindi* here is one of the clearest learner tells there is.",
+    "tags": [
+      "negation"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "Take the sentence **Tulungan mo ako** and make it sound (a) friendly, (b) insistent, and (c) very polite.",
+    "a": "The words barely change — the particles do all the work.\n\n| Version | Feel |\n|---|---|\n| **Tulungan mo ako.** | flat, can sound curt |\n| **Tulungan mo naman ako.** | (a) friendly — *naman* softens |\n| **Tulungan mo nga ako.** | (b) insistent — *nga* presses |\n| **Pakitulong naman po.** | (c) very polite — *paki-* + *naman* + *po* |\n\nThis is most of what separates textbook Tagalog from natural Tagalog. **naman** is the highest-value particle to adopt first: Filipino interaction runs on gentleness, and *naman* supplies it instantly. **paki-** turns any verb into a polite request, and **po** adds respect for anyone older or serving you.",
+    "tags": [
+      "particles",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "Explain **nag-e-enjoy ako** to someone who thinks Taglish is just lazy English.",
+    "a": "It's the opposite of lazy — it's Tagalog grammar applied faithfully to an English root.\n\nBreak it apart:\n- **nag-** — the completed/progressive actor-focus prefix (lesson 7)\n- **e-** — reduplication of the root's first syllable, exactly the rule that turns *luto* into *nagluluto*\n- **enjoy** — the English root\n\nSo the speaker has taken an English word and conjugated it correctly in Tagalog, including a reduplication rule they've never been taught explicitly. The same machinery gives **i-check mo**, **na-late ako**, **in-approve na**, **pa-print**.\n\nAnd sociolinguistically, code-switching is a normal, prestigious Metro Manila register — used in offices and media. Deep unmixed Tagalog isn't 'better'; it's a different register, read as formal, provincial or literary depending on context.",
+    "tags": [
+      "taglish"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "You didn't catch what someone said. Ask them to repeat it, slow down, and explain a word — politely.",
+    "a": "> **Pasensya na po, hindi ko maintindihan.** — 'Sorry, I don't understand.'\n> **Pwede mo bang ulitin?** — 'Could you repeat that?'\n> **Pwede bang dahan-dahan po?** — 'Could you go slowly?'\n> **Ano'ng ibig sabihin ng ___?** — 'What does ___ mean?'\n\nThat last one is the single most valuable sentence a learner can carry. Memorize it as one unbroken chunk. Filipinos will explain happily — and usually throw in three more words you didn't ask for, which is exactly what you want.\n\nNote **Pwede ba akong / Pwede mo bang** — *puwede* takes the ANG set (*akong*), which is the small irregularity worth remembering (lesson 9).",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "You invite a Filipino colleague to something and they say **'Baka mamaya'** or **'Tingnan natin.'** Are you going?",
+    "a": "Probably not — and it's worth reading that correctly rather than waiting around.\n\nA direct **hindi** is rare, because refusing outright risks embarrassment on both sides. So refusals arrive softened:\n\n- **Baka mamaya** — 'maybe later'\n- **Tingnan natin** — 'let's see'\n- **Medyo mahirap** — 'it's a bit difficult'\n- **Sige, sige…** — with hesitation, often keeping the peace rather than agreeing\n\nThis connects to **hiya** — a sense of propriety and reluctance to impose or embarrass — and to **pakikisama**, keeping relations smooth. The practical skill is listening for hesitation rather than for the word *hindi*.\n\nThe right response is to make it easy: offer an out yourself, warmly. That's the same instinct running in the other direction.",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "You're buying mangoes from a woman about your mother's age. Do the whole interaction, and justify your word choices.",
+    "a": "> **Ate, magkano po ang mangga?** — 'Ma'am, how much are the mangoes?'\n> **Tatlo po, please.** — 'Three, please.'\n> **Salamat po!** — 'Thank you!'\n\nThe choices:\n- **Ate** rather than **Tita** or **Manang** — when ages are close, *Ate* is the safe, warm choice. Calling someone *Tita* or *Lola* who doesn't consider themselves that old lands the way an unwanted 'ma'am' does in English.\n- **po** in every sentence — she's older and serving you; this is exactly its territory.\n- **Tatlo** — the native number, because you're *counting things*. Prices would more likely come back in Spanish-derived numbers: *'Singkwenta lang.'*\n- Slipping in English *please* is completely natural Manila speech, not a failure.",
+    "tags": [
+      "culture",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "Someone in your Filipino family has gone quiet with you. What might be happening, and what's the wrong response?",
+    "a": "It may be **tampo** — withdrawing affection when hurt. It's softer and more relational than sulking: it isn't announced, and it isn't quite the silent treatment as punishment. It's a recognized emotional state that *expects* to be noticed.\n\nThe wrong response is confrontation — 'what's your problem, just say it.' That reads as escalation, and it misses the point.\n\nThe expected remedy is **lambing**: affectionate sweetness and gentle coaxing. Small warmth, food, a joke, sitting nearby. The gap closes without either party having to state the grievance directly.\n\nKnowing the word is genuinely half of navigating it — once you can name *tampo*, the behavior stops looking like unexplained coldness and starts looking like what it is.",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "Why do Filipinos ask your age, salary and marital status within minutes of meeting you?",
+    "a": "Because those questions are warmth rather than intrusion. Filipino small talk is direct in a way that surprises many visitors, and questions about age, family, weight and pay are read as interest in you as a person, not as prying.\n\nThe standard openers you'll meet:\n\n> **Kumain ka na?** — 'Have you eaten?' (the universal greeting — asking about food *is* asking how you are)\n> **Taga-saan ka?** — 'Where are you from?'\n> **May asawa ka na ba?** — 'Are you married?'\n> **Ilang taon ka na?** — 'How old are you?'\n\nYou're entirely allowed to deflect with humor — **'Sikreto!'** ('Secret!') — and no offense is taken. What would be odd is treating the question as rude.",
+    "tags": [
+      "culture"
+    ]
+  }
+]

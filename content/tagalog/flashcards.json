@@ -1,0 +1,796 @@
+[
+  {
+    "q": "What's the difference between 'Tagalog' and 'Filipino'?",
+    "a": "Tagalog is the language of Manila and nearby provinces — one of over a hundred Philippine languages. Filipino is the national language, based on Tagalog and officially open to vocabulary from other Philippine languages, English and Spanish. In daily life the names are used interchangeably.",
+    "hint": "One is a regional language, one is national.",
+    "tags": [
+      "foundations"
+    ]
+  },
+  {
+    "q": "What is the default word order of a Tagalog sentence?",
+    "a": "Predicate first, subject last — the opposite of English. **Masarap ang pagkain** is literally 'delicious the food' = 'The food is delicious.'",
+    "hint": "Tagalog leads with the news.",
+    "tags": [
+      "foundations",
+      "syntax"
+    ]
+  },
+  {
+    "q": "How do you say 'The food is delicious' in Tagalog, and what English word has no equivalent in it?",
+    "a": "**Masarap ang pagkain.** There is no verb 'to be' — Tagalog has no word for is/are/am. The two parts simply sit side by side.",
+    "hint": "Something English requires is entirely missing.",
+    "tags": [
+      "foundations"
+    ]
+  },
+  {
+    "q": "Why is Tagalog spelling easy for English speakers?",
+    "a": "It's essentially phonetic — five pure vowels, every letter pronounced, no silent letters. Once you know the letters you can pronounce any written word.",
+    "hint": "Compare through / though / tough.",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "What's unusual about the Tagalog letter **ng**, and how do you practise it?",
+    "a": "It's a single letter — the sound at the end of English 'sing' — and unlike English it can start a word (**ngayon**, **ngipin**). Practise by saying 'singing', stopping on the middle *ng*, holding it, then adding the rest.",
+    "hint": "English has the sound but never at the start.",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "What do **búkas** and **bukás** mean, and why is this a problem for readers?",
+    "a": "**búkas** (stress on the first syllable) = open; **bukás** (stress on the second) = tomorrow. Dictionaries mark the stress but ordinary writing — texts, signs, social media — does not, so you learn stress as part of the word.",
+    "hint": "Same spelling, different stress.",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "When do you use **si** versus **ang**?",
+    "a": "**si** goes before a person's name; **ang** goes before everything else, including place names. *Si Miguel*, but *ang Palawan*. Plurals: **sina** and **ang mga**.",
+    "hint": "One of them is only for people.",
+    "tags": [
+      "markers",
+      "basics"
+    ]
+  },
+  {
+    "q": "What does **siya** mean, and what does it tell you about Tagalog pronouns?",
+    "a": "It means both 'he' and 'she' — Tagalog pronouns don't mark gender at all. Context supplies it, and usually nobody needs it.",
+    "hint": "One word covers two English ones.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "How do you negate a basic sentence like **Filipino ako**?",
+    "a": "Put **hindi** in front: **Hindi ako Filipino.** In fast speech it shortens to **'di** — *Di ako sigurado* ('I'm not sure').",
+    "hint": "One word, in front.",
+    "tags": [
+      "basics",
+      "negation"
+    ]
+  },
+  {
+    "q": "How do you turn a statement into a yes/no question in Tagalog?",
+    "a": "Add **ba** after the first word or phrase — no word-order change. *Masarap ang pagkain* → **Masarap ba ang pagkain?** In casual speech people often drop **ba** and just use rising intonation.",
+    "hint": "One small particle.",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "What does **Taga-** mean when attached to a place?",
+    "a": "'From (that place).' **Taga-Canada ako** = 'I'm from Canada.' **Taga-saan ka?** = 'Where are you from?'",
+    "hint": "A prefix for origin.",
+    "tags": [
+      "basics",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "What are the three sets of Tagalog pronouns, and what does each do?",
+    "a": "**ANG set** (ako, ikaw/ka, siya, kami, tayo, kayo, sila) = the subject/spotlight. **NG set** (ko, mo, niya, namin, natin, ninyo, nila) = the doer or possessor. **SA set** (akin, iyo, kaniya, amin, atin, inyo, kanila) = direction, recipient, benefit.",
+    "hint": "Named after the three markers.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What's the difference between **tayo** and **kami**?",
+    "a": "**tayo** = 'we' *including* the person you're speaking to; **kami** = 'we' *excluding* them. *Kakain na tayo!* means 'Let's eat!'; *Kakain na kami* means 'We're going to eat' — and you're not invited.",
+    "hint": "English can't make this distinction.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Which Tagalog pronouns include the listener, and how can you spot them?",
+    "a": "The **t-** forms: **tayo, natin, atin**. Their **k-**/**a-** counterparts (**kami, namin, amin**) exclude the listener.",
+    "hint": "One letter gives it away.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "When do you use **ikaw** and when **ka**?",
+    "a": "**ikaw** when 'you' comes first in the sentence; **ka** everywhere else. *Ikaw ang guro* but *Guro ka*. It's purely about position — neither is more polite.",
+    "hint": "Position, not politeness.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Does Tagalog have a formal 'you' like Spanish *usted*?",
+    "a": "No. Politeness is carried by the particle **po** instead. With elders, many families also use the plural **kayo** as a respectful singular, similar to French *vous*.",
+    "hint": "Politeness lives in a different word.",
+    "tags": [
+      "pronouns",
+      "politeness"
+    ]
+  },
+  {
+    "q": "How do you say 'my house' and 'your name' in Tagalog?",
+    "a": "Put the NG-set pronoun *after* the noun: **bahay ko** (my house), **pangalan mo** (your name). So *Ano'ng pangalan mo?* is literally 'What the name your?'",
+    "hint": "The pronoun follows the noun.",
+    "tags": [
+      "pronouns",
+      "possession"
+    ]
+  },
+  {
+    "q": "What is **kita**, and what famous sentence uses it?",
+    "a": "A special single pronoun meaning 'I → you', replacing an awkward *ko + ikaw*. **Mahal kita** = 'I love you' (literally 'beloved I-you').",
+    "hint": "One word doing two pronouns' work.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What job does each of **ang**, **ng** and **sa** do?",
+    "a": "**ang** marks the spotlight — the thing the sentence is about (and usually definite). **ng** marks a possessor, or a doer/thing-acted-on that isn't the spotlight. **sa** marks a location, direction or recipient.",
+    "hint": "Spotlight / of-by-some / to-at-in.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "What are the name-versions of **ang**, **ng** and **sa**?",
+    "a": "**si**, **ni**, and **kay** before a person's name — plural **sina**, **nina**, **kina**. *ang bahay ni Miguel* = 'Miguel's house'.",
+    "hint": "Three markers, two forms each.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "How is the marker **ng** pronounced?",
+    "a": "Like **'nang'** — not like the *ng* consonant in *ngayon*. The same two letters spell two different things, which trips up readers far more than listeners.",
+    "hint": "It doesn't sound like it looks.",
+    "tags": [
+      "markers",
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "Why can Tagalog rearrange a sentence without losing the meaning?",
+    "a": "Because the job of each noun is marked by the word in front of it (ang/ng/sa), not by its position. *Binili ni Miguel ang libro* and *Ang libro ay binili ni Miguel* both mean 'Miguel bought the book' — **ni** keeps him the buyer wherever he stands.",
+    "hint": "The tags travel with the nouns.",
+    "tags": [
+      "markers",
+      "syntax"
+    ]
+  },
+  {
+    "q": "What does **ay** do, and why shouldn't you use it casually?",
+    "a": "It inverts the sentence to put the subject first, English-style — it is **not** the verb 'to be'. *Ang bahay ay maganda* means the same as *Maganda ang bahay*, but sounds formal or written. Recognize it; say the second one.",
+    "hint": "A marker of inversion, not a verb.",
+    "tags": [
+      "markers",
+      "syntax"
+    ]
+  },
+  {
+    "q": "How do you translate an English possessive like 'the teacher's house'?",
+    "a": "Use **ng** — think of it as English 'of'. **ang bahay ng guro** = 'the house *of* the teacher'. Before a name it's **ni**: *ang bahay ni Miguel*.",
+    "hint": "Translate through the word 'of'.",
+    "tags": [
+      "markers",
+      "possession"
+    ]
+  },
+  {
+    "q": "What are the three Tagalog words for this/that, and what distinguishes them?",
+    "a": "**ito** (this — near me), **iyan** (that — near you), **iyon** (that — far from us both). Tagalog splits by distance from *both* speakers, where English has only two options. Casually: 'to, 'yan, 'yon.",
+    "hint": "Three distances, not two.",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "What are the place words matching ito / iyan / iyon?",
+    "a": "**dito** (here, by me), **diyan** (there, by you), **doon** (over there, far from both). The 'is located' forms are **nandito / nandiyan / nandoon**.",
+    "hint": "Same three-way split.",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "How do you say something is located somewhere?",
+    "a": "**nasa** + place: **Nasa bahay ako** ('I'm at home'), **Nasa mesa ang pagkain** ('The food is on the table').",
+    "hint": "One word does at/in/on.",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "How does Tagalog express both 'there is' and 'I have'?",
+    "a": "With the same word — **may** (or the longer **mayroon**, casually **meron**). *May tao* = 'There's someone'; *May bahay ako* = 'I have a house'; *Mayroon akong bahay* = same thing.",
+    "hint": "One structure for two English ideas.",
+    "tags": [
+      "existence",
+      "possession"
+    ]
+  },
+  {
+    "q": "How do you say 'I don't have money' — and what's the classic mistake?",
+    "a": "**Wala akong pera.** The mistake is negating with *hindi* — *~~Hindi ako may pera~~* is wrong. Having and existing are always negated with **wala**.",
+    "hint": "There's a dedicated negative for this.",
+    "tags": [
+      "negation",
+      "existence"
+    ]
+  },
+  {
+    "q": "What's the difference between **Saan** and **Nasaan**?",
+    "a": "**Saan** asks where an *action* happens — *Saan ka pupunta?* ('Where are you going?'). **Nasaan** asks where a *thing is located* — *Nasaan ang banyo?* ('Where's the bathroom?').",
+    "hint": "Action versus location.",
+    "tags": [
+      "questions",
+      "deixis"
+    ]
+  },
+  {
+    "q": "What does **Walang anuman** mean?",
+    "a": "'You're welcome' — literally 'it's nothing'. The standard reply to *Salamat*.",
+    "hint": "A response to thanks.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "What does the prefix **ma-** do to a Tagalog root?",
+    "a": "It turns a quality-noun into an adjective meaning 'having a lot of this': *ganda* (beauty) → **maganda** (beautiful), *bait* → **mabait**, *lamig* → **malamig**.",
+    "hint": "Most adjectives start with it.",
+    "tags": [
+      "adjectives"
+    ]
+  },
+  {
+    "q": "What is the linker, and when do you use **-ng**, **-g**, or **na**?",
+    "a": "The linker glues an adjective (or number, or pronoun) to what follows. **-ng** after a vowel (*magandang bahay*), **-g** after the letter n (*iyang libro*), **na** as a separate word after other consonants (*mabait na tao*).",
+    "hint": "It depends on the final sound.",
+    "tags": [
+      "adjectives",
+      "linker"
+    ]
+  },
+  {
+    "q": "What's wrong with *Maganda bahay*?",
+    "a": "It's missing the linker. It must be **magandang bahay** (or **bahay na maganda** — the order is reversible and the linker moves to sit between the two words).",
+    "hint": "Something is missing between the words.",
+    "tags": [
+      "adjectives",
+      "linker"
+    ]
+  },
+  {
+    "q": "Name three ways to intensify an adjective in Tagalog.",
+    "a": "**sobrang** + adjective (everyday: *Sobrang sarap!*), **ang** + root as an exclamation (*Ang ganda!*), and **napaka-** + root (stronger/more formal: *Napakaganda*). **masyado** means 'too much' in the excessive sense.",
+    "hint": "One is an exclamation using the bare root.",
+    "tags": [
+      "adjectives"
+    ]
+  },
+  {
+    "q": "How do you say 'more … than', 'the most', and 'as … as'?",
+    "a": "**mas** + adjective + **kaysa sa/kay** ('more … than'), **pinaka-** attached to the front ('the most'), and **kasing-** attached to the root ('as … as'). *Mas maganda kaysa kay Ana*; *pinakamabait*; *kasingganda mo*.",
+    "hint": "Three different affixes/words.",
+    "tags": [
+      "adjectives",
+      "comparison"
+    ]
+  },
+  {
+    "q": "What do Tagalog verbs mark instead of tense?",
+    "a": "**Aspect** — how far along the action is: completed (done), progressive (underway or habitual), contemplated (not started). Actual time comes from separate words like *kahapon*, *ngayon*, *bukas*.",
+    "hint": "Not when, but how far along.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "Why is 'completed aspect' not the same as past tense?",
+    "a": "Completed means the action is finished, regardless of when — *Kumain na ako* ('I've eaten') works for this morning or ten years ago. And the progressive covers both 'is eating' and the habitual 'eats every day'.",
+    "hint": "Finished ≠ in the past.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "What is reduplication in Tagalog verbs?",
+    "a": "Repeating the root's first consonant+vowel to build the progressive and contemplated aspects: *kain* → *ka-kain*, *luto* → *lu-luto*, *trabaho* → *ta-trabaho*.",
+    "hint": "A repeated syllable.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "Give all three aspects of **kain** as an *-um-* verb.",
+    "a": "Completed **kumain**, progressive **kumakain**, contemplated **kakain**. The basic (infinitive) form is also **kumain** — identical to the completed form, which is normal for *-um-* verbs.",
+    "hint": "-um- goes inside the word.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "What's the rule for **mag-** verbs across the aspects?",
+    "a": "**m- = not yet done, n- = done**, plus reduplication for the progressive: *magluto* (basic), **nagluto** (completed), **nagluluto** (progressive), **magluluto** (contemplated).",
+    "hint": "One letter marks completion.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "How do you know whether a verb root takes **-um-** or **mag-**?",
+    "a": "You memorize it with the word. There are tendencies (*mag-* often more deliberate or sustained, *-um-* a simpler action) but they leak — it's lexical, like English irregular verbs.",
+    "hint": "Not a rule you can derive.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "What do **na** and **pa** do to a verb phrase?",
+    "a": "**na** = 'already/now', **pa** = 'still/yet'. *Kumain na ako* ('I've already eaten'); *Hindi pa ako kumakain* ('I haven't eaten yet'); *Kumakain pa siya* ('He's still eating').",
+    "hint": "They do tense-like work.",
+    "tags": [
+      "verbs",
+      "particles"
+    ]
+  },
+  {
+    "q": "Why is **Kumain ka na?** more than just a question?",
+    "a": "'Have you eaten?' is a standard greeting and an expression of care. Answering **'Hindi pa'** in a Filipino household reliably produces food.",
+    "hint": "It's a greeting as much as a question.",
+    "tags": [
+      "phrases",
+      "culture"
+    ]
+  },
+  {
+    "q": "What does the focus system do in Tagalog?",
+    "a": "It lets you choose which participant in an event is in the spotlight — doer, thing, place, or beneficiary — and the verb's affix announces the choice. The spotlighted participant is the one marked with **ang**.",
+    "hint": "The verb agrees with the spotlight.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "Compare **Kumain ako ng mangga** and **Kinain ko ang mangga**.",
+    "a": "Same event, different spotlight. In the first, *I* am in focus (actor focus, **ako** from the ANG set) and the mango is background (**ng mangga**) — 'I ate a mango'. In the second, the *mango* is in focus (object focus, **ang mangga**) and I'm demoted to **ko** — 'I ate the mango'.",
+    "hint": "Watch which word carries ang.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "Which affixes go with which focus?",
+    "a": "Actor focus: **-um-**, **mag-**. Object focus: **-in**. Locative (place/recipient): **-an**. Benefactive/conveyed-thing: **i-**.",
+    "hint": "Four focuses, four affix families.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "Why does **ako** become **ko** when a sentence switches to object focus?",
+    "a": "Because the role changed. The spotlight participant takes an ANG-set pronoun; once the object takes the spotlight, the doer drops to the background and takes an NG-set pronoun.",
+    "hint": "The pronoun set follows the role.",
+    "tags": [
+      "verbs",
+      "focus",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What's the rule of thumb for choosing object focus over actor focus?",
+    "a": "If the thing being acted on is **specific and known** ('the' rather than 'a'), Filipinos usually use object focus. *Kainin mo ang gulay!* ('Eat the vegetables!') rather than *Kumain ka ng gulay* ('Eat some vegetables').",
+    "hint": "Definiteness of the object.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "Give the four aspects of **kain** in object focus.",
+    "a": "Basic **kainin**, completed **kinain**, progressive **kinakain**, contemplated **kakainin**. The completed form uses the infix **-in-** after the first consonant.",
+    "hint": "-in- goes inside for the completed form.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "Why is it **niluto** and not *linuto*?",
+    "a": "When a root starts with **l** (also *r*, *w*, *y*, and often *n*), the completed-aspect infix **-in-** becomes a **ni-** prefix instead: *luto* → **niluto**, *linis* → **nilinisan**.",
+    "hint": "A sound accommodation for certain first letters.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "What's the most common focus mistake English speakers make?",
+    "a": "Over-using actor focus, because English almost always keeps the doer as the subject. It's grammatical but sounds foreign — and it points at things in general when you mean a specific one.",
+    "hint": "An English habit carried over.",
+    "tags": [
+      "verbs",
+      "focus"
+    ]
+  },
+  {
+    "q": "How do you say 'I want coffee' versus 'I want to eat'?",
+    "a": "With a noun, use the NG set: **Gusto ko ng kape.** With a verb, use the NG set plus the linker and the verb's basic form: **Gusto kong kumain.**",
+    "hint": "The second one needs glue.",
+    "tags": [
+      "pseudo-verbs"
+    ]
+  },
+  {
+    "q": "Which two pseudo-verbs take the ANG set instead of the NG set?",
+    "a": "**puwede** and **dapat**. So it's **Puwede ba akong umupo?** ('May I sit?'), not *~~puwede ko~~*. The others (gusto, ayaw, kailangan, kaya) take the NG set.",
+    "hint": "Permission and obligation.",
+    "tags": [
+      "pseudo-verbs"
+    ]
+  },
+  {
+    "q": "What is **ayoko**?",
+    "a": "The everyday contraction of **ayaw ko** — 'I don't want (to)' / 'no thanks'. *Ayoko ng maanghang* = 'I don't like spicy food.'",
+    "hint": "Two words squeezed into one.",
+    "tags": [
+      "pseudo-verbs"
+    ]
+  },
+  {
+    "q": "What do the **ma-** verbs like **makita** and **marinig** have in common?",
+    "a": "They express perception or ability, and their completed form starts with **na-**: **nakita** (saw), **narinig** (heard), **natulog** (slept), **naligo** (bathed). They also take NG-set pronouns — *Nakita ko siya*.",
+    "hint": "Their completed form changes the first letter.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "What extra nuance does the **ma-** prefix often carry?",
+    "a": "A sense of *accidental* or *managed to*, versus deliberate action. **Nabasa ko ang libro** leans toward 'I happened to / got to read the book', where **Binasa ko** is straightforwardly 'I read it'.",
+    "hint": "Deliberate versus not.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "What are Tagalog's three negatives, and what does each negate?",
+    "a": "**hindi** negates statements, **huwag** (casually **'wag**) negates commands, and **wala** negates having/existing. Mixing them up is one of the clearest learner tells.",
+    "hint": "Statement, command, existence.",
+    "tags": [
+      "negation"
+    ]
+  },
+  {
+    "q": "What does the prefix **paki-** do?",
+    "a": "It turns a verb into a polite request — 'please do this'. **Pakiabot ng asin** ('Please pass the salt'), **Pakisara ang pinto** ('Please close the door').",
+    "hint": "The politeness prefix for requests.",
+    "tags": [
+      "verbs",
+      "politeness"
+    ]
+  },
+  {
+    "q": "How do you form a command in Tagalog?",
+    "a": "Use the verb's basic form, usually with **ka** or **mo**: *Kumain ka!* ('Eat!'), *Kainin mo!* ('Eat it!'), *Tulungan mo ako* ('Help me'). Add **po** and **naman** to soften considerably.",
+    "hint": "No special imperative form needed.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "What are enclitic particles, and where do they go in a sentence?",
+    "a": "Tiny words carrying tone and attitude rather than content (**na, pa, ba, po, lang, naman, din/rin, daw/raw, nga, pala**). They cling to the word before them and cluster right after the **first word or phrase** of the sentence.",
+    "hint": "They carry tone, not meaning.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What does **naman** do, and why is it the highest-value particle to learn first?",
+    "a": "It softens. **Tulungan mo naman ako** ('Help me out, would you?') versus the blunt *Tulungan mo ako*. It also marks contrast ('and you?' = *Ikaw naman?*) and mild affectionate complaint (*Ikaw naman!*). Filipino interaction runs on gentleness, and **naman** supplies it instantly.",
+    "hint": "The great softener.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "When do you use **rin/raw** versus **din/daw**?",
+    "a": "**rin/raw** after a word ending in a vowel (or *w*, *y*); **din/daw** after a consonant. *Ako rin* ('me too') but *Salamat din* ('thanks too').",
+    "hint": "It depends on the preceding sound.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What does **pala** signal?",
+    "a": "A realization — you've just learned something. **Ikaw pala!** ('Oh, it's you!'), **May klase pala ako bukas** ('Oh right — I have class tomorrow'), **Ganoon pala** ('Ah, I see'). English has no single word for it.",
+    "hint": "A discovery, mid-sentence.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What does **lang** do, and what's the most useful phrase built from it?",
+    "a": "It minimizes — the amount, the request, the imposition. *Isa lang po* ('just one, please'), *Tanong lang* ('just a question'). And **Wala lang** — 'nothing / no reason' — is a complete, socially acceptable answer to almost any 'why?'",
+    "hint": "The minimizer.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What does **kasi** do?",
+    "a": "It means 'because / you see', and it's how essentially every explanation opens. **Bakit?** ('Why?') is answered with **Kasi…**",
+    "hint": "Pairs with 'bakit'.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "How do multiple particles combine in one sentence?",
+    "a": "They stack in a fixed order — short ones before longer ones — right after the first word. Rather than memorizing an ordering table, learn common clusters as chunks: **na lang**, **na ba**, **pa ba**, **na po**, **lang po**, **sige na nga**. Three at once is ordinary: *Hindi pa nga po ako kumakain.*",
+    "hint": "Learn them as chunks.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What is the **'ng** contraction in questions?",
+    "a": "When a question word is followed by **ang**, they fuse: *Ano ang pangalan mo?* → **Ano'ng pangalan mo?** (also written *anong*). Same for *Sino'ng kasama mo?*, *Ano'ng oras na?*",
+    "hint": "Two words become one.",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "How do you answer **'May tubig ba kayo?'** if there isn't any?",
+    "a": "**Wala** — not *hindi*. Questions about having or existing are answered with **meron/wala**.",
+    "hint": "The existence negative.",
+    "tags": [
+      "questions",
+      "negation"
+    ]
+  },
+  {
+    "q": "What does the **gaano ka-** pattern ask?",
+    "a": "Degree — 'how [adjective]?' **Gaano katagal?** (how long?), **Gaano kalayo?** (how far?), **Gaano kadalas?** (how often?). Note it uses the bare root with **ka-**, not the *ma-* adjective.",
+    "hint": "How + adjective.",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "What's the single most useful question a Tagalog learner can memorize?",
+    "a": "**Ano'ng ibig sabihin ng ___?** — 'What does ___ mean?' Learn it as one unbroken chunk; it turns every conversation into a lesson.",
+    "hint": "It makes teachers out of strangers.",
+    "tags": [
+      "questions",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Why is **Hindi pa** often better than a flat **Hindi**?",
+    "a": "'Not yet' is softer than 'no' and is frequently the socially preferred answer — it leaves the door open rather than closing it. *'Kumain ka na ba?' 'Hindi pa.'*",
+    "hint": "Softness matters.",
+    "tags": [
+      "questions",
+      "culture"
+    ]
+  },
+  {
+    "q": "Which number system do Filipinos use for prices and clock time?",
+    "a": "Overwhelmingly the **Spanish-derived** one (*singkwenta, bente, alas-dose*), while counting things uses the **native** numbers (*isa, dalawa, tatlo*). English numbers are also extremely common in Metro Manila. All three coexist.",
+    "hint": "Two systems, split by use.",
+    "tags": [
+      "numbers"
+    ]
+  },
+  {
+    "q": "How do you count things in Tagalog — what do learners forget?",
+    "a": "The **linker**: *isang mangga* (one mango), *dalawang aso* (two dogs), *limang taon* (five years), *sampung piso* (ten pesos). The number attaches to the noun exactly like an adjective does.",
+    "hint": "Same glue as adjectives.",
+    "tags": [
+      "numbers",
+      "linker"
+    ]
+  },
+  {
+    "q": "How do you tell the time in Tagalog?",
+    "a": "**ala-** for one o'clock, **alas-** for everything else, then the part of day: **Ala-una** (1:00), **Alas-singko ng hapon** (5 p.m.), **Alas-otso ng umaga** (8 a.m.), **Alas-singko y medya** (5:30).",
+    "hint": "One hour is the exception.",
+    "tags": [
+      "numbers",
+      "time"
+    ]
+  },
+  {
+    "q": "What's the difference between **Linggo** and **linggo**?",
+    "a": "**Linggo** (capitalized) is Sunday; **linggo** is a week. *Isang linggo* = one week; *sa Linggo* = on Sunday.",
+    "hint": "Capitalization does the work.",
+    "tags": [
+      "time",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "Where is haggling (**tawad**) appropriate, and where isn't it?",
+    "a": "Entirely normal in a **palengke** (wet market) and with street vendors; not done in malls or supermarkets. **Tawad naman po** = 'a discount, please'.",
+    "hint": "It depends on the venue.",
+    "tags": [
+      "money",
+      "culture"
+    ]
+  },
+  {
+    "q": "What is **po**, and what does it mean?",
+    "a": "It's a marker of respect with no meaning of its own — you add it when speaking to elders, authority figures, customers or strangers. **Salamat po**, **Opo** (respectful yes), **Hindi po**. **ho** is a softer variant. When in doubt, use **po**.",
+    "hint": "It carries respect, not content.",
+    "tags": [
+      "politeness"
+    ]
+  },
+  {
+    "q": "Why might you call a stranger **Kuya** or **Ate**?",
+    "a": "Filipinos address people with kinship terms even when unrelated — *Kuya* (older brother) for a slightly older man, *Ate* for a slightly older woman. It's the normal way to say 'excuse me' to someone whose name you don't know; using no term at all can feel cold.",
+    "hint": "Family words for non-family.",
+    "tags": [
+      "politeness",
+      "culture"
+    ]
+  },
+  {
+    "q": "What is **mano po**?",
+    "a": "A gesture of respect to an elder: you take the back of their hand and touch it lightly to your forehead, saying *Mano po*. Younger generations often say **'Bless po'** for the same gesture.",
+    "hint": "A gesture, not just a phrase.",
+    "tags": [
+      "politeness",
+      "culture"
+    ]
+  },
+  {
+    "q": "Why shouldn't you use **Paalam** as an everyday goodbye?",
+    "a": "It carries the weight of a real parting. Ordinary goodbyes are **Sige**, **Ingat** ('take care'), or **Una na ako** ('I'll head off first'). Announcing your departure at all is itself a politeness.",
+    "hint": "It's heavier than it looks.",
+    "tags": [
+      "politeness",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What's the difference between **Pasensya na** and **Patawad**?",
+    "a": "**Pasensya na (po)** is the everyday, softer 'sorry / please bear with me'. **Patawad** means 'forgive me' and is reserved for genuine wrongs.",
+    "hint": "Everyday versus serious.",
+    "tags": [
+      "politeness",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What should you do when a Filipino family says **'Kain tayo!'** as you arrive?",
+    "a": "Answer it. Either accept (**Sige, salamat po!**) or decline warmly (**Salamat po, busog pa ako** — 'thanks, I'm still full'). The offer is an invitation to belong; ignoring it is the only wrong move.",
+    "hint": "Both yes and no are fine — silence isn't.",
+    "tags": [
+      "culture",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What do **hiya**, **pakikisama** and **utang na loob** describe?",
+    "a": "**Hiya** — a sense of propriety and social shame, not wanting to impose or embarrass. **Pakikisama** — getting along, keeping relations smooth. **Utang na loob** — a lasting 'debt of the inside' for a significant kindness. Together they explain much of the indirectness in Filipino conversation.",
+    "hint": "Three social currents.",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "q": "How is a polite refusal usually expressed in Tagalog?",
+    "a": "Indirectly. **Baka mamaya** ('maybe later'), **tingnan natin** ('let's see'), or a hesitant **medyo mahirap** ('it's a bit difficult') are often gentle no's. Listen for hesitation rather than for the word *hindi*.",
+    "hint": "A direct 'no' is rare.",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "q": "How does Taglish actually work, grammatically?",
+    "a": "The **grammar stays Tagalog** and English content words slot in — including Tagalog verb affixes attaching to English roots: **nag-shopping**, **i-check mo**, **na-late ako**, **in-approve na**, **nag-e-enjoy** (with the reduplication rule applied to an English word).",
+    "hint": "Which layer stays Tagalog?",
+    "tags": [
+      "taglish"
+    ]
+  },
+  {
+    "q": "Is Taglish 'broken' Tagalog?",
+    "a": "No — it's a normal, prestigious Metro Manila register used in offices, media and among friends. Deep unmixed Tagalog can read as formal, provincial or literary depending on context. Neither is better.",
+    "hint": "It's a register, not an error.",
+    "tags": [
+      "taglish",
+      "culture"
+    ]
+  },
+  {
+    "q": "What do **Para po!** and **Bayad po** mean, and where would you use them?",
+    "a": "On a jeepney: **Para po!** ('Stop, please!' — from Spanish *parar*) when you want to get off, and **Bayad po** as you pass your fare forward through the other passengers.",
+    "hint": "Public transport.",
+    "tags": [
+      "phrases",
+      "travel"
+    ]
+  },
+  {
+    "q": "What do **Pahingi** and **Pabili** mean?",
+    "a": "**Pahingi po ng ___** = 'could I have some ___'; **Pabili po ng ___** = 'I'd like to buy ___'. Both are everyday essentials, especially at a **sari-sari store** (the tiny neighborhood shop).",
+    "hint": "Asking for and buying.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "What is **tampo**, and what's the usual remedy?",
+    "a": "Withdrawing affection when hurt — softer and more relational than sulking; you don't announce it, you just go quiet. The remedy is **lambing** (affectionate sweetness and coaxing), not confrontation.",
+    "hint": "It expects coaxing, not argument.",
+    "tags": [
+      "culture",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "What do **kilig**, **gigil** and **sayang** mean?",
+    "a": "**kilig** — the giddy, fluttery thrill of romance. **gigil** — the trembling urge to squeeze something unbearably cute. **sayang** — 'what a waste', regret for a missed chance or something wasted.",
+    "hint": "Three feelings English can't name in one word.",
+    "tags": [
+      "vocabulary",
+      "culture"
+    ]
+  },
+  {
+    "q": "What does **bahala na** really mean?",
+    "a": "Roughly 'come what may' — part fatalism, part courage. It's closer to 'I've done what I can; I'll take the leap' than to giving up, and it's said *before* hard things rather than to avoid them.",
+    "hint": "Often mistranslated as pure fatalism.",
+    "tags": [
+      "culture",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "What sentence reliably gets Filipinos to help you learn?",
+    "a": "**Nag-aaral akong mag-Tagalog** — 'I'm learning Tagalog.' It produces smiles and help almost without fail. Pair it with **Ano'ng ibig sabihin ng ___?**",
+    "hint": "Announce what you're doing.",
+    "tags": [
+      "phrases"
+    ]
+  }
+]
