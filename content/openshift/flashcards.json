@@ -515,5 +515,425 @@
     "tags": [
       "networkpolicy"
     ]
+  },
+  {
+    "q": "Name the chain of objects OLM creates when you install an Operator, in order.",
+    "a": "CatalogSource -> (OperatorGroup) -> Subscription -> InstallPlan -> ClusterServiceVersion (CSV) -> the CRDs the CSV owns. Troubleshoot by walking the chain and finding the first link that didn't resolve.",
+    "hint": "Five objects, ending in CRDs.",
+    "tags": [
+      "olm",
+      "operators"
+    ]
+  },
+  {
+    "q": "What does a ClusterServiceVersion (CSV) represent, and what phase means success?",
+    "a": "A CSV is one installed Operator *version* — its Deployment, RBAC, owned CRDs, and upgrade edges. `oc get csv -n <ns>` should show PHASE: Succeeded.",
+    "hint": "Subscription = desire, InstallPlan = transaction, CSV = ?",
+    "tags": [
+      "olm"
+    ]
+  },
+  {
+    "q": "What is the difference between a Subscription and an InstallPlan?",
+    "a": "The Subscription is your declared intent (package, channel, catalog, approval mode). The InstallPlan is the concrete transaction OLM generated to satisfy it — and with installPlanApproval: Manual it waits for you to approve it.",
+    "hint": "Intent vs. transaction.",
+    "tags": [
+      "olm"
+    ]
+  },
+  {
+    "q": "Why is `installPlanApproval: Manual` the production-safe setting on a Subscription?",
+    "a": "New Operator versions are staged as an InstallPlan and wait for a human to approve, instead of upgrading themselves unattended. You approve with `oc patch installplan <name> --type merge -p '{\"spec\":{\"approved\":true}}'`.",
+    "hint": "Who decides when an Operator upgrades?",
+    "tags": [
+      "olm"
+    ]
+  },
+  {
+    "q": "A Subscription reports `ConstraintsNotSatisfiable` or `ResolutionFailed`. What does that mean?",
+    "a": "OLM couldn't resolve what you asked for: the package name, channel, or version doesn't exist in that CatalogSource, or a dependency can't be satisfied. Check the exact name/channel/source spelling and that the catalog is READY.",
+    "hint": "OLM could not resolve the request.",
+    "tags": [
+      "olm",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "A Subscription has existed for an hour with no InstallPlan at all. What's the most likely cause?",
+    "a": "The CatalogSource isn't serving — its pod in openshift-marketplace isn't READY, usually because the cluster can't reach the registry (disconnected, proxy, expired pull secret). Check `oc get catalogsource -n openshift-marketplace`.",
+    "hint": "Nothing to resolve against.",
+    "tags": [
+      "olm",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Why does having two OperatorGroups in one namespace break Operator installs there?",
+    "a": "OLM can't decide which watch scope applies, so it refuses to act and every CSV in that namespace fails. The `openshift-operators` namespace already has a cluster-wide OperatorGroup — don't add another.",
+    "hint": "Ambiguous watch scope.",
+    "tags": [
+      "olm",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Why is deleting a CRD more dangerous than deleting a CSV?",
+    "a": "CRDs are cluster-scoped and deleting one deletes every custom resource of that kind, cluster-wide — real data loss. Deleting a CSV only removes that Operator version; its CRDs and CRs survive.",
+    "hint": "What goes with the CRD?",
+    "tags": [
+      "olm",
+      "safety"
+    ]
+  },
+  {
+    "q": "A degraded ClusterOperator vs. a failed CSV — what's the difference?",
+    "a": "A ClusterOperator is a *platform* component managed by the Cluster Version Operator (`oc get co`). A CSV is an *add-on* Operator managed by OLM (`oc get csv -A`). Different systems, different health commands.",
+    "hint": "CVO vs OLM.",
+    "tags": [
+      "olm",
+      "operators"
+    ]
+  },
+  {
+    "q": "What is the supported way to change a file, sysctl, or kernel argument on an OpenShift node?",
+    "a": "Create a MachineConfig with the `machineconfiguration.openshift.io/role` label for the target pool. The MCO renders it into the pool's config and the machine-config-daemon drains, applies, and reboots each node.",
+    "hint": "Declarative, not SSH.",
+    "tags": [
+      "mco",
+      "rhcos"
+    ]
+  },
+  {
+    "q": "What does a MachineConfigPool do?",
+    "a": "It groups nodes (master, worker, or a custom pool) that share one rendered configuration, and controls the rollout — including `maxUnavailable` (default 1) and `paused`. `oc get mcp` is the rollout dashboard.",
+    "hint": "A herd of nodes plus its rollout policy.",
+    "tags": [
+      "mco"
+    ]
+  },
+  {
+    "q": "Walk through what the machine-config-daemon does to a node when a MachineConfig changes.",
+    "a": "Cordon -> drain (respecting PodDisruptionBudgets) -> write files/units and stage the OS change -> reboot -> verify the applied config matches desired -> uncordon. It does this for maxUnavailable nodes at a time.",
+    "hint": "Six steps, one of them is a reboot.",
+    "tags": [
+      "mco"
+    ]
+  },
+  {
+    "q": "What are the risks of leaving a MachineConfigPool paused?",
+    "a": "A paused pool accumulates every pending change, including certificate rotation — leave it paused long enough and node kubelet certificates can expire. Pause deliberately (e.g. an EUS-to-EUS upgrade), unpause promptly.",
+    "hint": "What else rolls out through the MCO?",
+    "tags": [
+      "mco",
+      "safety"
+    ]
+  },
+  {
+    "q": "When should you write a KubeletConfig or ContainerRuntimeConfig instead of a raw MachineConfig?",
+    "a": "Whenever the setting is a kubelet tunable (pod limits, eviction thresholds, allowed unsafe sysctls) or a CRI-O setting (log size, pids limit). Those CRs generate the MachineConfig for you — safer and more readable.",
+    "hint": "Higher-level CRs that render MCs.",
+    "tags": [
+      "mco"
+    ]
+  },
+  {
+    "q": "Your worker MachineConfigPool shows DEGRADED=True. What are the first three things to check?",
+    "a": "1) `oc describe mcp worker` — the condition message names the node. 2) The node's `machineconfiguration.openshift.io/reason` annotation. 3) The machine-config-daemon logs on that node. Usual causes: a hand-edited file, a drain blocked by a PDB, or two MCs writing the same path.",
+    "hint": "Pool -> node -> daemon.",
+    "tags": [
+      "mco",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Why is etcd unusually sensitive to storage performance?",
+    "a": "Every write is fsync'd to disk and replicated to a quorum, so etcd is a *latency* machine rather than a throughput one. Sustained high WAL fsync or backend commit durations cause leader elections and API slowness. Give it dedicated low-latency SSD/NVMe.",
+    "hint": "fsync on every write.",
+    "tags": [
+      "etcd"
+    ]
+  },
+  {
+    "q": "How do you take an etcd backup on OpenShift, and what do you get?",
+    "a": "`oc debug node/<control-plane-node>`, then `chroot /host` and run `/usr/local/bin/cluster-backup.sh /home/core/assets/backup`. You get a `snapshot_<ts>.db` plus a `static_kuberesources_<ts>.tar.gz` (static pod manifests + certs). Keep both, treat them as secrets, and copy them off the node.",
+    "hint": "Two artifacts, one script.",
+    "tags": [
+      "etcd",
+      "backup"
+    ]
+  },
+  {
+    "q": "One of three etcd members is unhealthy but quorum is intact. Why is a snapshot restore the wrong response?",
+    "a": "A restore rolls the entire cluster back to the snapshot's point in time, losing everything created since. With quorum intact you simply remove the bad member, delete its etcd secrets, and delete its pod — the cluster-etcd-operator rebuilds it with no data loss.",
+    "hint": "Restore is all-or-nothing.",
+    "tags": [
+      "etcd",
+      "recovery"
+    ]
+  },
+  {
+    "q": "When do you run `cluster-restore.sh`, and what does it do?",
+    "a": "Only when etcd quorum is lost. On one surviving control-plane node it stops the static pods, moves the old data aside, restores the snapshot as a single-member cluster and restarts the control plane; the other masters then rejoin as new, empty members.",
+    "hint": "The lost-quorum procedure.",
+    "tags": [
+      "etcd",
+      "recovery"
+    ]
+  },
+  {
+    "q": "Which etcd signals tell you the cluster is unhealthy before anything turns red?",
+    "a": "p99 of `etcd_disk_wal_fsync_duration_seconds` and `etcd_disk_backend_commit_duration_seconds`, peer round-trip time, `etcd_server_leader_changes_seen_total`, and DB size. Rising leader changes almost always mean disk or network latency, not etcd itself.",
+    "hint": "Latency metrics, not error counts.",
+    "tags": [
+      "etcd",
+      "monitoring"
+    ]
+  },
+  {
+    "q": "How does authentication work in OpenShift, end to end?",
+    "a": "An internal OAuth server (openshift-authentication) is configured via the cluster-scoped `oauth/cluster` resource with one or more identity providers (LDAP, OIDC, htpasswd, GitHub...). A successful login creates/maps a `User` and an `Identity`, and the user gets a token. Authorization is then a separate RBAC decision.",
+    "hint": "Federated identity, local authorization.",
+    "tags": [
+      "auth"
+    ]
+  },
+  {
+    "q": "Where must the Secret and ConfigMap for an identity provider live?",
+    "a": "In the **openshift-config** namespace — the client secret / bind password Secret and the CA ConfigMap. Putting them elsewhere is the most common reason a newly added provider never appears on the login page.",
+    "hint": "One specific namespace.",
+    "tags": [
+      "auth",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "When and how should you remove the kubeadmin user?",
+    "a": "After a real identity provider works *and* you've verified a genuine user or group has cluster-admin. Then `oc delete secret kubeadmin -n kube-system`. Verifying first matters — otherwise you can lock yourself out.",
+    "hint": "Verify the replacement first.",
+    "tags": [
+      "auth",
+      "security"
+    ]
+  },
+  {
+    "q": "How does group membership reach the cluster from LDAP/AD, versus from OIDC?",
+    "a": "OIDC passes a `groups` claim that flows straight through at login. LDAP/AD membership isn't read at login — you sync it with `oc adm groups sync --sync-config=... --confirm`, normally as a CronJob so AD changes reach the cluster automatically.",
+    "hint": "One is push-at-login, one is a sync job.",
+    "tags": [
+      "auth",
+      "rbac"
+    ]
+  },
+  {
+    "q": "What does binding a ClusterRole with a RoleBinding (rather than a ClusterRoleBinding) achieve?",
+    "a": "It reuses one cluster-wide permission *definition* but scopes it to a single namespace — how the same `admin` role works in hundreds of projects. Using a ClusterRoleBinding instead would grant those permissions everywhere: the most common RBAC accident.",
+    "hint": "Definition vs. scope.",
+    "tags": [
+      "rbac"
+    ]
+  },
+  {
+    "q": "How do you find out what a specific user is actually allowed to do?",
+    "a": "Impersonate: `oc auth can-i <verb> <resource> -n <ns> --as <user>` or `oc auth can-i --list -n <ns> --as <user>`. From the other direction, `oc adm policy who-can <verb> <resource> -n <ns>`.",
+    "hint": "--as",
+    "tags": [
+      "rbac",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What does removing the `self-provisioner` role from `system:authenticated:oauth` do?",
+    "a": "It stops ordinary authenticated users from creating their own projects, so namespaces become an administered resource. `oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth`.",
+    "hint": "Self-service project creation.",
+    "tags": [
+      "rbac"
+    ]
+  },
+  {
+    "q": "What can the default `view` role NOT read?",
+    "a": "Secrets. `view` grants read access to most objects in a project but deliberately excludes Secrets — a detail worth knowing before you hand it out as 'harmless read-only'.",
+    "hint": "One notable exclusion.",
+    "tags": [
+      "rbac",
+      "security"
+    ]
+  },
+  {
+    "q": "What does the Cluster Version Operator actually do during an upgrade?",
+    "a": "It verifies the signature of a single release *payload image*, then reconciles every ClusterOperator toward the versions that payload declares, in dependency order. Node OS updates follow afterwards, driven pool-by-pool by the MCO.",
+    "hint": "One image, many operators.",
+    "tags": [
+      "upgrades"
+    ]
+  },
+  {
+    "q": "What is the green light before starting an upgrade?",
+    "a": "Every ClusterOperator AVAILABLE=True, PROGRESSING=False, DEGRADED=False; all nodes Ready; all MachineConfigPools UPDATED, unpaused and not degraded; all CSVs Succeeded; plus a fresh etcd backup.",
+    "hint": "Three booleans, on every CO.",
+    "tags": [
+      "upgrades"
+    ]
+  },
+  {
+    "q": "Can you upgrade OpenShift from 4.14 straight to 4.16?",
+    "a": "No — minor versions can't be skipped; the control plane goes through 4.15. The EUS-to-EUS path lets you *pause the worker pool* across both hops so nodes reboot only once, but every minor version is still traversed.",
+    "hint": "What EUS actually saves.",
+    "tags": [
+      "upgrades"
+    ]
+  },
+  {
+    "q": "What does an `Upgradeable=False` condition on the ClusterVersion mean?",
+    "a": "Something in the cluster objects to a *minor* upgrade (patches still work) — a deprecated API still in use, an incompatible operator, a degraded component. The condition's message names the reason; fix it rather than forcing past it.",
+    "hint": "Blocks minor, not patch.",
+    "tags": [
+      "upgrades",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "The control plane upgraded fine but the worker pool has been at 12/40 nodes for 20 minutes. What's the most likely cause?",
+    "a": "A drain that can't complete — usually a PodDisruptionBudget that can never be satisfied, a pod with no controller, or a stuck terminating pod. Check `oc describe mcp worker`, the MCD logs, and `oc get pdb -A`.",
+    "hint": "The rollout is a drain loop.",
+    "tags": [
+      "upgrades",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What are the OpenShift update channels and when do you use each?",
+    "a": "`stable-4.y` (soaked, production default), `fast-4.y` (released, earlier), `candidate-4.y` (pre-release, testing only), and `eus-4.y` (Extended Update Support, enables EUS-to-EUS hops). Set with `oc adm upgrade channel <name>`.",
+    "hint": "Four names.",
+    "tags": [
+      "upgrades"
+    ]
+  },
+  {
+    "q": "Why might your cluster's metrics vanish after every upgrade or pod restart?",
+    "a": "Prometheus is using ephemeral storage. Add a `volumeClaimTemplate` under `prometheusK8s` in the `cluster-monitoring-config` ConfigMap so metrics persist — this is the most common monitoring regret.",
+    "hint": "One missing block of YAML.",
+    "tags": [
+      "monitoring"
+    ]
+  },
+  {
+    "q": "How do you configure OpenShift monitoring, and what must you never edit?",
+    "a": "Through the `cluster-monitoring-config` ConfigMap in openshift-monitoring (platform) and `user-workload-monitoring-config` in openshift-user-workload-monitoring. Never edit the Prometheus/Alertmanager CRs directly — the Cluster Monitoring Operator owns and reverts them.",
+    "hint": "Two ConfigMaps.",
+    "tags": [
+      "monitoring"
+    ]
+  },
+  {
+    "q": "How do you get your own application's metrics scraped?",
+    "a": "Set `enableUserWorkload: true` in cluster-monitoring-config, then create a ServiceMonitor (or PodMonitor) in your namespace whose selector matches the **Service's** labels and whose `port` is the port **name**, not the number.",
+    "hint": "Opt in, then a ServiceMonitor.",
+    "tags": [
+      "monitoring"
+    ]
+  },
+  {
+    "q": "What is the Watchdog alert for?",
+    "a": "It always fires, by design, as a dead-man's switch: route it to an external service that alarms if it ever *stops* arriving. Without it, a broken monitoring stack looks exactly like a perfectly healthy cluster.",
+    "hint": "The alert whose silence is the signal.",
+    "tags": [
+      "monitoring",
+      "alerting"
+    ]
+  },
+  {
+    "q": "Distinguish grouping, inhibition, and silencing in Alertmanager.",
+    "a": "Grouping (`group_by`) collapses related alerts into one notification. Inhibition suppresses a lower-severity alert while a related higher-severity one fires ('node down' silences 'pod unreachable'). Silencing is a temporary, human, time-boxed mute for planned maintenance.",
+    "hint": "Automatic, conditional, manual.",
+    "tags": [
+      "alerting"
+    ]
+  },
+  {
+    "q": "What does a PrometheusRule's `for:` clause do, and why add a `runbook_url` annotation?",
+    "a": "`for:` requires the condition to hold continuously for that duration before the alert fires — it's what separates an alert from a flap. `runbook_url` gives whoever is paged at 3 a.m. an immediate next step.",
+    "hint": "Anti-flap, plus kindness.",
+    "tags": [
+      "alerting"
+    ]
+  },
+  {
+    "q": "What's the difference between an etcd backup and an OADP backup?",
+    "a": "An etcd backup captures the whole cluster's state and restores as an all-or-nothing rollback in place. OADP (Velero) backs up *application* state — a namespace's API objects plus its PV data — to object storage, and can restore one namespace, or restore into a different cluster.",
+    "hint": "Cluster layer vs. application layer.",
+    "tags": [
+      "oadp",
+      "backup"
+    ]
+  },
+  {
+    "q": "What are the moving parts of OADP?",
+    "a": "The OADP Operator installs Velero (the controller for Backup/Restore/Schedule CRs), plugins (openshift, csi, and a cloud plugin such as aws), and the node-agent DaemonSet for file-level volume backup via Kopia or Restic — all pointed at object storage.",
+    "hint": "Velero + plugins + node-agent + a bucket.",
+    "tags": [
+      "oadp"
+    ]
+  },
+  {
+    "q": "What CR configures OADP, and what should you check before trusting any backup?",
+    "a": "The DataProtectionApplication (DPA) CR in openshift-adp. Then check `oc get backupstoragelocation -n openshift-adp` shows PHASE: Available — an unavailable location means every backup fails or partially fails.",
+    "hint": "DPA, then the storage location.",
+    "tags": [
+      "oadp"
+    ]
+  },
+  {
+    "q": "CSI snapshots vs. filesystem backup in OADP — when do you need each?",
+    "a": "CSI snapshots are fast and low-overhead but usually cluster/storage-local, so they don't survive losing the storage system. Filesystem backup (node-agent + Kopia/Restic) copies data into object storage, which is what makes restoring into a different cluster or cloud possible.",
+    "hint": "Fast and local vs. slow and portable.",
+    "tags": [
+      "oadp",
+      "storage"
+    ]
+  },
+  {
+    "q": "Why should a Velero backup in `PartiallyFailed` be treated as a failure?",
+    "a": "It usually means some volumes weren't captured — exactly the part you'd want back. A backup you half-trust is worse than none, because you'll plan around it.",
+    "hint": "Which part typically failed?",
+    "tags": [
+      "oadp",
+      "backup"
+    ]
+  },
+  {
+    "q": "How do you make an OADP backup of a database consistent?",
+    "a": "Use Velero pre/post hooks to quiesce the database around the snapshot, with `onError: Fail` so a skipped quiesce doesn't silently produce a torn backup. Better still, pair OADP with the database's own logical dump tooling.",
+    "hint": "Hooks — and what onError should be.",
+    "tags": [
+      "oadp"
+    ]
+  },
+  {
+    "q": "What does OADP *not* protect?",
+    "a": "The control plane and cluster configuration (that's etcd backups plus your install-time IaC in Git), and external data such as a managed cloud database or an external object store. OADP is the application layer only.",
+    "hint": "Two things outside the namespace.",
+    "tags": [
+      "oadp",
+      "backup"
+    ]
+  },
+  {
+    "q": "How do you give internal and external Routes separate routers on one cluster?",
+    "a": "Create an additional IngressController with a `routeSelector` or `namespaceSelector` — ingress sharding. Each shard gets its own domain, certificates, and load balancer, and only admits Routes matching its selector.",
+    "hint": "A second IngressController with a selector.",
+    "tags": [
+      "networking",
+      "ingress"
+    ]
+  },
+  {
+    "q": "A Route exists and looks correct but nothing serves it. What sharding mistake should you suspect?",
+    "a": "No IngressController's selector matches it, so no router admitted it. Read `oc get route <name> -o yaml` and check `status.ingress` — that list shows which routers actually admitted the Route.",
+    "hint": "status.ingress",
+    "tags": [
+      "networking",
+      "ingress",
+      "troubleshooting"
+    ]
   }
 ]
