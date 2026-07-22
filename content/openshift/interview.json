@@ -3,84 +3,217 @@
     "category": "Fundamentals & CNI",
     "q": "Walk me through what happens, end to end, when a pod is scheduled and gets its IP.",
     "a": "The **kubelet** on the chosen node asks the container runtime (**CRI-O** on OpenShift) to create the pod's **sandbox** — the shared network namespace. CRI-O invokes the configured **CNI plugin** with the `ADD` operation. The plugin:\n\n1. creates a **veth pair** (a virtual cable),\n2. moves one end into the pod's network namespace as `eth0`,\n3. assigns an IP from the cluster (pod) network via its **IPAM**, and\n4. installs routes so the pod can reach the rest of the cluster.\n\nThe assigned IP flows back up to the kubelet (that's what `oc get pod -o wide` shows). On delete, the same plugin is called with `DEL` and returns the IP to the pool.\n\n**Why it's a good answer:** it names the kubelet → CRI-O → CNI chain and shows you know the plugin — not Kubernetes core — does the wiring.",
-    "tags": ["cni", "fundamentals"]
+    "tags": [
+      "cni",
+      "fundamentals"
+    ]
   },
   {
     "category": "Fundamentals & CNI",
     "q": "What is CNI, and why does Kubernetes delegate networking to it instead of building it in?",
     "a": "**CNI (Container Network Interface)** is a small CNCF standard: a plugin is just an executable the runtime calls with `ADD`/`DEL` to wire up or tear down a pod's network namespace and assign its IP. It says nothing about *how* packets move between nodes.\n\nKubernetes delegates on purpose. By defining only the **network model** (one IP per pod, no NAT pod-to-pod) and handing implementation to a pluggable component, it lets an **ecosystem** of plugins compete on capabilities — overlay vs routed, iptables vs eBPF, policy, encryption, dual-stack. That decoupling is exactly why OpenShift can offer a *choice* of engine (OpenShift SDN, OVN-Kubernetes) behind the same Kubernetes API.",
-    "tags": ["cni", "design"]
+    "tags": [
+      "cni",
+      "design"
+    ]
   },
   {
     "category": "Fundamentals & CNI",
     "q": "What network guarantees does the Kubernetes/OpenShift model make, and why do they matter?",
     "a": "Three guarantees:\n\n- **Every pod has a unique, cluster-wide IP.**\n- **Any pod can reach any other pod on any node directly, with no NAT.**\n- **Node agents (kubelet) can reach all pods on their node.**\n\nThey matter because they make the cluster behave like **one flat network** — applications can use real IPs and ports without port-mapping gymnastics, and a pod's self-view of its IP matches how others address it. Banning NAT between pods is what keeps that consistent; break it and things like source-IP-based logic and return traffic fall apart.",
-    "tags": ["model", "fundamentals"]
+    "tags": [
+      "model",
+      "fundamentals"
+    ]
   },
   {
     "category": "OpenShift SDN vs OVN-Kubernetes",
     "q": "Compare OpenShift SDN and OVN-Kubernetes. Which would you choose for a new cluster and why?",
     "a": "For any **new** cluster: **OVN-Kubernetes** — it's the default and the only forward-supported path.\n\n| | OpenShift SDN | OVN-Kubernetes |\n|---|---|---|\n| Foundation | OVS + flow rules | OVN logical network on OVS |\n| Overlay | **VXLAN** (4789) | **Geneve** (6081) |\n| Dual-stack / IPv6 | ❌ | ✅ |\n| Egress IP / firewall | limited | ✅ |\n| IPsec, HW offload, hybrid | ❌ | ✅ |\n| Status | deprecated 4.14, **removed 4.17** | **default** |\n\nOVN-Kubernetes raises the abstraction from per-node flow rules to a declarative logical network (switches, routers, ACLs) with a clear control plane, and unlocks the capabilities SDN structurally can't provide.",
-    "tags": ["comparison"]
+    "tags": [
+      "comparison"
+    ]
   },
   {
     "category": "OpenShift SDN vs OVN-Kubernetes",
     "q": "Why does the SDN → OVN-Kubernetes migration actually matter — what bites a team that ignores it?",
     "a": "Four concrete pressures:\n\n1. **Upgrades are blocked.** SDN was removed in 4.17, so an un-migrated cluster can't move past 4.16 — it falls off supported, patched releases.\n2. **Requested features live only on OVN:** dual-stack/IPv6, egress IP (predictable source IP to an external firewall), egress firewall, IPsec for in-transit compliance.\n3. **Performance/cost:** hardware offload to SmartNICs/DPUs moves packet processing off host CPUs — OVN only.\n4. **Operational consistency:** OVN folds connectivity, NetworkPolicy (ACLs), and Service load balancing into one model with one control plane to debug.\n\nSo even a cluster that's \"fine today\" should migrate, because *staying supported* depends on it.",
-    "tags": ["comparison", "migration"]
+    "tags": [
+      "comparison",
+      "migration"
+    ]
   },
   {
     "category": "OpenShift SDN vs OVN-Kubernetes",
     "q": "What's the difference between VXLAN and Geneve, and why did OVN standardize on Geneve?",
     "a": "Both are **overlay encapsulations** — they wrap a pod-to-pod packet inside a node-to-node UDP packet so the physical network can carry it.\n\n- **VXLAN** (OpenShift SDN, UDP **4789**) has a fixed header — essentially a 24-bit network ID and little else.\n- **Geneve** (OVN-Kubernetes, UDP **6081**) adds **extensible TLV (type-length-value) option fields**, so the overlay can carry additional metadata per packet.\n\nOVN standardized on Geneve because that flexibility lets it carry the extra logical-network metadata it needs and keeps the protocol future-proof. The one-liner to remember: **SDN → VXLAN, OVN → Geneve.**",
-    "tags": ["comparison", "overlay"]
+    "tags": [
+      "comparison",
+      "overlay"
+    ]
   },
   {
     "category": "OpenShift SDN vs OVN-Kubernetes",
     "q": "Explain the OVN-Kubernetes control plane. How does a NetworkPolicy I create become rules on a node?",
     "a": "It's a compiler pipeline:\n\n1. The **ovnkube control-plane** watches the Kubernetes API and writes your intent (pods, services, your NetworkPolicy → an **ACL**) into the **Northbound DB** — the *desired logical* network.\n2. **ovn-northd** compiles the NB DB into **logical flows** stored in the **Southbound DB**.\n3. **ovn-controller**, running on **every node**, reads the SB DB and programs concrete **OpenFlow** rules into that node's local **Open vSwitch**.\n\nSo your NetworkPolicy becomes an ACL in the NB DB, gets compiled to logical flows, and is realized as OpenFlow on each node. Debugging tip: wrong *desired* state → look at the NB DB / control-plane; correct desired but one node misbehaving → look at that node's ovn-controller/OVS.",
-    "tags": ["ovn", "architecture"]
+    "tags": [
+      "ovn",
+      "architecture"
+    ]
   },
   {
     "category": "Services, Routes & Ingress",
     "q": "A developer says 'I created a Service but can't reach my app from my laptop.' What's going on?",
     "a": "They almost certainly created a **ClusterIP** Service (the default), which is an **internal-only** virtual IP for east-west traffic. It's reachable from inside the cluster, not from a laptop.\n\nTo expose it externally on OpenShift you create a **Route** (served by the HAProxy-based router) — or an **Ingress**, which OpenShift implements by creating a Route under the hood. `NodePort` and `LoadBalancer` Service types also reach outside, but for HTTP(S) apps a **Route** is the idiomatic OpenShift answer. The teaching point: a Service is *plumbing between pods*, not a front door to the internet.",
-    "tags": ["services", "routes", "troubleshooting"]
+    "tags": [
+      "services",
+      "routes",
+      "troubleshooting"
+    ]
   },
   {
     "category": "Services, Routes & Ingress",
     "q": "Explain Route TLS modes: edge, passthrough, and reencrypt. When do you use each?",
     "a": "They differ in **where TLS terminates**:\n\n- **edge** — TLS terminates at the **router**; traffic from router to pod is plain HTTP. Use for simple HTTPS where the internal hop is trusted.\n- **passthrough** — the router does **not** decrypt; it routes by **SNI** and the **pod** terminates TLS. Use when the pod must own TLS (e.g. mutual TLS, or a protocol the router shouldn't touch).\n- **reencrypt** — the router terminates TLS, then **re-encrypts** to the pod. Use when the backend must also see TLS for compliance/zero-trust, but you still want the router's routing/observability.\n\nA crisp way to say it: edge = decrypt at the edge; passthrough = never decrypt; reencrypt = decrypt then re-encrypt.",
-    "tags": ["routes", "tls"]
+    "tags": [
+      "routes",
+      "tls"
+    ]
   },
   {
     "category": "Services, Routes & Ingress",
     "q": "On OpenShift, what's the relationship between Routes and Ingress?",
     "a": "**Routes** are OpenShift's **native** external-exposure resource and **predate** Kubernetes Ingress. They're served by the **OpenShift router** (an HAProxy-based ingress controller).\n\nStandard **Ingress** objects also work, but on OpenShift the **Ingress Operator implements them by creating Routes under the hood**. So Routes are the lower-level primitive doing the real work; Ingress is a portable abstraction layered on top. If you want OpenShift-specific features (like the TLS termination modes), you reach for Routes directly.",
-    "tags": ["routes", "ingress"]
+    "tags": [
+      "routes",
+      "ingress"
+    ]
   },
   {
     "category": "NetworkPolicy & Security",
     "q": "Describe how NetworkPolicy default behavior works. Why do people get surprised by it?",
     "a": "By default the flat pod network lets **any pod reach any pod**. A **NetworkPolicy** is namespaced and selects pods by label. The surprising rule:\n\n> A pod is **unrestricted until at least one policy selects it**. The instant *any* policy selects it for a direction, everything **not explicitly allowed** in that direction is **denied**.\n\nSo \"default allow\" flips to **\"default deny\" per pod, per direction** the moment a policy touches it. People get burned when they add an allow-rule for `frontend → api` and suddenly **monitoring can't scrape `api`** either — because selecting `api` for ingress denied everything else they didn't list. The fix is to also allow the other legitimate sources.\n\nEnforcement is by the plugin: **OVN ACLs** on OVN-Kubernetes.",
-    "tags": ["networkpolicy", "security"]
+    "tags": [
+      "networkpolicy",
+      "security"
+    ]
   },
   {
     "category": "NetworkPolicy & Security",
     "q": "How do you restrict what a namespace can reach OUTSIDE the cluster? Is that NetworkPolicy?",
     "a": "Not core NetworkPolicy — that governs **pod-to-pod** (in-cluster) traffic. To control traffic **leaving** the cluster to external IPs/domains, OpenShift adds a separate **EgressFirewall** resource, enforced by the network plugin.\n\nRelated egress controls (much stronger on OVN-Kubernetes) include **egress IP** (pin a namespace's outbound traffic to a fixed source IP, e.g. to satisfy an external firewall's allow-list) and **egress router**. These are exactly the kind of capabilities OpenShift SDN handles weakly or not at all, and a reason teams with strict egress requirements need OVN-Kubernetes.",
-    "tags": ["networkpolicy", "egress", "security"]
+    "tags": [
+      "networkpolicy",
+      "egress",
+      "security"
+    ]
   },
   {
     "category": "Troubleshooting & Operations",
     "q": "A pod is stuck in ContainerCreating with a sandbox/network error. How do you triage it?",
     "a": "That error means the **CNI plugin** couldn't set up the network or assign an IP — so look at the **network layer, not the app**:\n\n1. `oc describe pod` — read the events; confirm it's a network/sandbox failure.\n2. Check the plugin's pods: `oc get pods -n openshift-ovn-kubernetes` (or `openshift-sdn` on legacy clusters) — are `ovnkube-node` pods healthy on that node?\n3. Look at IPAM/IP exhaustion — is the node out of pod IPs from its cluster-network slice?\n4. Check the node itself (`oc get nodes`, kubelet/CRI-O health) — a `NotReady` node won't wire pods.\n\nThe key reflex: a `ContainerCreating` *network* error points at the plugin, not your Deployment.",
-    "tags": ["troubleshooting", "operations"]
+    "tags": [
+      "troubleshooting",
+      "operations"
+    ]
   },
   {
     "category": "Troubleshooting & Operations",
     "q": "How do you check which network plugin a cluster runs, and how would you plan a migration to OVN-Kubernetes?",
     "a": "Check the engine:\n\n```bash\noc get network.config/cluster -o jsonpath='{.spec.networkType}{\"\\n\"}'\n# -> OVNKubernetes  or  OpenShiftSDN\n```\n\nTo plan an SDN → OVN-Kubernetes migration:\n\n1. **Confirm the version path** — SDN is removed in 4.17, so migrate before upgrading past 4.16, and follow the migration guide for *your* exact version.\n2. **Inventory egress behavior** — egress IPs, egress firewall rules, multicast: these differ most between engines.\n3. **Choose offline vs limited live migration** depending on version and tolerance for disruption; the **Cluster Network Operator** orchestrates it (it's an in-place change, not a reinstall).\n4. **Validate in non-prod first**, then schedule production around the node-reboot rollout.\n\nDon't hand-edit `networkType` on production without the runbook — it rewires every pod.",
-    "tags": ["operations", "migration"]
+    "tags": [
+      "operations",
+      "migration"
+    ]
+  },
+  {
+    "category": "Architecture & Operators",
+    "q": "A team says their Operator install has been stuck for two hours. Walk me through how you'd diagnose it.",
+    "a": "I'd walk the OLM chain in order, because the failure is always at the first link that didn't resolve.\n\n1. **Subscription** — `oc describe sub <name> -n <ns>`. The conditions are explicit: `ResolutionFailed` or `ConstraintsNotSatisfiable` means the package name, channel, or catalog is wrong, or a dependency can't be satisfied.\n2. **InstallPlan** — `oc get ip -n <ns>`. If one exists with `APPROVED=false`, the Subscription is set to `installPlanApproval: Manual` and it's simply waiting for a human. That's the single most common \"stuck\" case.\n3. **CatalogSource** — if there's no InstallPlan at all, `oc get catalogsource -n openshift-marketplace` and check the pods. A catalog that can't reach the registry (disconnected cluster, proxy, expired pull secret) means there's nothing to resolve against.\n4. **CSV** — `oc get csv -n <ns>`; I want `PHASE: Succeeded`. A `Failed`/`Pending` CSV with RBAC complaints usually means an **OperatorGroup** mismatch — wrong install mode, or the classic two-OperatorGroups-in-one-namespace situation.\n5. **OLM itself** — `oc logs -n openshift-operator-lifecycle-manager deploy/catalog-operator` and `deploy/olm-operator`.\n\nAnd if the CSV *is* Succeeded, the Operator is fine and the problem has moved to the custom resource — I'd read the operand CR's `status` and the operator pod's logs.\n\n**Why it's a good answer:** it's an ordered method rather than a list of commands, and it names the specific conditions and the two or three failure modes that account for most real cases.",
+    "tags": [
+      "olm",
+      "troubleshooting"
+    ]
+  },
+  {
+    "category": "Architecture & Operators",
+    "q": "Someone fixed a production issue by SSH-ing to a node and editing a sysctl. What do you tell them?",
+    "a": "Kindly, that the fix won't last and may cause a second problem.\n\nNodes run **RHEL CoreOS**, which is immutable and reconciled. A hand-edited file is invisible to the cluster, won't survive a node reboot or replacement, and — because the machine-config-daemon verifies on-disk state against the rendered config — can put the node into **Degraded**, which then blocks the next upgrade.\n\nThe supported path is a **MachineConfig** labelled for the pool:\n\n```yaml\nmetadata:\n  labels:\n    machineconfiguration.openshift.io/role: worker\nspec:\n  config:\n    ignition: { version: 3.2.0 }\n    storage:\n      files:\n        - path: /etc/sysctl.d/99-custom.conf\n          mode: 0644\n          contents: { source: \"data:text/plain;base64,...\" }\n```\n\nThe MCO renders it into the pool config and rolls it out: cordon → drain → apply → reboot → verify → uncordon, `maxUnavailable` nodes at a time. If the setting is a kubelet or CRI-O tunable I'd reach for **KubeletConfig** or **ContainerRuntimeConfig** instead, which generate the MachineConfig for me.\n\nI'd also acknowledge the real constraint they were under — during an incident, `oc debug node/` for *diagnosis* is completely fine. It's persistent mutation that's the anti-pattern.\n\n**Why it's a good answer:** it explains the mechanism (why it won't stick and how it degrades the node), gives the concrete alternative, and doesn't shame someone who was mid-incident.",
+    "tags": [
+      "mco",
+      "rhcos"
+    ]
+  },
+  {
+    "category": "Architecture & Operators",
+    "q": "How would you check whether etcd is healthy, and what would worry you?",
+    "a": "Two levels — the operator view and the etcd view.\n\n```bash\noc get co etcd\noc get pods -n openshift-etcd -l app=etcd\noc rsh -n openshift-etcd -c etcdctl etcd-<node>\n  etcdctl endpoint health --cluster -w table\n  etcdctl endpoint status --cluster -w table   # DB size, leader, raft term\n  etcdctl member list -w table\n```\n\nWhat worries me is almost always **latency**, not errors:\n\n- p99 `etcd_disk_wal_fsync_duration_seconds` and `etcd_disk_backend_commit_duration_seconds` — every write is fsync'd, so this is the disk speaking. Sustained tens of milliseconds is a problem.\n- `etcd_server_leader_changes_seen_total` climbing, or a raft term that keeps incrementing — repeated elections, nearly always caused by disk or network latency rather than by etcd.\n- `etcd_network_peer_round_trip_time_seconds` — control-plane nodes should be network-close.\n- Database size trending toward the space quota, which puts etcd into a read-only alarm and takes the API server with it.\n\nOpenShift ships alerts for these by name: `etcdHighFsyncDurations`, `etcdHighCommitDurations`, `etcdMembersDown`, `etcdNoLeader`.\n\nThe structural recommendation is dedicated low-latency SSD/NVMe for etcd, not shared with the container runtime or logs — \"slow etcd\" and \"noisy-neighbour disk\" are usually the same incident.\n\n**Why it's a good answer:** it names specific metrics and thresholds, explains *why* etcd is latency-bound, and connects the symptom (leader churn) to the real cause (storage).",
+    "tags": [
+      "etcd",
+      "monitoring"
+    ]
+  },
+  {
+    "category": "Architecture & Operators",
+    "q": "Two of three control-plane nodes are gone. What do you do — and how does that differ from losing just one?",
+    "a": "These are completely different situations and conflating them is expensive.\n\n**One member down, quorum intact** — this is routine, not a disaster. I remove the failed member from the etcd member list, delete that node's etcd secrets in `openshift-etcd`, and delete its pod. The **cluster-etcd-operator** re-adds the member and re-issues certificates. No data loss, no downtime. I would *not* restore from a snapshot here, because a restore rolls the whole cluster back in time for no reason.\n\n**Quorum lost (two of three)** — now it's the documented disaster-recovery procedure:\n\n1. Choose one surviving control-plane node as the recovery host; copy the snapshot **and** the matching `static_kuberesources` tarball to it.\n2. Ensure the other control-plane nodes can't rejoin with stale data.\n3. Run `/usr/local/bin/cluster-restore.sh /home/core/assets/backup` on the recovery host — it restores the snapshot as a single-member cluster and restarts the control plane.\n4. Bring the other masters back as new, empty members so they resync.\n5. Rotate certificates as the procedure directs, then verify: `oc get nodes`, `oc get co`, and expect operators to churn while they reconcile.\n\nEverything created after the snapshot is gone, so I'd also plan the reconciliation of workloads the restored etcd doesn't know about.\n\nThe honest caveat I'd add: the exact steps change between releases, so I follow the runbook for that cluster's version — and I'd want to have rehearsed it on a throwaway cluster before ever doing it for real.\n\n**Why it's a good answer:** it draws the quorum distinction first, doesn't reach for the nuclear option, and admits that the procedure is version-specific rather than reciting steps with false confidence.",
+    "tags": [
+      "etcd",
+      "recovery"
+    ]
+  },
+  {
+    "category": "Security & Access Control",
+    "q": "How would you integrate corporate Active Directory, and give the platform team cluster-wide read access without touching individual users?",
+    "a": "**Authentication** first. I'd add an LDAP identity provider to the cluster-scoped `oauth/cluster` resource, with the bind password in a Secret and the CA in a ConfigMap — both in the **`openshift-config`** namespace, which is the detail people most often get wrong. I'd use `mappingMethod: claim` so username collisions fail loudly rather than silently merging identities. Applying it redeploys the OAuth pods, so I'd watch `oc get co authentication` settle and test a login before going further.\n\n**Groups** next. OpenShift doesn't read LDAP group membership at login, so I'd set up `oc adm groups sync --sync-config=ldap-sync.yaml --confirm` — declaring the schema (`activeDirectory` or `augmentedActiveDirectory`) and the group/user queries — and run it as a **CronJob** with a dedicated ServiceAccount, so membership changes in AD reach the cluster without a human.\n\n**Authorization** last:\n\n```bash\noc adm policy add-cluster-role-to-group cluster-reader platform-sre\n```\n\nThat's a ClusterRoleBinding to a group, so people join and leave by changing AD, not by changing the cluster. In a GitOps setup I'd commit the binding as YAML rather than run the command imperatively.\n\nThen I'd verify with impersonation rather than assume: `oc auth can-i --list --as <user>`, and `oc adm policy who-can delete secrets -A` from the other direction. And once a real group has cluster-admin and I've tested it, I'd remove `kubeadmin`.\n\n**Why it's a good answer:** it separates authentication from authorization explicitly, knows the LDAP-vs-OIDC group difference, binds to groups instead of users, and ends with verification.",
+    "tags": [
+      "auth",
+      "rbac"
+    ]
+  },
+  {
+    "category": "Security & Access Control",
+    "q": "What's the difference between a RoleBinding and a ClusterRoleBinding, and where do people go wrong?",
+    "a": "A **Role** and a **ClusterRole** define permissions; a **RoleBinding** and **ClusterRoleBinding** attach them to subjects. The scoping rule is where it gets interesting:\n\n- `Role` + `RoleBinding` — permissions defined and granted inside one namespace.\n- `ClusterRole` + `ClusterRoleBinding` — granted everywhere, cluster-wide.\n- **`ClusterRole` + `RoleBinding`** — this is the important one. The ClusterRole is just a reusable *definition*; the namespaced RoleBinding scopes it to that namespace. It's how a single definition of `admin` works across hundreds of projects.\n\nThe classic mistake is grabbing the built-in `admin` ClusterRole and binding it with a **ClusterRoleBinding** — intending \"admin of this project\" and actually granting admin over every project on the cluster. Same object name, wildly different blast radius.\n\nSecondary things people miss: `view` deliberately excludes **Secrets**, so it isn't quite the harmless read-only role people assume; ServiceAccounts are first-class subjects (`system:serviceaccount:<ns>:<name>`) and deserve their own narrow roles rather than reusing the namespace default; and SCC grants are RBAC grants under the hood, which is why `oc adm policy add-scc-to-user anyuid -z myapp` is really a role binding.\n\nI verify with `oc auth can-i --as` rather than reasoning about it on a whiteboard.\n\n**Why it's a good answer:** it gets the ClusterRole-plus-RoleBinding subtlety right, names a concrete high-blast-radius mistake, and connects RBAC to SCCs.",
+    "tags": [
+      "rbac",
+      "security"
+    ]
+  },
+  {
+    "category": "Day-2 Operations",
+    "q": "Walk me through upgrading a production cluster from 4.14 to 4.16.",
+    "a": "**It's two hops, not one** — minor versions can't be skipped, so 4.14 → 4.15 → 4.16.\n\n**Pre-flight** (this is most of the work):\n- Every ClusterOperator `AVAILABLE=True, PROGRESSING=False, DEGRADED=False`; all nodes Ready; all MCPs UPDATED, unpaused, not degraded.\n- **etcd backup**, off-cluster. Non-negotiable.\n- Check the `Upgradeable` condition on the ClusterVersion — if it's `False`, its message names the blocker (deprecated API in use, incompatible operator).\n- Check the API-removal alerts for workloads calling APIs that the target version drops.\n- Check **add-on Operator** compatibility and move Subscriptions to supported channels first — OLM operators upgrade on their own schedule and have their own matrix.\n- Check **PodDisruptionBudgets** are satisfiable and that there's spare capacity for drains; I'd often scale a MachineSet out beforehand.\n\n**Execution**: set the channel (`oc adm upgrade channel stable-4.15`), then `oc adm upgrade --to=4.15.x` with an explicit version rather than `--to-latest`. Watch the control plane finish, let the MCO roll the nodes, confirm everything is green, then repeat for 4.16.\n\nIf both hops are planned together, the **EUS-to-EUS** path is attractive: pause the worker pool across both control-plane hops and unpause once, so nodes drain and reboot a single time instead of twice. The caveat is that a paused pool also stalls certificate rotation, so it can't stay paused indefinitely.\n\n**If it stalls**, I look for one named condition rather than restarting things: `oc get co` for the operator that's been PROGRESSING too long and `oc describe co <name>` for its message; or if it's the node phase, `oc get mcp`, `oc describe mcp worker`, the MCD logs, and `oc get pdb -A` — a blocked drain is the most common cause of \"stuck at 63%\".\n\n**Why it's a good answer:** it knows the no-skip rule and the EUS trade-off, treats pre-flight as the real work, and diagnoses stalls by finding the specific blocking condition instead of poking at pods.",
+    "tags": [
+      "upgrades"
+    ]
+  },
+  {
+    "category": "Day-2 Operations",
+    "q": "How do you make sure the right people actually get paged when something breaks?",
+    "a": "The monitoring stack is on by default; the *routing* is what you have to build.\n\n**Alertmanager configuration** lives in the `alertmanager-main` secret in `openshift-monitoring` (there's also a console editor). I'd set up a route tree:\n\n```yaml\nroute:\n  group_by: [namespace, alertname]\n  group_wait: 30s\n  repeat_interval: 12h\n  receiver: default-null\n  routes:\n    - matchers: [ 'severity = critical' ]\n      receiver: pagerduty-critical\n    - matchers: [ 'namespace = payments' ]\n      receiver: slack-payments\n```\n\nReceivers are PagerDuty, Slack webhooks, email, or a generic webhook into ticketing — with the credentials in mounted Secrets, never inline.\n\nThree things I'd make sure of:\n\n1. **The `Watchdog` alert is routed externally.** It always fires by design; an external dead-man's-switch service alarms if it *stops* arriving. Otherwise a broken monitoring stack is indistinguishable from a healthy cluster.\n2. **Grouping and inhibition are tuned.** Group too finely and an incident becomes a notification storm; inhibition should suppress \"pod unreachable\" while \"node down\" is firing. And silences are for planned maintenance — time-boxed, so they expire on their own.\n3. **Alerts have `for:` and a `runbook_url`.** `for:` is what separates an alert from a flap, and the runbook link is the kindest thing you can give whoever answers at 3 a.m.\n\nFor app teams, I'd enable user-workload monitoring, let them own **ServiceMonitor** and **PrometheusRule** objects in their namespaces, and use **AlertmanagerConfig** so they can change their own Slack channel without a cluster-admin. And I'd make sure Prometheus has a `volumeClaimTemplate` — otherwise metrics vanish on every restart and nobody can answer \"was this happening last week?\"\n\n**Why it's a good answer:** it covers delivery, noise control, and the dead-man's switch, and it pushes ownership to the teams rather than centralizing every routing change.",
+    "tags": [
+      "monitoring",
+      "alerting"
+    ]
+  },
+  {
+    "category": "Day-2 Operations",
+    "q": "Design a backup and disaster-recovery strategy for an OpenShift cluster.",
+    "a": "I'd separate it into layers, because one tool doesn't cover them.\n\n**1. Cluster definition — in Git.** `install-config`, MachineSets, MachineConfigs, Operator Subscriptions, RBAC, network policy: all as manifests reconciled by GitOps. This is what makes the cluster *rebuildable* rather than merely restorable.\n\n**2. Control-plane state — etcd snapshots.** `cluster-backup.sh` on a control-plane node, on a schedule and before every risky change, keeping **both** artifacts (snapshot + `static_kuberesources` tarball) and copying them off-cluster. They contain every Secret in plaintext, so they're treated as secrets themselves. This gives in-place recovery from quorum loss — and only that; it can't bring back one deleted namespace.\n\n**3. Application state — OADP.** The DataProtectionApplication CR wires Velero to object storage, then a `Schedule` per application namespace. The key design decision is volume handling: **CSI snapshots** are fast but usually storage-local, so if the array or the cluster is gone, so are they. **Filesystem backup** via the node-agent with Kopia puts the data in object storage, which is what makes restoring into a DR cluster possible. For anything I actually need off-site, that's the choice.\n\nFor databases I'd add Velero **hooks** with `onError: Fail` to quiesce writes — or, better, keep the database's own logical dumps and let OADP handle the surrounding namespace.\n\n**4. External data.** A managed cloud database or external object store isn't in the cluster and needs its own backup. Easy to forget.\n\n**5. RPO/RTO per application**, so the backup frequency is a decision rather than an accident, and **rehearsed restores** — into a scratch namespace or a test cluster, on a cadence. And I'd treat `PartiallyFailed` as failed, since it usually means volumes were skipped.\n\nThe principle underneath: **the only backup you can trust is one you have restored.** An untested backup is a hypothesis.\n\n**Why it's a good answer:** it distinguishes rebuildable from restorable, gets the etcd-vs-OADP layer split right, makes the snapshot-vs-filesystem trade-off explicit, and ends on testing rather than on tooling.",
+    "tags": [
+      "oadp",
+      "etcd",
+      "backup"
+    ]
+  },
+  {
+    "category": "Services, Routes & Ingress",
+    "q": "How would you separate internal and external traffic, and scale ingress for a busy cluster?",
+    "a": "Both are IngressController questions.\n\n**Separation is ingress sharding.** The `default` IngressController serves `*.apps.<cluster-domain>`. I'd create a second one with its own domain and a selector:\n\n```yaml\napiVersion: operator.openshift.io/v1\nkind: IngressController\nmetadata:\n  name: internal\n  namespace: openshift-ingress-operator\nspec:\n  domain: internal.apps.example.com\n  replicas: 2\n  routeSelector:\n    matchLabels:\n      exposure: internal\n```\n\nEach shard gets its own router pods, load balancer, certificates, and DNS — so internal apps never traverse the internet-facing path. `namespaceSelector` works too when the split is per-team rather than per-route.\n\n**Scaling** is `spec.replicas` on the IngressController, plus `nodePlacement` if routers should live on infra nodes — they're ordinary pods and need somewhere to run. `endpointPublishingStrategy` (LoadBalancerService, NodePortService, or HostNetwork on bare metal) is effectively fixed at creation, so it's a design-time decision.\n\nThe gotcha with sharding is label discipline: a Route matched by **no** controller is silently unreachable, and one matched by **several** is admitted by each. `oc get route <name> -o yaml` and reading `status.ingress` tells you which routers actually admitted it — that's the first thing I check when a Route \"exists but doesn't work\".\n\nI'd also mention TLS while I'm here, since it interacts: **edge** terminates at the router, **reencrypt** terminates and re-encrypts to the pod, and **passthrough** doesn't decrypt at all and routes by SNI — which matters for sharding because a passthrough Route gives the router no HTTP layer to make decisions on.\n\n**Why it's a good answer:** it treats sharding and scaling as one CR, names the silent-failure mode and how to detect it, and connects ingress design to TLS termination.",
+    "tags": [
+      "ingress",
+      "networking"
+    ]
   }
 ]

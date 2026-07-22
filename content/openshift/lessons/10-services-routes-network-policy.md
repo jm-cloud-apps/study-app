@@ -36,6 +36,39 @@ Routes also own **where TLS terminates**, which is a frequent point of confusion
 
 > 💡 Rule of thumb: use **edge** for simple HTTPS, **reencrypt** when the backend must also see TLS (compliance/zero-trust), and **passthrough** when the pod must terminate TLS itself (e.g. mutual TLS or a protocol the router shouldn't touch).
 
+### Operating and scaling the Ingress Controller
+
+The routers themselves are declared by **IngressController** CRs, owned by the Ingress Operator. The `default` one serves `*.apps.<cluster-domain>`.
+
+```bash
+oc get ingresscontroller -n openshift-ingress-operator
+oc get pods -n openshift-ingress -o wide          # the HAProxy router pods
+oc describe ingresscontroller default -n openshift-ingress-operator
+```
+
+Three levers you'll actually pull:
+
+- **Replicas.** `spec.replicas` scales the router pods. Two is the default; raise it for throughput or to spread across more nodes. Router pods are ordinary pods — they need somewhere to run, so pair this with a `nodePlacement` selector if you keep routers on infra nodes.
+- **Sharding.** A second IngressController with a `routeSelector` or `namespaceSelector` serves only matching Routes — the standard way to give internal and external traffic separate routers (and separate domains, certificates, and load balancers).
+
+  ```yaml
+  apiVersion: operator.openshift.io/v1
+  kind: IngressController
+  metadata:
+    name: internal
+    namespace: openshift-ingress-operator
+  spec:
+    domain: internal.apps.example.com
+    replicas: 2
+    routeSelector:
+      matchLabels:
+        exposure: internal        # only Routes labelled this way
+  ```
+
+- **Publishing strategy.** `endpointPublishingStrategy` decides how the router is reached from outside — a cloud `LoadBalancerService`, `NodePortService`, or `HostNetwork` on bare metal. It's effectively immutable in practice, so choose it when you create the controller.
+
+> ⚠️ A Route matched by **no** IngressController is silently unreachable, and a Route matched by **several** is admitted by each of them. Sharding is label discipline — check `oc get route <name> -o yaml` and read the `status.ingress` list to see which routers actually admitted it.
+
 ## NetworkPolicy: who may talk to whom
 
 By default, the flat pod network means **any pod can reach any pod**. A **NetworkPolicy** locks that down. It's a *namespaced* object that selects pods by label and then allow-lists ingress and/or egress traffic. The crucial, counter-intuitive rule:
