@@ -45,12 +45,13 @@ Flashcards should test *understanding*, not trivia: one idea per card, a self-co
 
 ## Working on the app code
 
-- Stack: React 18 + Vite 5 + Tailwind 3, react-router, react-markdown + rehype-highlight (frontend) + a small Express + better-sqlite3 progress API (`server/index.js`).
+- Stack: React 18 + Vite 8 + Tailwind 3, react-router, react-markdown + rehype-highlight (frontend) + a small Express + better-sqlite3 progress API (`server/index.js`).
 - Progress/spaced-repetition logic is in `src/lib/progress.js` (Leitner boxes). It keeps a synchronous `localStorage` cache and syncs to the **local SQLite-backed API** (`/api/state`): `hydrate()` pulls on startup, `save()` pushes the full snapshot (debounced). The DB file (`data/studyforge.db`) is **gitignored**.
 - **Privacy is a hard rule:** the only network calls for user data go to the *local* progress API. **No telemetry, no third-party/cloud calls for user progress.** Keep persistence local and the DB gitignored.
 - `npm run dev` runs web + API together; Vite proxies `/api/*` to port 5182. The app must still work (from the localStorage cache) if the API is down.
 - Match the existing code style (functional components, Tailwind classes, the warm dark theme tokens in `tailwind.config.js`).
-- There is no test suite or linter configured. Verify changes by running `npm run dev` and exercising the UI.
+- There is no test suite or linter configured. Verify app-code changes by running `npm run dev` and exercising the UI.
+- **After any content change, run `npm run validate:content`.** It checks the contract mechanically — JSON validity, exactly one `# H1` per lesson, `NN-slug.md` naming, no duplicate order prefixes, required card/interview fields — and prints a per-topic summary. It also runs in CI and blocks the Pages deploy on failure. Warnings (e.g. a missing "Check yourself") are quality nudges you may accept; errors mean the app will silently drop content.
 
 ## Guardrails
 

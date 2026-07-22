@@ -6,7 +6,7 @@ This file guides Claude Code (and other AI assistants) when working in this repo
 
 ## What this is
 
-**StudyForge** — a content-driven study app (Markdown lessons + spaced-repetition flashcards). React 18 + Vite 5 + Tailwind 3 frontend, plus a tiny Express + better-sqlite3 progress API. Adding a subject means dropping a folder under `content/`; the app auto-discovers it.
+**StudyForge** — a content-driven study app (Markdown lessons + spaced-repetition flashcards). React 18 + Vite 8 + Tailwind 3 frontend, plus a tiny Express + better-sqlite3 progress API. Adding a subject means dropping a folder under `content/`; the app auto-discovers it.
 
 ## Commands
 
@@ -17,9 +17,11 @@ npm run dev:web    # Vite dev server only
 npm run dev:api    # progress API only
 npm run build      # production build → dist/
 npm start          # run the progress API
+
+npm run validate:content   # check every topic against the content contract
 ```
 
-No test suite or linter is configured. Verify changes by running `npm run dev` and using the UI.
+No test suite or linter is configured. Verify app-code changes by running `npm run dev` and using the UI; verify **content** changes with `npm run validate:content` (it also runs in CI and gates the Pages deploy).
 
 ## The two rules that matter most
 
