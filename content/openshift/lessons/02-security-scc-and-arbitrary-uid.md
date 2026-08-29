@@ -8,6 +8,8 @@ This is the lesson that separates people who've *seen* OpenShift from people who
 
 Running containers as root is a real security risk: a container escape as UID 0 is far more dangerous than as an unprivileged user. OpenShift's default posture is **deny-by-default, non-root-by-default**, enforced by **Security Context Constraints (SCCs)**.
 
+> 💡 SCCs sit on top of the same Linux primitives the **RHCSA (EX200)** topic drills — SELinux types and booleans, capabilities, and UID/GID ownership. If "why can't this container write here?" feels opaque, that topic's SELinux and containers lessons are the layer underneath this one.
+
 ## What an SCC is
 
 A **Security Context Constraint** is an OpenShift admission-policy object that decides **what a Pod is allowed to do**: can it run as root? use the host network or host PID? mount `hostPath` volumes? add Linux capabilities? what UID/GID range may it use?

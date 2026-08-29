@@ -935,5 +935,103 @@
       "ingress",
       "troubleshooting"
     ]
+  },
+  {
+    "q": "A CSI driver runs in two halves. What are they, and what does each do?",
+    "a": "A controller plugin (a Deployment) that talks to the storage system's API — create, delete, attach, resize, snapshot — and a node plugin (a DaemonSet, one Pod per node) that formats, mounts, and bind-mounts the volume into the Pod's directory. Knowing which half failed is most of the debugging.",
+    "hint": "Warehouse vs. delivery to the door.",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "What do the CSI sidecars external-provisioner, external-attacher, external-resizer, and external-snapshotter each watch for?",
+    "a": "They translate Kubernetes objects into CSI calls: provisioner watches PVCs (`CreateVolume`/`DeleteVolume`), attacher watches VolumeAttachments (`ControllerPublishVolume`), resizer watches PVC size changes (`ControllerExpandVolume`), snapshotter watches VolumeSnapshots (`CreateSnapshot`). Their logs carry the real error when provisioning fails.",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "What is the difference between NodeStageVolume and NodePublishVolume?",
+    "a": "`NodeStageVolume` mounts the volume once per node to a global staging path (formatting it if needed). `NodePublishVolume` then bind-mounts that staging path into the individual Pod's directory. Stage is per-node, publish is per-Pod.",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "Why would you set `volumeBindingMode: WaitForFirstConsumer` on a StorageClass?",
+    "a": "To avoid a topology mismatch. With `Immediate`, the volume can be provisioned in one availability zone while the scheduler later places the Pod in another, and the Pod never starts. `WaitForFirstConsumer` delays provisioning until a Pod is scheduled, so the volume is created where the Pod actually landed.",
+    "hint": "Think zones.",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "How do you grow a PersistentVolume, and what are the two hard limits?",
+    "a": "Edit the PVC's requested size (never the PV): `oc patch pvc data -p '{\"spec\":{\"resources\":{\"requests\":{\"storage\":\"20Gi\"}}}}'`. The limits: the StorageClass must have `allowVolumeExpansion: true`, and you can never shrink a volume. If the PVC shows `FileSystemResizePending`, the filesystem step completes when the Pod restarts.",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "A PVC is Pending with the event \"waiting for first consumer to be created before binding.\" What's wrong with the storage?",
+    "a": "Nothing — that's the expected message for a `WaitForFirstConsumer` StorageClass. The volume won't be provisioned until a Pod that uses the claim is scheduled, so the real question is why the Pod isn't scheduling.",
+    "tags": [
+      "storage",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "You see \"Multi-Attach error for volume\" on a Pod that won't start. What does it mean and where do you look?",
+    "a": "A ReadWriteOnce volume is still attached to another node — commonly a Pod that hasn't finished terminating after a drain. Check `oc get volumeattachment` and the old Pod; RWO is one node at a time, so scaling an RWO-backed Deployment across nodes causes the same thing.",
+    "tags": [
+      "storage",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Which three objects make up the CSI snapshot API, and how do you restore from a snapshot?",
+    "a": "VolumeSnapshotClass (the how), VolumeSnapshot (your request), and VolumeSnapshotContent (the real snapshot in the storage system) — mirroring the StorageClass/PVC/PV pattern. You restore by creating a new PVC with `dataSource` pointing at the VolumeSnapshot (`apiGroup: snapshot.storage.k8s.io`).",
+    "tags": [
+      "storage",
+      "csi"
+    ]
+  },
+  {
+    "q": "Why is a CSI snapshot not a backup?",
+    "a": "It almost always lives on the same storage system as the source volume, so losing the array or the cluster loses both. It's a fast undo button before a risky change. Anything that must survive that loss needs a copy in separate storage — OADP filesystem backup into object storage.",
+    "tags": [
+      "storage",
+      "backup"
+    ]
+  },
+  {
+    "q": "A PVC is stuck in Terminating. What's holding it, and what's the wrong fix?",
+    "a": "The `kubernetes.io/pvc-protection` finalizer, which blocks deletion while a Pod still uses the claim. Find and remove the consumer. Stripping the finalizer by hand is the wrong fix — it deletes the claim while a workload is still mounting it.",
+    "tags": [
+      "storage",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Your app needs several Pods on different nodes writing to the same volume. Why isn't that just a matter of asking for ReadWriteMany?",
+    "a": "RWX is a property of the backend, not a request you can grant in the claim. Most cloud block storage is RWO-only; RWX needs a file backend such as NFS or CephFS (OpenShift Data Foundation). It's a storage-platform decision made before the first PVC — the alternative is a StatefulSet giving each replica its own volume.",
+    "tags": [
+      "storage",
+      "access-modes"
+    ]
+  },
+  {
+    "q": "What is the Cluster Storage Operator responsible for on OpenShift?",
+    "a": "It installs and manages the platform's CSI Driver Operator, which runs the driver's controller Deployment and node DaemonSet (in `openshift-cluster-csi-drivers`) and creates a default StorageClass for the platform — e.g. `gp3-csi` on AWS. The old in-tree volume plugins were migrated to CSI drivers over the 4.x line.",
+    "tags": [
+      "storage",
+      "operators"
+    ]
   }
 ]

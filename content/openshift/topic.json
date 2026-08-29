@@ -2,7 +2,7 @@
   "id": "openshift",
   "title": "OpenShift",
   "emoji": "🎩",
-  "blurb": "Red Hat's enterprise Kubernetes, in depth: architecture and Operators (OLM, CSVs, subscriptions), RHCOS & MachineConfigs, etcd health and recovery, SCCs and the arbitrary-UID contract, authentication & RBAC, S2I builds, a full networking track (pod network, CNI, OVN-Kubernetes, Routes, ingress sharding, NetworkPolicy), storage, scheduling, GitOps, cluster upgrades, monitoring & alerting, logging with Loki, and backup/DR with OADP.",
+  "blurb": "Red Hat's enterprise Kubernetes, in depth: architecture and Operators (OLM, CSVs, subscriptions), RHCOS & MachineConfigs, etcd health and recovery, SCCs and the arbitrary-UID contract, authentication & RBAC, S2I builds, a full networking track (pod network, CNI, OVN-Kubernetes, Routes, ingress sharding, NetworkPolicy), storage and CSI in depth, scheduling, GitOps, cluster upgrades, monitoring & alerting, logging with Loki, and backup/DR with OADP.",
   "accent": "#f87171",
   "order": 6.1
 }
