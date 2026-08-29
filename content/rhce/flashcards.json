@@ -1,0 +1,438 @@
+[
+  {
+    "q": "What single result tells you an Ansible task is finished correctly?",
+    "a": "A second run reporting `changed=0`. Idempotency is the definition of the work, not a nicety: a playbook that reports changes every time isn't configuration management, and the exam's managed hosts may be re-run against your playbooks.",
+    "tags": [
+      "idempotency"
+    ]
+  },
+  {
+    "q": "Why are `command` and `shell` the two modules that break idempotency, and what are the fixes?",
+    "a": "They just run a program, so Ansible can't know whether anything changed — they report `changed` every time. Fix with `args: creates:`/`removes:` (skip if a path exists or doesn't), or `changed_when:` to define what counts as a change. Better still, check `ansible-doc -l | grep <thing>` first; a real module usually exists.",
+    "hint": "Two task-level keys, or don't use them at all.",
+    "tags": [
+      "idempotency"
+    ]
+  },
+  {
+    "q": "What's the difference between `command` and `shell` as modules?",
+    "a": "`command` runs a program directly, with no shell — so pipes, redirects, globs and environment-variable expansion don't work. `shell` runs the string through a shell, so those do work, along with all the ways a shell can surprise you. Use `command` when it suffices, `shell` only when you truly need shell features.",
+    "tags": [
+      "modules"
+    ]
+  },
+  {
+    "q": "Where does Ansible look for its configuration file, and does it merge them?",
+    "a": "In order: `$ANSIBLE_CONFIG`, `./ansible.cfg`, `~/.ansible.cfg`, `/etc/ansible/ansible.cfg` — and it uses the first one found, never merging. `ansible --version` prints which file is actually in effect, which is the fastest way to explain a config that seems to be ignored.",
+    "tags": [
+      "config"
+    ]
+  },
+  {
+    "q": "Why might a project-local ansible.cfg be silently ignored?",
+    "a": "Ansible refuses to load a config file from a world-writable directory, as a security measure — another user could otherwise plant settings that run commands as you. Check the directory's permissions; `ansible --version` will show it falling back to a different config.",
+    "hint": "It's a permission thing, not a syntax thing.",
+    "tags": [
+      "config"
+    ]
+  },
+  {
+    "q": "What's the difference between `group_vars/webservers.yml` and `host_vars/web1.example.com.yml`?",
+    "a": "The first applies to every host in the `webservers` group; the second applies only to `web1.example.com` — and host variables beat group variables when both define the same name. Both directories are loaded automatically by name, next to the inventory or the playbook.",
+    "tags": [
+      "variables"
+    ]
+  },
+  {
+    "q": "Which command shows what Ansible actually thinks your inventory contains?",
+    "a": "`ansible-inventory --graph` for a readable tree (or `--list` for full JSON). `ansible <group> --list-hosts` answers the narrower question of which hosts a pattern matches. Checking this beats reading the inventory file, especially with nested `[group:children]` definitions.",
+    "tags": [
+      "inventory"
+    ]
+  },
+  {
+    "q": "Why is `ansible all -m ping` the right first troubleshooting command?",
+    "a": "It isn't ICMP — it connects over SSH, starts Python on the managed host, and reports back. A `pong` therefore proves the inventory entry, SSH credentials, and remote Python all work in one step. Add `-vvv` to see the exact SSH command when it fails.",
+    "tags": [
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What two things does a managed host need for `become: true` to work?",
+    "a": "SSH access as the remote user (normally via a key), and a passwordless sudo rule for that user — e.g. `ansible ALL=(ALL) NOPASSWD: ALL` in `/etc/sudoers.d/`. Without the sudoers rule you get `sudo: a password is required` on the first privileged task.",
+    "tags": [
+      "setup"
+    ]
+  },
+  {
+    "q": "What's the shape of an ad-hoc command, and what does -b do?",
+    "a": "`ansible <host-pattern> -m <module> -a \"<arguments>\" -b`. `-b` is `--become`, running the module with privilege escalation — without it anything touching `/etc` or installing packages fails as an ordinary user.",
+    "tags": [
+      "ad-hoc"
+    ]
+  },
+  {
+    "q": "What's the single most useful documentation command on the exam, and why?",
+    "a": "`ansible-doc -s <module>` — it prints a paste-ready YAML skeleton of every parameter with one-line comments. Paste it, delete what you don't need, and you can't typo a parameter name. `ansible-doc <module>` gives the full docs, whose EXAMPLES section at the bottom is tested, working snippets.",
+    "hint": "It stands for 'snippet'.",
+    "tags": [
+      "docs"
+    ]
+  },
+  {
+    "q": "What is a fully qualified collection name, and name the three collections you'll use most on RHEL.",
+    "a": "`namespace.collection.module`, e.g. `ansible.posix.firewalld`. The three: `ansible.builtin` (copy, template, user, service, dnf, file, lineinfile), `ansible.posix` (firewalld, selinux, seboolean, mount, authorized_key), and `community.general` (lvg, lvol, parted, filesystem, sefcontext).",
+    "tags": [
+      "collections"
+    ]
+  },
+  {
+    "q": "How do you find the exact name of a fact you want to use in a template?",
+    "a": "Run the setup module ad-hoc: `ansible web1 -m ansible.builtin.setup` to browse everything, or `-a \"filter=ansible_default_ipv4\"` to narrow it. Guessing fact names is the slow path; this is the fast one.",
+    "tags": [
+      "facts"
+    ]
+  },
+  {
+    "q": "When does a handler run, and how many times?",
+    "a": "Once, at the end of the play, and only if at least one task that notified it reported `changed`. Ten config changes on one host still produce one restart, and a host whose config didn't change isn't restarted at all — which is exactly the behaviour you want for service restarts. `meta: flush_handlers` forces them to run earlier.",
+    "hint": "Think about a config deployed to ten hosts where only three differ.",
+    "tags": [
+      "handlers"
+    ]
+  },
+  {
+    "q": "A handler never fires even though the task reported changed. What's the most likely cause?",
+    "a": "The `notify:` string doesn't exactly match the handler's `name:` — handlers are matched by name, character for character. (The other possibility: the play ended early, or the notifying task was skipped by a `when:`.)",
+    "tags": [
+      "handlers"
+    ]
+  },
+  {
+    "q": "Why is `when: ansible_facts['os_family'] == \"RedHat\"` written without curly braces?",
+    "a": "`when:` is already evaluated as a Jinja2 expression, so wrapping it in `{{ }}` is redundant (and can be an error). You need `{{ }}` when substituting a value into a string or module argument — e.g. `path: \"{{ doc_root }}\"`. Confusing the two contexts is the most common Ansible syntax mistake.",
+    "tags": [
+      "conditionals"
+    ]
+  },
+  {
+    "q": "How do you loop over a list of dictionaries, and how do you reference the fields?",
+    "a": "`loop:` with a list of dicts, and `item.<field>` inside the task — e.g. `loop: [{ name: ana, groups: devs }]` with `name: \"{{ item.name }}\"`. `loop: \"{{ users }}\"` does the same from a variable in `group_vars`. (`with_items` is the older form; write `loop`.)",
+    "tags": [
+      "loops"
+    ]
+  },
+  {
+    "q": "What are the useful fields of a registered task result?",
+    "a": "`rc` (exit code), `stdout` and `stdout_lines`, `changed`, and `failed`. You register a task's result with `register: <name>` and then use them in later `when:` conditions or `debug` messages.",
+    "tags": [
+      "register"
+    ]
+  },
+  {
+    "q": "Which ansible-playbook flags let you preview a run without changing anything?",
+    "a": "`--check` performs a dry run, and `--diff` shows the actual text differences for file and template tasks — together, `--check --diff` is the fastest way to catch a bad template. `--syntax-check` validates structure only, and `--list-tasks` shows what would run in what order.",
+    "tags": [
+      "cli"
+    ]
+  },
+  {
+    "q": "In practice, which variable source wins over all others, and which loses to all others?",
+    "a": "`--extra-vars` (`-e`) on the command line wins over everything; a role's `defaults/main.yml` loses to everything. That pairing covers nearly every real collision — and it's why `defaults/` is where a role puts values it expects to be overridden.",
+    "hint": "One is a command-line flag, one is a role directory.",
+    "tags": [
+      "variables",
+      "precedence"
+    ]
+  },
+  {
+    "q": "Why must you write `path: \"{{ doc_root }}\"` rather than `path: {{ doc_root }}`?",
+    "a": "A value starting with `{{` is invalid YAML — the brace begins a dictionary, so the parser fails before Jinja2 ever sees it. Quote any value that begins with a template expression.",
+    "tags": [
+      "yaml"
+    ]
+  },
+  {
+    "q": "Name four facts you'll use constantly and what they hold.",
+    "a": "`ansible_facts['fqdn']` (full hostname), `ansible_facts['default_ipv4']['address']` (primary IP), `ansible_facts['os_family']` / `['distribution']` (e.g. RedHat), and `ansible_facts['memtotal_mb']` (RAM). Browse them all with `-m setup`.",
+    "tags": [
+      "facts"
+    ]
+  },
+  {
+    "q": "What is `gather_facts: false` for, and what's the cost of using it?",
+    "a": "It skips the automatic fact-gathering step at the start of a play, which is often the slowest part of a short play. The cost is that no `ansible_facts` values are available — so use it for plays that only need static variables, or gather facts explicitly later with the `setup` module.",
+    "tags": [
+      "facts"
+    ]
+  },
+  {
+    "q": "How do you add custom facts to a managed host, and where do they appear?",
+    "a": "Put an INI or JSON file ending in `.fact` in `/etc/ansible/facts.d/` on the host (an executable printing JSON also works). It surfaces under `ansible_facts['ansible_local']['<filename>']` — e.g. `/etc/ansible/facts.d/custom.fact` becomes `ansible_local['custom']`.",
+    "tags": [
+      "facts"
+    ]
+  },
+  {
+    "q": "Which magic variables tell you the current host's inventory name and let you read another host's variables?",
+    "a": "`inventory_hostname` is the name as written in the inventory (not necessarily the machine's hostname), and `hostvars['<host>']` gives access to another host's variables and facts. `groups` holds the whole inventory as a dictionary — the three together are what makes 'generate a config listing all the backends' possible.",
+    "tags": [
+      "variables"
+    ]
+  },
+  {
+    "q": "Name the ansible-vault subcommands and the two ways to supply the password at run time.",
+    "a": "`create`, `edit`, `view`, `encrypt`, `decrypt`, `rekey`, and `encrypt_string` for a single value. At run time: `--ask-vault-pass` to be prompted, or `--vault-password-file <path>` (which can be set once as `vault_password_file` in `ansible.cfg`) — and that file must be `chmod 600` and never committed.",
+    "tags": [
+      "vault"
+    ]
+  },
+  {
+    "q": "When would you use `ansible-vault encrypt_string` instead of encrypting a whole file?",
+    "a": "When only one value in an otherwise readable file is sensitive. It emits an encrypted blob you paste in as a normal variable, so the rest of the vars file stays reviewable in Git. The alternative project pattern is a plaintext `vars.yml` referencing `{{ vault_* }}` names defined in an encrypted `vault.yml`.",
+    "tags": [
+      "vault"
+    ]
+  },
+  {
+    "q": "When do you use `template` instead of `copy`?",
+    "a": "When the file's content depends on variables or facts — a page showing each host's own FQDN, a config with the host's IP. `copy` is for content that's identical everywhere (or given inline with `content:`). Templates live in `templates/` as `*.j2` and are found by bare filename.",
+    "tags": [
+      "templates"
+    ]
+  },
+  {
+    "q": "Write the Jinja2 for looping over a group's hosts and printing each one's IP address.",
+    "a": "```\n{% for host in groups['webservers'] %}\nserver {{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }};\n{% endfor %}\n```\nThis `groups` + `hostvars` combination is the standard way to generate a load-balancer or cluster config that lists other machines.",
+    "tags": [
+      "templates",
+      "jinja2"
+    ]
+  },
+  {
+    "q": "What does the `default()` filter do and why does it matter?",
+    "a": "`{{ port | default(80) }}` supplies a fallback when a variable is undefined, turning a fatal 'undefined variable' error into a sensible value. It's the most useful filter there is for making a playbook or role tolerant of missing optional data.",
+    "tags": [
+      "jinja2"
+    ]
+  },
+  {
+    "q": "What does `validate:` do on a template or lineinfile task?",
+    "a": "It runs a checker against a temporary copy of the rendered file (`%s` is replaced by that path) and refuses to install it if the check fails — e.g. `validate: 'visudo -cf %s'` or `'/usr/sbin/sshd -t -f %s'`. It's what stands between a bad template and an unusable machine.",
+    "hint": "Think sudoers.",
+    "tags": [
+      "templates",
+      "safety"
+    ]
+  },
+  {
+    "q": "Why is `regexp:` essential to `lineinfile`, and when should you stop using the module?",
+    "a": "`regexp:` is how the module finds the existing line to replace; without it, a differing line gets appended and the file grows on every run. If you need several `lineinfile` tasks on the same file, switch to a template and own the whole file — it's clearer and reliably idempotent.",
+    "tags": [
+      "lineinfile",
+      "idempotency"
+    ]
+  },
+  {
+    "q": "What's the difference between a role's `defaults/main.yml` and `vars/main.yml`?",
+    "a": "`defaults/` has the lowest precedence of any variable source, so it holds values a user is expected to override from `group_vars` or the play. `vars/` sits near the top of precedence and holds internal values the role depends on. Putting an overridable setting in `vars/` is why a role sometimes 'ignores' your variable.",
+    "hint": "One is meant to be overridden; the other resists it.",
+    "tags": [
+      "roles"
+    ]
+  },
+  {
+    "q": "Name the directories in a standard role and the command that scaffolds them.",
+    "a": "`tasks/`, `handlers/`, `templates/`, `files/`, `defaults/`, `vars/`, `meta/` (plus a README). `ansible-galaxy init roles/<name>` creates the whole skeleton. Only `tasks/main.yml` is truly required.",
+    "tags": [
+      "roles"
+    ]
+  },
+  {
+    "q": "What's the difference between listing a role under `roles:` and using `include_role`?",
+    "a": "Roles under `roles:` run before the play's `tasks:`, in order. `include_role` is a task, so it runs exactly where you place it and can be made conditional with `when:` or looped. `import_role` is the static variant, processed when the playbook is parsed rather than when it's reached.",
+    "tags": [
+      "roles"
+    ]
+  },
+  {
+    "q": "How do you install a project's roles and collections into the project directory rather than system-wide?",
+    "a": "Describe them in a `requirements.yml`, then `ansible-galaxy collection install -r requirements.yml -p collections/` and `ansible-galaxy role install -r requirements.yml -p roles/`. Point `ansible.cfg` at those directories with `collections_path` and `roles_path` so the project stays self-contained.",
+    "tags": [
+      "collections"
+    ]
+  },
+  {
+    "q": "What are RHEL system roles, and where do you look to learn how to use one?",
+    "a": "Red Hat's supported, idempotent roles for common administration jobs (time synchronisation, SELinux, firewall, storage, networking, logging), from the `rhel-system-roles` package. Their interface is variables, documented — with example playbooks — in `/usr/share/doc/rhel-system-roles/<role>/`. That directory is the first place to look when a task names one.",
+    "tags": [
+      "system-roles"
+    ]
+  },
+  {
+    "q": "Which `ansible.posix.mount` state both mounts a filesystem now and writes it to /etc/fstab?",
+    "a": "`state: mounted`. `present` only writes the fstab entry (no mount), `unmounted` unmounts but leaves the entry, and `absent` removes both. It's the RHCSA persistence rule encoded in one parameter.",
+    "hint": "Two of the four states touch fstab.",
+    "tags": [
+      "storage"
+    ]
+  },
+  {
+    "q": "What does `append: true` do on the `user` module?",
+    "a": "It adds the listed supplementary groups instead of replacing the user's whole group list — the module's version of `usermod -aG` versus `usermod -G`. Without it you silently remove every other group the user was in, including `wheel`.",
+    "tags": [
+      "users"
+    ]
+  },
+  {
+    "q": "Why do `permanent: true` and `immediate: true` usually appear together on an `ansible.posix.firewalld` task?",
+    "a": "They're the module's `--permanent` and `--reload`. `permanent` alone writes the rule but doesn't apply it to the running firewall; `immediate` alone applies it but loses it at reboot. Setting both gets you one idempotent task that's correct now and after a reboot.",
+    "tags": [
+      "firewalld"
+    ]
+  },
+  {
+    "q": "Which modules replace `pvcreate`/`vgcreate`/`lvcreate`/`mkfs`, and which collection are they in?",
+    "a": "`community.general.lvg` (volume group, taking `pvs:`), `community.general.lvol` (logical volume), and `community.general.filesystem` (mkfs). `community.general.parted` handles the partition beforehand. To grow later, `lvol` takes `size: +1g` with `resizefs: true` — the module's `lvextend -r`.",
+    "tags": [
+      "storage",
+      "lvm"
+    ]
+  },
+  {
+    "q": "How do you set a password with the `user` module without leaking it?",
+    "a": "Pass a hash, not plaintext: `password: \"{{ pw | password_hash('sha512') }}\"`, keep `pw` in a Vault-encrypted variable, and set `no_log: true` on the task so the value never appears in the output. The module will not accept a plaintext password as-is.",
+    "tags": [
+      "users",
+      "vault"
+    ]
+  },
+  {
+    "q": "Why is `state: present` usually preferable to `state: latest` in the dnf module?",
+    "a": "`latest` reports `changed` whenever an upgrade is available upstream, so re-runs stop being clean and you can never verify idempotency. Use `present` unless the task explicitly asks for packages to be upgraded.",
+    "tags": [
+      "dnf",
+      "idempotency"
+    ]
+  },
+  {
+    "q": "What makes a `cron` module entry idempotent across runs?",
+    "a": "The `name:` parameter — Ansible writes it into the crontab as a comment and uses it to find and update that job later. Without a stable name, changing the schedule or command adds a duplicate entry instead of updating the existing one.",
+    "tags": [
+      "cron"
+    ]
+  },
+  {
+    "q": "Which two modules cover SELinux booleans and file contexts, and what still has to happen after the context one?",
+    "a": "`ansible.posix.seboolean` (with `persistent: true`, the module's `-P`) and `community.general.sefcontext` for the policy rule. `sefcontext` records the rule but doesn't relabel existing files — you still need a `restorecon` step, typically as a handler, exactly as on the command line.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "What does `changed_when: false` accomplish, and when do you need it?",
+    "a": "It tells Ansible a task never counts as a change — needed on any `command`/`shell` task that only reads state, which would otherwise report `changed` on every run and stop your playbook from ever reaching a clean second run.",
+    "tags": [
+      "idempotency"
+    ]
+  },
+  {
+    "q": "What's the difference between `ignore_errors: true` and `failed_when: false`?",
+    "a": "`ignore_errors` still marks the task failed in the output and simply continues; `failed_when: false` redefines the task as never failing. `failed_when` with a real condition (`failed_when: \"'ERROR' in result.stdout\"`) is better than either, because it states *why* a result is acceptable.",
+    "tags": [
+      "error-handling"
+    ]
+  },
+  {
+    "q": "What do `block`, `rescue`, and `always` do?",
+    "a": "Try/catch/finally for tasks: `block` groups them, `rescue` runs only if something in the block failed, and `always` runs either way. It's the structure for a change that needs rolling back or cleaning up rather than just stopping the play.",
+    "tags": [
+      "error-handling"
+    ]
+  },
+  {
+    "q": "By default, what happens to the other hosts when one host fails a task?",
+    "a": "That host is dropped from the rest of the play; the others carry on. Change it with `any_errors_fatal: true` (any failure stops the play for everyone), `max_fail_percentage`, or `serial: 1` to roll changes out one host at a time.",
+    "tags": [
+      "error-handling"
+    ]
+  },
+  {
+    "q": "A playbook run ends with 'The task includes an option with an undefined variable'. What are the likely causes?",
+    "a": "A typo'd variable name, a variable defined for a different host or group than the one being run, or an optional value that simply wasn't set. Check `group_vars`/`host_vars` for the failing host, and consider `| default(...)` if the variable is genuinely optional.",
+    "tags": [
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Which flags show what a template task would write, without writing it?",
+    "a": "`ansible-playbook site.yml --check --diff` — check mode performs a dry run and `--diff` prints the actual rendered differences. It's the fastest way to catch a Jinja2 error, and far nicer than deploying the file and reading it afterwards.",
+    "tags": [
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Which in-playbook modules help you debug, and what does each do?",
+    "a": "`ansible.builtin.debug` prints a variable (`var:`) or a message (`msg:`), `ansible.builtin.fail` stops with your own message under a `when:` condition, and `ansible.builtin.assert` checks a list of conditions with a custom `fail_msg`. On the command line, `-v`/`-vvv` and `--step` complement them.",
+    "tags": [
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What's the difference between `forks` and `serial`?",
+    "a": "`forks` (default 5, set in ansible.cfg or with `-f`) caps how many hosts a SINGLE task runs on simultaneously. `serial` splits the ENTIRE play into batches, so batch one completes the whole play before batch two starts — that's what makes a rolling update possible. One is concurrency, the other is release strategy.",
+    "hint": "One is about speed, the other about safety.",
+    "tags": [
+      "parallelism"
+    ]
+  },
+  {
+    "q": "What does `delegate_to` do, and why not just target the other host directly?",
+    "a": "It runs one task on a different host while variables and facts still refer to the ORIGINAL target — so `delegate_to: lb1` with `{{ inventory_hostname }}` lets you remove *this* web server from the load balancer. Targeting the load balancer group directly would lose the identity of the host you're working on. `delegate_to: localhost` runs a task on the control node.",
+    "tags": [
+      "delegation"
+    ]
+  },
+  {
+    "q": "What does `run_once: true` do?",
+    "a": "Runs the task a single time — on the first host of the batch — and makes the result available to all hosts in the play. It's how you do a database migration or a one-off API call from a play that targets many hosts, usually paired with `delegate_to` to pin it to a specific machine.",
+    "tags": [
+      "delegation"
+    ]
+  },
+  {
+    "q": "A command takes 20 minutes and the task keeps failing on a connection timeout. What fixes it?",
+    "a": "`async: 1800` with `poll: 10` — Ansible starts the job and polls for completion instead of holding an SSH connection open for the whole run. With `poll: 0` it's fire-and-forget: the play continues immediately and you collect the result later with the `async_status` module using the registered `ansible_job_id`.",
+    "tags": [
+      "async"
+    ]
+  },
+  {
+    "q": "Why use the `reboot` module instead of `command: reboot`?",
+    "a": "Because the connection dies before a plain `command` can report success, so the task fails even though the reboot worked. `ansible.builtin.reboot` expects the disconnection, waits for the host to answer again, and only then returns. `wait_for_connection` does the waiting half if something else triggered the reboot.",
+    "tags": [
+      "modules"
+    ]
+  },
+  {
+    "q": "What do `:`, `!`, and `&` mean in a host pattern?",
+    "a": "`:` is union (`webservers:dbservers`), `!` excludes (`webservers:!web1`), and `&` intersects (`webservers:&production`). They work in a play's `hosts:` line and with `--limit` — though `--limit` can only narrow what the play already targets, never widen it.",
+    "tags": [
+      "inventory"
+    ]
+  },
+  {
+    "q": "What is a dynamic inventory, and how do you verify one is working?",
+    "a": "A source queried at run time instead of a static file — normally an inventory plugin configured by a YAML file (e.g. `plugin: amazon.aws.aws_ec2`), or an executable script printing JSON for `--list` and `--host <name>`. Verify with `ansible-inventory -i <source> --graph`. Point `inventory` at a directory and Ansible merges static and dynamic sources, leaving your plays and group_vars unchanged.",
+    "tags": [
+      "inventory"
+    ]
+  },
+  {
+    "q": "What does `strategy: free` change about how a play runs?",
+    "a": "By default (`linear`), Ansible finishes a task on every host before starting the next, so all hosts stay in step. With `strategy: free`, each host races through the play independently and doesn't wait for the others — useful when hosts vary wildly in speed and the lockstep is the bottleneck rather than the point.",
+    "tags": [
+      "parallelism"
+    ]
+  }
+]

@@ -1,0 +1,662 @@
+[
+  {
+    "q": "RHCSA is graded on end state rather than method. What does that change about how you work?",
+    "a": "Any correct approach counts — there's no credit for the 'official' command and no partial credit for intent. So use the tool you're fastest and safest with, and spend the saved time verifying each requirement with a command instead of assuming it worked.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "Why is 'does it survive a reboot?' the single most important question on the RHCSA exam?",
+    "a": "Grading happens on a freshly booted system. A hand-mounted filesystem, a started-but-not-enabled service, a non-`--permanent` firewall rule and a `chcon` label all disappear at reboot — so every change needs its persistent partner (`/etc/fstab`, `systemctl enable`, `--permanent`, `semanage fcontext`).",
+    "hint": "Think about when the grading script runs.",
+    "tags": [
+      "exam",
+      "persistence"
+    ]
+  },
+  {
+    "q": "Name the persistent partner for each: `systemctl start`, `mount`, `firewall-cmd --add-service`, `setenforce 1`, `swapon`.",
+    "a": "`systemctl enable` (or `enable --now`); an `/etc/fstab` entry; the same command with `--permanent` plus `--reload`; `SELINUX=enforcing` in `/etc/selinux/config`; an `/etc/fstab` swap line.",
+    "tags": [
+      "exam",
+      "persistence"
+    ]
+  },
+  {
+    "q": "What documentation is available on an offline RHCSA exam system?",
+    "a": "Everything installed on the machine: `man` pages, `man -k <keyword>` (apropos) to search their descriptions, `<command> --help`, and real example configuration files under `/usr/share/doc/<package>/`. Using them is expected — practise finding things there before exam day.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "What's the difference between `command &> file` and `command 2>&1 | less`?",
+    "a": "`&>` sends both stdout and stderr to a file. When a pipe is involved you need `2>&1` placed before the pipe, because the pipe only carries stdout — merging stderr into it first is what makes both streams reach the next command.",
+    "tags": [
+      "tools"
+    ]
+  },
+  {
+    "q": "Why must the pattern in `find /etc -name '*.conf'` be quoted?",
+    "a": "Unquoted, the shell expands `*.conf` against the current directory before `find` ever sees it, so `find` searches for whatever filenames happened to match there. Quoting passes the pattern through for `find` to match against every path it visits.",
+    "tags": [
+      "tools"
+    ]
+  },
+  {
+    "q": "On a directory, what do the r, w, and x permission bits actually allow?",
+    "a": "`r` lists the names inside, `w` creates and deletes entries, and `x` lets you enter the directory and access files within it. A directory with `r` but no `x` shows filenames and nothing else — which is why 'but I gave it read!' is such a common confusion.",
+    "hint": "One of them is about traversal, not content.",
+    "tags": [
+      "permissions"
+    ]
+  },
+  {
+    "q": "Which special permission bit makes new files in a directory inherit the directory's group, and what's its numeric mode?",
+    "a": "setgid — `chmod g+s <dir>`, or numerically a leading 2, e.g. `chmod 2770 /srv/project`. It's the standard answer for a shared collaboration directory, so everything created there belongs to the shared group automatically.",
+    "tags": [
+      "permissions"
+    ]
+  },
+  {
+    "q": "What does the sticky bit do, and where do you see it by default?",
+    "a": "On a directory it means only a file's owner (or root) may delete or rename it, even though the directory is writable by everyone. `/tmp` is the canonical example, mode `1777` — everyone can create files, nobody can delete someone else's.",
+    "tags": [
+      "permissions"
+    ]
+  },
+  {
+    "q": "A umask of 007 produces which default modes for new files and new directories?",
+    "a": "Files `660` and directories `770`. New files start from `666` and directories from `777`, minus the umask — so `007` removes all permissions for 'other' while leaving the group full access. (`022`, the common default, gives `644` and `755`.)",
+    "hint": "Files start at 666, directories at 777.",
+    "tags": [
+      "permissions",
+      "umask"
+    ]
+  },
+  {
+    "q": "`getfacl` shows `user:ana:rwx` but ana can only read the file. What's the most likely explanation?",
+    "a": "The ACL mask is limiting it. The mask caps every named user and group entry, so with `mask::r--` the `rwx` entry is effective as read-only — `getfacl` prints `#effective:r--` beside it. Fix the mask (`setfacl -m m::rwx <file>`) rather than re-adding the entry.",
+    "tags": [
+      "acl"
+    ]
+  },
+  {
+    "q": "How do you make every new file inside a directory inherit a given ACL?",
+    "a": "Set a default ACL with the `d:` prefix: `setfacl -m d:g:devs:rwx /srv/data`. Default ACLs apply only to directories and are inherited by things created inside them; they don't change the directory's own effective permissions.",
+    "tags": [
+      "acl"
+    ]
+  },
+  {
+    "q": "Why is `usermod -aG devs raj` so different from `usermod -G devs raj`?",
+    "a": "`-G` replaces raj's entire supplementary group list, silently removing every other group — including `wheel`, which takes his sudo access with it. `-a` appends instead. Always use `-aG`, then verify with `id raj`.",
+    "hint": "One of them is destructive.",
+    "tags": [
+      "users"
+    ]
+  },
+  {
+    "q": "What's the difference between a user's primary group (-g) and supplementary groups (-G)?",
+    "a": "The primary group is the one new files they create are owned by, and it's the GID field in `/etc/passwd`. Supplementary groups are additional memberships listed in `/etc/group` that grant access. `id` shows the primary as `gid=` and the rest under `groups=`.",
+    "tags": [
+      "users"
+    ]
+  },
+  {
+    "q": "How do you create an account that can't be logged into, for running a service?",
+    "a": "`useradd -M -s /sbin/nologin svcacct` — `-M` skips creating a home directory and `/sbin/nologin` as the shell refuses interactive logins. (`usermod -s /sbin/nologin <user>` converts an existing account.)",
+    "tags": [
+      "users"
+    ]
+  },
+  {
+    "q": "`chage -M 60` versus `chage -E 2026-12-31` — what's the difference?",
+    "a": "`-M` sets the maximum password age: after 60 days the user must change their password, then carries on. `-E` expires the account itself on a fixed date: no more logins at all, password change or not. `chage -l <user>` shows both.",
+    "hint": "One expires a credential, the other an identity.",
+    "tags": [
+      "users"
+    ]
+  },
+  {
+    "q": "Where should you put a new sudo rule, and with which command?",
+    "a": "In a drop-in file: `visudo -f /etc/sudoers.d/<name>`. `visudo` syntax-checks before saving, and a drop-in keeps one typo from breaking the whole sudo configuration. Verify the result with `sudo -lU <user>`.",
+    "tags": [
+      "sudo"
+    ]
+  },
+  {
+    "q": "On a Red Hat system, what's usually the fastest way to give a user full sudo access?",
+    "a": "Add them to the `wheel` group — `usermod -aG wheel ana`. A rule for `%wheel` ships in `/etc/sudoers` by default, so no new sudoers file is needed. Confirm with `sudo -lU ana`.",
+    "tags": [
+      "sudo"
+    ]
+  },
+  {
+    "q": "Write the sudoers line letting ana run any command as root without a password prompt.",
+    "a": "`ana  ALL=(ALL)  NOPASSWD: ALL` — read left to right as who, on which hosts, (as whom), which commands. A `%` prefix would make it a group rule. Put it in `/etc/sudoers.d/` via `visudo -f`.",
+    "tags": [
+      "sudo"
+    ]
+  },
+  {
+    "q": "What are the three LVM layers, and what problem does the middle one solve?",
+    "a": "PV → VG → LV: a physical volume is a device given to LVM, a volume group is a pool of PVs, and a logical volume is a slice of that pool that you format and mount. The pool exists so that a slice can be grown from any disk in the group without moving data.",
+    "tags": [
+      "lvm"
+    ]
+  },
+  {
+    "q": "Which single flag makes `lvextend` grow the filesystem as well as the logical volume?",
+    "a": "`-r` (`--resizefs`), e.g. `lvextend -L +1G -r /dev/vg_data/lv_app`. Without it you've grown the container but not the filesystem inside, so `df -h` shows no change — the classic 'I did extend it' failure. Doing it manually is `xfs_growfs <mountpoint>` or `resize2fs <device>`.",
+    "hint": "Its absence is the most common LVM exam mistake.",
+    "tags": [
+      "lvm"
+    ]
+  },
+  {
+    "q": "Your volume group has no free space but there's an unused disk. What's the sequence?",
+    "a": "Partition the new disk if needed, then `pvcreate /dev/vdc1`, `vgextend vg_data /dev/vdc1`, and confirm the pool grew with `vgs` (VFree). Only then can `lvextend` take more space for a logical volume.",
+    "tags": [
+      "lvm"
+    ]
+  },
+  {
+    "q": "In `lvcreate`, when do you use -L and when -l?",
+    "a": "`-L` takes a human size (`-L 2G`); `-l` takes a number of physical extents or a percentage (`-l 50`, `-l 100%FREE`). Extents are LVM's allocation unit, 4 MiB by default — if a task words the size in extents, use `-l` and don't convert.",
+    "tags": [
+      "lvm"
+    ]
+  },
+  {
+    "q": "What are XFS's two hard limits when resizing?",
+    "a": "It cannot be shrunk at all, and it can only be grown while mounted (`xfs_growfs` operates on the mount point). A task asking you to reduce a filesystem is therefore hinting at ext4 — shrinking that requires unmounting it first.",
+    "tags": [
+      "filesystems"
+    ]
+  },
+  {
+    "q": "What's the very first command to run before any partitioning or mkfs work, and why?",
+    "a": "`lsblk` (and `lsblk -f`) to confirm exactly which device you're about to change. `/dev/vda` is usually the system disk; a `mkfs` or `mklabel` on the wrong device destroys the machine you're being graded on. Looking first costs seconds.",
+    "tags": [
+      "storage",
+      "safety"
+    ]
+  },
+  {
+    "q": "Why does `/etc/fstab` refer to partitions by UUID instead of /dev/sdb1?",
+    "a": "Device names are assigned in discovery order, so adding hardware or moving a VM can renumber them while fstab still points at the old name. A UUID is stored in the filesystem itself and travels with it. Find one with `lsblk -f` or `blkid`. (LVM paths like `/dev/vg/lv` are stable and safe to use directly.)",
+    "tags": [
+      "fstab"
+    ]
+  },
+  {
+    "q": "Name the six fields of an /etc/fstab line, in order.",
+    "a": "What (UUID=/LABEL=/device), where (mount point, which must exist), type (xfs, ext4, swap, nfs…), options (`defaults`, `_netdev`, `nofail`…), dump (almost always 0), and fsck order (0 none, 1 root, 2 others; XFS uses 0).",
+    "tags": [
+      "fstab"
+    ]
+  },
+  {
+    "q": "Which two commands do you run immediately after editing /etc/fstab, and why?",
+    "a": "`systemctl daemon-reload` — systemd generates mount units from fstab and must re-read it — then `mount -a`, which mounts everything not already mounted and fails loudly on a bad line. That turns a would-be unbootable system into an error message you can fix while you still have a shell. `findmnt --verify` is a useful third check.",
+    "hint": "You want to find the typo now, not at the next boot.",
+    "tags": [
+      "fstab"
+    ]
+  },
+  {
+    "q": "What does the `_netdev` mount option do, and which mounts need it?",
+    "a": "It tells systemd the mount depends on the network, so it waits for networking and unmounts it before the network goes down at shutdown. NFS and other network filesystems need it; without it the boot can hang or the mount can fail on a race.",
+    "tags": [
+      "fstab",
+      "nfs"
+    ]
+  },
+  {
+    "q": "What's the full sequence to add and persist a swap volume?",
+    "a": "`mkswap /dev/vg_data/lv_swap` to format it, `swapon /dev/vg_data/lv_swap` to enable it now, verify with `swapon --show` (or `free -h`), then add an fstab line with type `swap`: `/dev/vg_data/lv_swap none swap defaults 0 0`. Higher `pri=` values are used first when there are several.",
+    "tags": [
+      "swap"
+    ]
+  },
+  {
+    "q": "What does autofs do, and what are the two files an indirect map needs?",
+    "a": "It mounts a path on demand when something accesses it and unmounts it when idle — avoiding boot hangs when a file server is unreachable. You need a master entry (e.g. `/etc/auto.master.d/data.autofs` containing `/shares /etc/auto.data`) and the map file it points to. In the map, `*` matches the subdirectory and `&` substitutes it, which is how one line serves every user's home.",
+    "tags": [
+      "autofs"
+    ]
+  },
+  {
+    "q": "`systemctl isolate` versus `systemctl set-default` — which does a task about boot behaviour want?",
+    "a": "`set-default` — it changes which target the system boots into next time, which is what 'from now on' means. `isolate` switches the running system immediately and changes nothing about the next boot.",
+    "tags": [
+      "boot"
+    ]
+  },
+  {
+    "q": "Give the full root-password-reset procedure from the GRUB menu.",
+    "a": "Press `e` at the menu, append `rd.break` to the `linux` line, Ctrl-x. At the `switch_root:/#` prompt: `mount -o remount,rw /sysroot`, `chroot /sysroot`, `passwd root`, `touch /.autorelabel`, then `exit` twice. The system relabels and reboots itself.",
+    "hint": "Five commands after the prompt appears.",
+    "tags": [
+      "boot",
+      "recovery"
+    ]
+  },
+  {
+    "q": "Why does skipping `touch /.autorelabel` during a root password reset lock everyone out?",
+    "a": "`passwd` rewrites `/etc/shadow`, and inside the chroot the new file gets the wrong SELinux context. On the next boot the login process is denied access to it, so no account can authenticate. The `/.autorelabel` flag triggers a relabel of the filesystem at boot, which restores the correct context.",
+    "tags": [
+      "boot",
+      "selinux"
+    ]
+  },
+  {
+    "q": "What's the safe way to add or remove a kernel boot argument permanently?",
+    "a": "`grubby`: `grubby --update-kernel=ALL --args=\"quiet\"` and `grubby --update-kernel=ALL --remove-args=\"quiet\"`, with `grubby --info=ALL` to inspect. It edits the boot entries for you instead of hand-editing GRUB files. Menu-level settings (like `GRUB_TIMEOUT`) go in `/etc/default/grub` followed by `grub2-mkconfig -o /boot/grub2/grub.cfg`.",
+    "tags": [
+      "boot"
+    ]
+  },
+  {
+    "q": "The system drops to emergency mode after an fstab edit. What's your first command?",
+    "a": "`mount -o remount,rw /` — in emergency mode the root filesystem is read-only, so you can't fix anything until it's writable. Then correct `/etc/fstab`, and consider `nofail` on non-critical mounts so a missing device can't do this again.",
+    "tags": [
+      "boot",
+      "recovery"
+    ]
+  },
+  {
+    "q": "Which four tuned-adm subcommands cover the RHCSA use of tuned?",
+    "a": "`tuned-adm active` (current profile), `tuned-adm list` (available), `tuned-adm recommend` (what tuned suggests for this machine), and `tuned-adm profile <name>` to switch — which is persistent. Ensure the service itself is running with `systemctl enable --now tuned`.",
+    "tags": [
+      "tuned"
+    ]
+  },
+  {
+    "q": "A command a task needs isn't installed and you don't know its package. What do you run?",
+    "a": "`dnf provides '*/<command>'` — it searches package contents for the file. It's how you learn that `semanage` comes from `policycoreutils-python-utils`. `rpm -qf <path>` answers the same question for a file that's already installed.",
+    "tags": [
+      "dnf"
+    ]
+  },
+  {
+    "q": "How do you reverse a package installation you regret?",
+    "a": "`dnf history` to list transactions with their IDs, then `dnf history undo <id>`. It reverses that whole transaction — including dependencies pulled in with it — which is safer and more complete than removing packages one at a time.",
+    "tags": [
+      "dnf"
+    ]
+  },
+  {
+    "q": "What are the minimum fields of a repository file in /etc/yum.repos.d/?",
+    "a": "A section id in brackets, plus `name`, `baseurl`, `enabled=1`, and `gpgcheck` (with `gpgkey=` when it's 1). Confirm the repo is seen with `dnf repolist`, and `dnf clean all` if a stale cache is interfering.",
+    "tags": [
+      "dnf"
+    ]
+  },
+  {
+    "q": "What are cron's five time fields, and what extra field do /etc/crontab and /etc/cron.d entries add?",
+    "a": "minute, hour, day-of-month, month, day-of-week — so `30 3 * * *` is 03:30 daily. System-wide files (`/etc/crontab`, `/etc/cron.d/*`) add a user field between the schedule and the command: `0 4 * * * root /usr/local/bin/rotate.sh`.",
+    "hint": "User crontabs and system files differ by one column.",
+    "tags": [
+      "cron"
+    ]
+  },
+  {
+    "q": "How do you schedule a one-off command for later, and how do you check or cancel it?",
+    "a": "`at 22:00` (or `at now +10 minutes`), then type the command and finish with Ctrl-d. `atq` lists pending jobs and `atrm <id>` cancels one. The `atd` service must be running: `systemctl enable --now atd`.",
+    "tags": [
+      "scheduling"
+    ]
+  },
+  {
+    "q": "`journalctl -b -1` prints nothing. Why, and what fixes it for next time?",
+    "a": "The journal is stored in memory by default, so it doesn't survive a reboot. Make it persistent with `mkdir -p /var/log/journal && systemctl restart systemd-journald`, or by setting `Storage=persistent` in `/etc/systemd/journald.conf`.",
+    "tags": [
+      "logs"
+    ]
+  },
+  {
+    "q": "Which journalctl options answer 'what went wrong with this service, recently, and how bad was it'?",
+    "a": "`journalctl -u <unit>` for one service, `--since \"10 min ago\"` (or `-b` for this boot) to bound the time, and `-p err` to filter by priority — priorities run emerg, alert, crit, err, warning, notice, info, debug, and `-p` means 'this level and worse'. `-f` follows live.",
+    "tags": [
+      "logs"
+    ]
+  },
+  {
+    "q": "How do you set the timezone and enable network time synchronisation?",
+    "a": "`timedatectl set-timezone Asia/Manila` (find names with `timedatectl list-timezones`) and `timedatectl set-ntp true`. Verify actual synchronisation with `chronyc sources -v`; a specific time server goes in `/etc/chrony.conf` as `server <host> iburst`, then restart `chronyd`.",
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "q": "Why doesn't `ip addr add` count as configuring an address on RHEL?",
+    "a": "NetworkManager owns the configuration. An address added with `ip` isn't in any connection profile, so it's lost at reboot or the next time the profile is activated. Configure with `nmcli connection add/modify`, which writes a keyfile under `/etc/NetworkManager/system-connections/`; use `ip addr` only to read the current state.",
+    "tags": [
+      "networking"
+    ]
+  },
+  {
+    "q": "You ran `nmcli connection modify` and `ip addr` still shows the old address. What's missing?",
+    "a": "The profile hasn't been reactivated. Run `nmcli connection up <profile>` (or `nmcli device reapply <device>`). `modify` edits the stored profile; it doesn't touch the running interface.",
+    "hint": "Editing isn't applying.",
+    "tags": [
+      "networking"
+    ]
+  },
+  {
+    "q": "What's the difference between `ipv4.dns` and `+ipv4.dns` in nmcli?",
+    "a": "Plain `ipv4.dns` replaces the whole list of DNS servers; `+ipv4.dns` appends one and `-ipv4.dns` removes one. It's the same trap as `usermod -G` versus `-aG` — assignment quietly discards what was there.",
+    "tags": [
+      "networking"
+    ]
+  },
+  {
+    "q": "Give the nmcli command for a static IPv4 profile with address, gateway, and DNS.",
+    "a": "`nmcli connection add type ethernet con-name static0 ifname enp1s0 ipv4.method manual ipv4.addresses 192.168.1.10/24 ipv4.gateway 192.168.1.1 ipv4.dns 192.168.1.53 autoconnect yes` — then `nmcli connection up static0` to apply it. `ipv4.method manual` is what turns DHCP off.",
+    "tags": [
+      "networking"
+    ]
+  },
+  {
+    "q": "What does `--permanent` do in firewall-cmd, and what must follow it?",
+    "a": "It writes the rule to the permanent configuration but does not apply it to the running firewall — `firewall-cmd --reload` does that. The alternative pattern is to configure at runtime, test, then save everything with `firewall-cmd --runtime-to-permanent`.",
+    "tags": [
+      "firewalld"
+    ]
+  },
+  {
+    "q": "Why prefer `firewall-cmd --add-service=http` over `--add-port=80/tcp`?",
+    "a": "A service definition covers every port and protocol that service needs and states the intent clearly, which is normally what the task means. `firewall-cmd --get-services` lists the predefined names. Use `--add-port` when the service runs somewhere non-standard, or when no definition exists.",
+    "tags": [
+      "firewalld"
+    ]
+  },
+  {
+    "q": "A service is running locally but unreachable from another host. In what order do you check?",
+    "a": "Listening (`ss -tulpn` — bound to `127.0.0.1` only is a classic), then the firewall (`firewall-cmd --list-all`), then SELinux (`ausearch -m AVC -ts recent`), with `systemctl status` before all of it. Four checks in a fixed order beats guessing.",
+    "tags": [
+      "networking",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Why does a file moved into /var/www/html get denied while a file created there works?",
+    "a": "SELinux labels are inherited from the destination directory when a file is created or copied, but a moved file keeps its original label — so `mv /root/index.html /var/www/html/` carries `admin_home_t` with it and httpd is denied. Fix with `restorecon -v /var/www/html/index.html`, or copy instead of moving.",
+    "hint": "cp and mv treat labels differently.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "What's the two-command pattern for permanently labelling a non-standard directory?",
+    "a": "`semanage fcontext -a -t httpd_sys_content_t \"/web(/.*)?\"` records the rule in policy, then `restorecon -Rv /web` applies it to the files on disk. Both halves are needed: the first alone changes no labels, the second alone has no rule to apply.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "Why is `chcon` not an acceptable permanent fix for a mislabelled path?",
+    "a": "It changes the label on disk without teaching policy anything, so the next `restorecon` or filesystem relabel reverts it. It's fine for quickly testing whether a label is the problem — then make it stick with `semanage fcontext -a` plus `restorecon`.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "What does the `-P` in `setsebool -P` do, and why does it matter?",
+    "a": "It writes the boolean to the persistent policy instead of only flipping it in memory, so it survives a reboot. Without `-P` the change is lost — it's SELinux's equivalent of firewalld's `--permanent`. List booleans with `getsebool -a` or `semanage boolean -l` (which adds descriptions).",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "A service is configured on a non-standard port, the firewall is open, and it still won't start. What's the fix?",
+    "a": "Label the port for SELinux: `semanage port -a -t http_port_t -p tcp 8888` (use `-m` if the port already has a label, `semanage port -l` to inspect). Services may only bind ports carrying the type their policy permits.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "What's the fastest way to turn an SELinux denial into an explanation?",
+    "a": "`ausearch -m AVC -ts recent | audit2why` — it reads the audit log and explains the denial in plain language, often naming the exact boolean that would allow it. `sealert -a /var/log/audit/audit.log` gives a fuller analysis. (`semanage`/`ausearch` come from `policycoreutils-python-utils`, `sealert` from `setroubleshoot-server`.)",
+    "tags": [
+      "selinux",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "How do you set SELinux to enforcing both now and after a reboot?",
+    "a": "`setenforce 1` for the running system and `SELINUX=enforcing` in `/etc/selinux/config` for the next boot. Note that moving from `disabled` to `enforcing` needs a full relabel: `touch /.autorelabel` and reboot.",
+    "tags": [
+      "selinux"
+    ]
+  },
+  {
+    "q": "Why do `podman ps` as root and as another user show different containers?",
+    "a": "Podman is daemonless: containers are ordinary processes owned by the user who started them, with per-user storage under `~/.local/share/containers/storage`. There's no shared daemon holding a single global list, so each user sees only their own.",
+    "tags": [
+      "podman"
+    ]
+  },
+  {
+    "q": "Why can't a rootless container bind host port 80, and what do you do instead?",
+    "a": "Ports below 1024 are privileged and an unprivileged user may not bind them. Map a high host port to the container's low port: `-p 8080:80`. The service can still listen on 80 *inside* the container.",
+    "tags": [
+      "podman"
+    ]
+  },
+  {
+    "q": "What does the `:Z` suffix on a podman volume mount do?",
+    "a": "It relabels the host directory with a private SELinux container label so the container is allowed to use it. Without it SELinux denies access and the container fails in a way that looks like a plain permission error. Lowercase `:z` is the shared variant for a directory two containers both need.",
+    "hint": "It's about labels, not permissions.",
+    "tags": [
+      "podman",
+      "selinux"
+    ]
+  },
+  {
+    "q": "How do you make a rootless container start automatically at boot?",
+    "a": "Generate a user unit — `podman generate systemd --new --files --name web` in `~/.config/systemd/user` — then `systemctl --user daemon-reload` and `systemctl --user enable --now container-web.service`. Finally, as root, `loginctl enable-linger <user>`.",
+    "tags": [
+      "podman",
+      "systemd"
+    ]
+  },
+  {
+    "q": "What does `loginctl enable-linger` do, and why do container tasks fail without it?",
+    "a": "It allows a user's systemd instance (and therefore their `--user` services) to run without that user being logged in, including at boot. Without lingering, the user's services stop at logout and never start after a reboot — so the container 'works' right up until it's graded. Check with `loginctl show-user <user> | grep Linger`.",
+    "tags": [
+      "podman",
+      "systemd"
+    ]
+  },
+  {
+    "q": "Why does `podman generate systemd` need the `--new` flag?",
+    "a": "With `--new`, the unit creates and removes the container on each start and stop, so the service is reproducible from the unit alone. Without it, the unit merely starts an existing container — which breaks as soon as that container is removed or the machine is rebuilt.",
+    "tags": [
+      "podman",
+      "systemd"
+    ]
+  },
+  {
+    "q": "Why use `su - ana` rather than `su ana` before working with rootless containers?",
+    "a": "The dash starts a full login shell with the user's complete environment, including `XDG_RUNTIME_DIR`, which rootless Podman and `systemctl --user` both need. Most 'it works as root but not as the user' confusion comes from an incomplete login session. `ssh ana@localhost` works equally well.",
+    "tags": [
+      "podman"
+    ]
+  },
+  {
+    "q": "How do you find the top CPU and memory consumers on a system from the command line?",
+    "a": "`ps aux --sort=-%cpu | head` and `ps aux --sort=-%mem | head`. Interactively, `top` with `P` (sort by CPU) or `M` (sort by memory). In `ps aux`, RSS is the honest memory figure — VSZ counts virtual address space the process may never touch.",
+    "tags": [
+      "processes"
+    ]
+  },
+  {
+    "q": "A load average of 6.0 — is that bad?",
+    "a": "You can't say without knowing the core count. Load average counts processes running or waiting on I/O, so 6.0 on a 4-core box is oversubscribed while on a 32-core box it's idle. Check `nproc` first, and read the 1/5/15-minute figures together to see whether it's rising or recovering.",
+    "hint": "One command turns the number into meaning.",
+    "tags": [
+      "processes"
+    ]
+  },
+  {
+    "q": "What do the ps STAT letters R, S, D, Z, and T mean?",
+    "a": "R running or runnable, S sleeping (waiting on something — most processes most of the time), D uninterruptible sleep (blocked in the kernel, usually on I/O), Z zombie (finished, exit status not yet collected by its parent), T stopped. A machine full of D processes has an I/O problem, not a CPU one.",
+    "tags": [
+      "processes"
+    ]
+  },
+  {
+    "q": "Why is `kill -9` the wrong first choice, and what does plain `kill` send?",
+    "a": "Plain `kill` sends SIGTERM (15), which asks a process to shut down and lets it flush buffers, remove lock files, and exit cleanly. SIGKILL (9) can't be caught, so nothing is cleaned up and data can be lost. Try the default, wait a couple of seconds, then escalate — and for a systemd service, prefer `systemctl stop`.",
+    "tags": [
+      "processes",
+      "signals"
+    ]
+  },
+  {
+    "q": "What is niceness, what's its range, and what can an ordinary user not do with it?",
+    "a": "Niceness is scheduling priority from -20 (greediest) to 19 (most generous), default 0 — higher niceness means lower priority. Set it at launch with `nice -n 10 <cmd>` or change it later with `renice -n 5 -p <pid>`. An ordinary user may only raise their own niceness; lowering it (more CPU) requires root.",
+    "hint": "Higher number, lower priority.",
+    "tags": [
+      "processes"
+    ]
+  },
+  {
+    "q": "Why does a background job started with `&` disappear when you log out, and what are two fixes?",
+    "a": "It's a child of your shell, so it's terminated when the shell exits. Use `nohup ./task.sh &` to detach it, or better, `systemd-run --unit=mytask /usr/local/bin/task.sh`, which creates a transient systemd unit that survives logout and can be inspected with `systemctl status`.",
+    "tags": [
+      "processes",
+      "jobs"
+    ]
+  },
+  {
+    "q": "Which two files does `ssh-keygen` create, and which one may never leave your machine?",
+    "a": "`~/.ssh/id_ed25519` (the private key — never copy it anywhere) and `~/.ssh/id_ed25519.pub` (the public key, safe to distribute). `ssh-copy-id user@host` appends the public half to the remote account's `~/.ssh/authorized_keys` with the correct permissions.",
+    "tags": [
+      "ssh"
+    ]
+  },
+  {
+    "q": "Key-based SSH fails with no clear error even though the key is in authorized_keys. What's the first thing to check?",
+    "a": "Permissions — SSH silently refuses keys in loosely-permissioned files. `~/.ssh` must be 700, and `authorized_keys` and private keys 600. If the home directory was moved or restored, also check SELinux labels with `restorecon -Rv ~/.ssh`.",
+    "hint": "It's not the key itself.",
+    "tags": [
+      "ssh",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What does the trailing slash change in `rsync -av /src/ /dest/`?",
+    "a": "With the trailing slash, the CONTENTS of /src are copied into /dest. Without it (`rsync -av /src /dest/`), the directory itself is copied, producing /dest/src/. Use `--dry-run` to see which one you actually asked for before it happens.",
+    "tags": [
+      "rsync"
+    ]
+  },
+  {
+    "q": "Which command should you always run after editing /etc/ssh/sshd_config, and before restarting?",
+    "a": "`sshd -t` — it validates the configuration and reports errors without touching the running daemon. Restarting on a broken config can lock you out of the machine entirely, which is a much worse position than an unapplied change.",
+    "tags": [
+      "ssh",
+      "safety"
+    ]
+  },
+  {
+    "q": "What's the difference between a hard link and a symbolic link?",
+    "a": "A hard link is another name for the same inode: it works only within one filesystem, can't point at a directory, and the data survives as long as any name remains. A symbolic link is a small file containing a path: it crosses filesystems, can point at directories, and breaks if the target is removed. `ls -li` reveals hard links by their shared inode number.",
+    "hint": "One points at data, the other at a path.",
+    "tags": [
+      "links"
+    ]
+  },
+  {
+    "q": "You delete a file that has two hard links. Is the data gone?",
+    "a": "No — the other name still refers to the same inode, and the data is only freed when the last link is removed. That's also why deleting such a file frees no disk space. With a symbolic link, deleting the target does destroy the data and leaves a dangling link.",
+    "tags": [
+      "links"
+    ]
+  },
+  {
+    "q": "Why does `name = \"ana\"` fail in a shell script?",
+    "a": "Assignment must have no spaces around the `=`. With spaces, bash reads `name` as a command and `=` and `\"ana\"` as its arguments, so you get a command-not-found error that doesn't explain itself. Write `name=\"ana\"`.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "What does an exit code of 0 mean, and how does `if` use it?",
+    "a": "0 means success; any non-zero value is a failure (and `$?` holds the last one). `if` doesn't test true/false — it tests whether a command exited 0. That's why `if systemctl is-active --quiet httpd; then` works with no brackets at all.",
+    "hint": "It's backwards from what you'd guess.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "What are $0, $1, $#, and $@ in a shell script?",
+    "a": "`$0` is the script's own name, `$1` (and `$2`…) are the positional arguments, `$#` is how many arguments were given, and `$@` is all of them. A three-line guard — `if [ $# -lt 2 ]; then echo \"Usage: $0 <src> <dst>\" >&2; exit 1; fi` — is worth writing every time.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "Name the file-test operators you need inside `[ ]`, and the one syntax rule that breaks scripts.",
+    "a": "`-f` regular file, `-d` directory, `-e` exists, `-r`/`-w`/`-x` readable/writable/executable; `-z`/`-n` for empty/non-empty strings; `-eq -ne -lt -le -gt -ge` for numbers and `=`/`!=` for strings. The rule: spaces inside the brackets are mandatory — `[ -f /etc/hosts ]`, never `[-f /etc/hosts]` — and quote your variables so an empty value can't collapse the test.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "Write the idiomatic one-liner that creates a user only if they don't already exist.",
+    "a": "`id \"$user\" &> /dev/null || useradd \"$user\"`. `||` runs the second command only when the first FAILS, and `&&` only when it succeeds — a conditional without an `if` block.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "How do you loop over the lines of a file safely in bash?",
+    "a": "`while read -r line; do echo \"$line\"; done < /etc/hosts`. The `-r` stops backslashes being interpreted, and redirecting the file into the loop reads it a line at a time. `for line in $(cat file)` splits on every space instead, which is why it misbehaves on real data.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "Which two bash flags help you debug a script?",
+    "a": "`bash -n script.sh` checks the syntax without executing anything, and `bash -x script.sh` traces each line as it runs with variables expanded. Also remember `chmod +x` — a script without the execute bit isn't executable, however correct it is.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "q": "What does Stratis give you that plain LVM plus XFS doesn't?",
+    "a": "A single management layer: `stratis pool create` then `stratis filesystem create`, with no pvcreate/vgcreate/lvcreate/mkfs sequence — and the filesystems are thinly provisioned, so they grow automatically as they fill. It also does real snapshots (`stratis filesystem snapshot`) that mount as independent filesystems.",
+    "tags": [
+      "stratis"
+    ]
+  },
+  {
+    "q": "Which /etc/fstab option does a Stratis filesystem need, and what happens without it?",
+    "a": "`x-systemd.requires=stratisd.service`. The Stratis device only exists once stratisd is running, so without it the boot tries to mount a device that isn't there yet and the system drops into emergency mode. Mount by UUID rather than the /dev/stratis path.",
+    "hint": "It's about ordering at boot.",
+    "tags": [
+      "stratis",
+      "fstab"
+    ]
+  },
+  {
+    "q": "In `lvcreate --type vdo --size 10G --virtualsize 50G`, what do the two sizes mean?",
+    "a": "`--size` is the real space taken from the volume group; `--virtualsize` is what the filesystem above believes it has. VDO deduplicates and compresses beneath the filesystem, so it can usually store more than its physical size — the volume is over-committed by design.",
+    "tags": [
+      "vdo"
+    ]
+  },
+  {
+    "q": "What's the risk of a VDO volume, and how do you monitor for it?",
+    "a": "Over-commitment: the filesystem thinks it has the virtual size, so if the data compresses or deduplicates worse than expected the physical pool fills while `df` still shows free space. Watch the real usage with `lvs -a` (and `vdostats` where available), not `df`. VDO also earns nothing on already-compressed or encrypted data.",
+    "tags": [
+      "vdo"
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "id": "rhcsa",
+  "title": "RHCSA (EX200)",
+  "emoji": "🎓",
+  "blurb": "Hands-on prep for Red Hat's system administrator exam: tools, permissions and ACLs, users and sudo, processes and priorities, SSH keys and transfers, shell scripting, LVM and filesystems, Stratis and VDO, boot recovery, dnf and scheduling, nmcli and firewalld, SELinux, and rootless containers — every task done the way it must survive a reboot.",
+  "accent": "#ef4444",
+  "order": 3.1,
+  "interviewTitle": "Practice tasks",
+  "interviewNoun": "practice tasks",
+  "interviewEmoji": "🧪",
+  "interviewIntro": "Exam-shaped tasks with worked solutions. Read the task, do it on a scratch VM (or write out the exact commands), then reveal the solution and compare — including the verification step. Every solution ends the way the exam is graded: does it still hold after a reboot?"
+}

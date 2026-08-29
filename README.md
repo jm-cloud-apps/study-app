@@ -2,7 +2,7 @@
 
 **Learn anything, one card at a time.** A content-driven study app: read bite-sized lessons, then lock the material in with **randomized, spaced-repetition flashcards**. Adding a new subject is as simple as dropping a folder of Markdown + JSON — no app code required, which makes it easy for both humans *and* AI assistants to extend.
 
-> Comes seeded with thirteen complete topics — a full **platform-engineering track**: PKI & Certificates · Nginx · Linux & systemd · Networking Fundamentals · DNS · Git Branching · Containers & Docker · Kubernetes & OpenShift · CI/CD · Terraform & IaC · Observability · ELK / Elastic Stack · Dynatrace.
+> Comes seeded with a full **platform-engineering track**: PKI & Certificates · Nginx · Linux & systemd · Networking Fundamentals · DNS · HTTP · Git Branching · Containers & Docker · Kubernetes · OpenShift (in depth) · CI/CD · Argo CD · Terraform & IaC · Observability · ELK / Elastic Stack · Dynatrace — plus a **Red Hat certification track** (RHCSA EX200 and RHCE EX294) whose exam-style practice tasks ship with worked solutions, and a Tagalog language topic.
 
 ---
 

@@ -4,7 +4,8 @@
 //   topic.json          metadata { id, title, emoji, blurb, order, accent? }
 //   lessons/*.md        Markdown lessons (ordered by their NN- filename prefix)
 //   flashcards.json     array of { q, a, hint?, tags? }
-//   interview.json      array of { q, a, category?, tags? }  (mock interview Q&A)
+//   interview.json      array of { q, a, category?, tags? }  (mock interview Q&A,
+//                       or exam practice tasks — see topic.json's interview* fields)
 //
 // To add a subject, drop a new folder in /content — no app code changes needed.
 // See content/CONTENT_GUIDE.md for the authoring contract.
@@ -64,6 +65,12 @@ function buildTopics() {
       blurb: meta.blurb || '',
       accent: meta.accent || '#6ea8fe',
       order: typeof meta.order === 'number' ? meta.order : 100,
+      // Optional relabelling of the read-and-reveal segment. Defaults describe a
+      // mock interview; an exam topic can call it "Practice tasks" instead.
+      interviewTitle: meta.interviewTitle || 'Interview prep',
+      interviewNoun: meta.interviewNoun || 'interview Q&A',
+      interviewEmoji: meta.interviewEmoji || '🎤',
+      interviewIntro: meta.interviewIntro || '',
       lessons: [],
       flashcards: [],
       interview: [],

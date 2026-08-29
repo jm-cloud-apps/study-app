@@ -77,3 +77,4 @@ A subtle but important point: **Secrets are base64-encoded, not encrypted** at r
 - **Access modes** matter: **RWO** is one-node-at-a-time (most cloud disks); scaling across nodes needs **RWX** or a **StatefulSet** with per-replica volumes.
 - Keep config out of images: **ConfigMaps** for plain config, **Secrets** for sensitive values, injected as **env vars or mounted files**.
 - **Secrets are base64, not encrypted** — protect with RBAC, keep them out of Git, and consider Vault/External Secrets for real secret management.
+- Want the layer underneath — how a CSI driver actually provisions and mounts that volume, plus snapshots and the `Pending`-PVC debugging ladder? That's the **CSI in depth** lesson at the end of this track.
