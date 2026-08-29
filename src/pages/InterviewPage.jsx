@@ -15,6 +15,14 @@ export default function InterviewPage() {
   const questions = topicId ? topic?.interview || [] : ALL_INTERVIEW
   const title = topic ? topic.title : 'Everything'
 
+  // A topic may relabel this segment (an exam topic ships practice tasks rather
+  // than interview questions); these are the mock-interview defaults.
+  const heading = topic?.interviewTitle || 'Interview prep'
+  const emoji = topic?.interviewEmoji || '🎤'
+  const intro =
+    topic?.interviewIntro ||
+    "Read each question, say your answer out loud as if an interviewer were across the table, then reveal the model answer and compare. The goal isn't word-for-word recall — it's being able to explain the idea clearly under a little pressure."
+
   const [revealed, setRevealed] = useState(() => new Set())
 
   // For the all-topics view, label each question with its source topic.
@@ -46,7 +54,7 @@ export default function InterviewPage() {
   if (questions.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-white/15 p-10 text-center text-slate-400">
-        No interview questions here yet.{' '}
+        Nothing to practise here yet.{' '}
         <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-brand-soft underline">
           {topicId ? 'Back to topic' : 'Browse topics'}
         </Link>
@@ -61,13 +69,11 @@ export default function InterviewPage() {
       </Link>
 
       <header className="animate-rise rounded-3xl border border-white/10 bg-gradient-to-br from-slate-850 to-slate-950 p-7">
-        <div className="text-4xl">🎤</div>
-        <h1 className="mt-2 text-2xl font-bold text-white">Interview prep · {title}</h1>
-        <p className="mt-2 max-w-2xl text-slate-400">
-          Read each question, say your answer out loud as if an interviewer were across the table, then
-          reveal the model answer and compare. The goal isn't word-for-word recall — it's being able to
-          explain the idea clearly under a little pressure.
-        </p>
+        <div className="text-4xl">{emoji}</div>
+        <h1 className="mt-2 text-2xl font-bold text-white">
+          {heading} · {title}
+        </h1>
+        <p className="mt-2 max-w-2xl text-slate-400">{intro}</p>
         <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
           <button
             onClick={toggleAll}

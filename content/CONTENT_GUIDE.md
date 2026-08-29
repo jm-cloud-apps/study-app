@@ -48,6 +48,10 @@ content/<topic-id>/
 | `blurb` | recommended | Short description (keep under ~140 chars). |
 | `accent` | optional | Hex color for the topic's progress bar/badge. Defaults to brand blue. |
 | `order` | optional | Sort position on the home page (lower = earlier). Defaults to 100. |
+| `interviewTitle` | optional | Header for the read-and-reveal segment. Defaults to `"Interview prep"`; an exam topic sets `"Practice tasks"`. |
+| `interviewNoun` | optional | What the topic-page button counts. Defaults to `"interview Q&A"` (e.g. `"practice tasks"`). |
+| `interviewEmoji` | optional | Icon for that segment. Defaults to 🎤. |
+| `interviewIntro` | optional | The paragraph under the header. Defaults to the mock-interview instructions. |
 
 Must be valid JSON (no comments, no trailing commas).
 
@@ -106,6 +110,18 @@ An array of card objects:
 | `hint` | optional | Shown under the question to scaffold recall. |
 | `tags` | optional | Free-form labels for future filtering. |
 
+### Card text: what renders, and what doesn't
+
+Cards are read at a glance, so their text is **not** parsed as full Markdown — that would reinterpret things authors never meant as markup (`origin/*` as italics, `1)` as a numbered list, `<<<<<<<` as HTML). Exactly three things are honoured in `q`, `a`, and `hint`:
+
+| Write | Renders as |
+|---|---|
+| `` `oc get pods` `` | inline code — use it for commands, flags, paths, and field names |
+| `**the key phrase**` | bold — for the one idea the card turns on |
+| `\n` | a line break |
+
+Everything else is shown literally, so don't reach for headings, bullet lists, tables, or fenced code blocks in a card. If an answer needs those, it's really an **interview/practice item** (section 5), where the answer *is* rendered as Markdown.
+
 ### Flashcard quality bar
 
 - **One idea per card.** If the answer has three unrelated parts, make three cards.
@@ -119,6 +135,8 @@ An array of card objects:
 ## 5. Interview questions (`interview.json`)
 
 A topic can also ship a **mock-interview segment** — questions you'd be asked out loud, each with a model answer. It renders as a calm, grouped accordion (read the question, answer aloud, reveal the model answer and compare), separate from the graded flashcard deck.
+
+The same file also carries **exam practice tasks**: for a hands-on certification topic, each `q` is a task ("Create a 2 GiB logical volume…") and each `a` is a worked solution. Relabel the segment in `topic.json` with `interviewTitle` / `interviewNoun` / `interviewEmoji` / `interviewIntro` so it reads as practice rather than as an interview — the **RHCSA** and **RHCE** topics do exactly this.
 
 An array of question objects:
 

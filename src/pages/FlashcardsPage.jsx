@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getTopic, ALL_FLASHCARDS } from '../content/loadContent.js'
 import { orderForSession, gradeCard, getCardStats } from '../lib/progress.js'
 import { encouragement } from '../lib/encouragement.js'
+import CardText from '../components/CardText.jsx'
 
 export default function FlashcardsPage() {
   const { topicId } = useParams()
@@ -158,16 +159,24 @@ function Flashcard({ card, flipped, onFlip }) {
         <div className="card-face absolute inset-0 flex flex-col rounded-2xl border border-white/10 bg-slate-850 p-6">
           <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Question</span>
           <div className="flex flex-1 items-center justify-center text-center">
-            <p className="text-lg font-medium text-white">{card.q}</p>
+            <p className="text-lg font-medium text-white">
+              <CardText text={card.q} />
+            </p>
           </div>
-          {card.hint && <p className="text-center text-xs text-slate-500">💡 Hint: {card.hint}</p>}
+          {card.hint && (
+            <p className="text-center text-xs text-slate-500">
+              💡 Hint: <CardText text={card.hint} />
+            </p>
+          )}
           <p className="text-center text-xs text-slate-600">tap to flip</p>
         </div>
         {/* Back — answer */}
         <div className="card-face card-back absolute inset-0 flex flex-col overflow-auto rounded-2xl border border-brand/30 bg-gradient-to-br from-slate-850 to-slate-950 p-6">
           <span className="text-xs font-semibold uppercase tracking-wide text-brand-soft">Answer</span>
           <div className="flex flex-1 items-center justify-center text-center">
-            <p className="whitespace-pre-line text-base text-slate-100">{card.a}</p>
+            <p className="whitespace-pre-line text-base text-slate-100">
+              <CardText text={card.a} />
+            </p>
           </div>
         </div>
       </div>
