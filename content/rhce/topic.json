@@ -1,0 +1,12 @@
+{
+  "id": "rhce",
+  "title": "RHCE (EX294)",
+  "emoji": "🤖",
+  "blurb": "The Ansible automation exam, built on RHCSA: control node and inventory, playbook fundamentals, variables, facts and Vault, Jinja2 templates, roles and collections including RHEL system roles, administration tasks as playbooks, parallelism and delegation, and error handling — all judged on idempotency.",
+  "accent": "#c084fc",
+  "order": 3.2,
+  "interviewTitle": "Practice tasks",
+  "interviewNoun": "practice tasks",
+  "interviewEmoji": "🧪",
+  "interviewIntro": "Exam-shaped automation tasks with worked solutions. Read the task, write the playbook yourself, then reveal the solution and compare — especially the verification step. Every solution asks the question the exam asks: is it idempotent, and does a second run report zero changes?"
+}

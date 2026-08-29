@@ -1,0 +1,198 @@
+[
+  {
+    "category": "Users, groups & permissions",
+    "q": "Create a group devs. Create users ana and raj as members of it, with ana also able to run any command as root without a password prompt. Both home directories must be inaccessible to anyone but their owner.",
+    "a": "```bash\ngroupadd devs\nuseradd -G devs ana\nuseradd -G devs raj\npasswd ana ; passwd raj          # set passwords if the task asks for them\n\nchmod 700 /home/ana /home/raj\n\nvisudo -f /etc/sudoers.d/ana\n#   ana   ALL=(ALL)   NOPASSWD: ALL\n```\n\n**Verify every clause separately — this is where marks are lost:**\n\n```bash\ngetent group devs                # devs:x:1002:ana,raj\nid ana ; id raj                  # devs appears in groups=\nls -ld /home/ana /home/raj       # drwx------\nsudo -lU ana                     # \"(ALL) NOPASSWD: ALL\"\n```\n\n**Notes.** `useradd -G` at creation time is safe; it's `usermod -G` on an existing user that destroys the group list — that one always needs `-aG`. Use `visudo -f` rather than an editor so a typo can't break sudo system-wide, and note that if the task had said only \"give ana admin rights,\" `usermod -aG wheel ana` would have been enough, since `%wheel` already has a rule.\n\n**Persistence:** all of this is on-disk configuration, so nothing extra is needed — but `sudo -lU ana` is still worth running, because a sudoers file that failed to parse silently grants nothing.",
+    "tags": [
+      "users",
+      "sudo"
+    ]
+  },
+  {
+    "category": "Users, groups & permissions",
+    "q": "Create /srv/project as a collaborative directory for the devs group: members can create and read each other's files, nobody outside the group has any access, files created there automatically belong to devs, and users may only delete their own files.",
+    "a": "```bash\nmkdir -p /srv/project\nchgrp devs /srv/project\nchmod 3770 /srv/project\n```\n\n`3770` is the whole answer packed into one number: **2** (setgid) makes new files inherit the `devs` group, **1** (sticky) stops users deleting each other's files, and `770` gives the group full access while excluding everyone else.\n\n```bash\nls -ld /srv/project\n# drwxrws--T. 2 root devs 6 Aug 29 10:00 /srv/project\n#      ^ s = setgid          ^ T = sticky (uppercase because 'other' has no x)\n```\n\n**Prove it actually behaves:**\n\n```bash\nsu - ana -c 'touch /srv/project/from-ana'\nls -l /srv/project               # group should be devs, not ana\nsu - raj -c 'rm /srv/project/from-ana'   # should be REFUSED by the sticky bit\n```\n\n**If new files should also carry a specific ACL**, add a default ACL: `setfacl -m d:g:devs:rwx /srv/project`. Check it with `getfacl /srv/project`, and remember the mask can cap named entries.",
+    "tags": [
+      "permissions",
+      "setgid"
+    ]
+  },
+  {
+    "category": "Users, groups & permissions",
+    "q": "User mia's password must expire every 45 days, she must be warned 10 days beforehand, she cannot change her password more than once a week, and her account must stop working entirely on 2027-01-31.",
+    "a": "```bash\nchage -M 45 -W 10 -m 7 -E 2027-01-31 mia\n```\n\nOr one flag at a time if that's clearer under pressure — `chage -M 45 mia`, `chage -W 10 mia`, and so on.\n\n**Verify:**\n\n```bash\nchage -l mia\n# Minimum number of days between password change     : 7\n# Maximum number of days between password change     : 45\n# Number of days of warning before password expires  : 10\n# Account expires                                    : Jan 31, 2027\n```\n\n**The distinction the task is testing:** `-M` expires the **password** (change it and carry on working), while `-E` expires the **account** (no logins at all, ever again). Mixing them up produces a plausible-looking `chage -l` that answers a different question.\n\nIf the task instead said \"new users should default to these settings,\" that's `/etc/login.defs` (`PASS_MAX_DAYS`, `PASS_MIN_DAYS`, `PASS_WARN_AGE`) — and it only affects accounts created **afterwards**.",
+    "tags": [
+      "users",
+      "chage"
+    ]
+  },
+  {
+    "category": "Storage & LVM",
+    "q": "A second disk /dev/vdb is attached and unused. Create a 2 GiB XFS filesystem on it using LVM (volume group vg_data, logical volume lv_app), permanently mounted at /data.",
+    "a": "**Look first — always.**\n\n```bash\nlsblk                      # confirm /dev/vdb is the empty one\n```\n\n**Partition, then build the LVM stack:**\n\n```bash\nparted /dev/vdb mklabel gpt\nparted /dev/vdb mkpart primary 1MiB 2049MiB\nparted /dev/vdb set 1 lvm on\nudevadm settle\n\npvcreate /dev/vdb1\nvgcreate vg_data /dev/vdb1\nlvcreate -n lv_app -L 2G vg_data\nmkfs.xfs /dev/vg_data/lv_app\n```\n\n**Mount it permanently:**\n\n```bash\nmkdir -p /data\nblkid /dev/vg_data/lv_app          # or just use the LVM path, which is stable\nvim /etc/fstab\n#   /dev/vg_data/lv_app   /data   xfs   defaults   0 0\n\nsystemctl daemon-reload\nmount -a\n```\n\n**Verify:**\n\n```bash\ndf -h /data                        # ~2G, mounted\nfindmnt /data\nfindmnt --verify                   # sanity-check fstab before trusting it\n```\n\n**Persistence:** `mount -a` succeeding is the proof that the fstab line is good — run it *before* you move on, while you still have a shell to fix it in. A partition sized slightly above 2 GiB gives LVM metadata room so the 2 GiB logical volume actually fits.",
+    "tags": [
+      "lvm",
+      "fstab"
+    ]
+  },
+  {
+    "category": "Storage & LVM",
+    "q": "/data is nearly full. Grow the underlying logical volume by 1 GiB. There is no free space left in the volume group, but /dev/vdc is available.",
+    "a": "**Check what you actually have:**\n\n```bash\ndf -h /data\nvgs                        # VFree = 0\nlsblk                      # /dev/vdc is unused\n```\n\n**Grow the pool, then the slice:**\n\n```bash\nparted /dev/vdc mklabel gpt\nparted /dev/vdc mkpart primary 1MiB 100%\nparted /dev/vdc set 1 lvm on\nudevadm settle\n\npvcreate /dev/vdc1\nvgextend vg_data /dev/vdc1\nvgs                        # VFree has grown\n\nlvextend -L +1G -r /dev/vg_data/lv_app\n```\n\n**Verify the mounted size — not just the LV size:**\n\n```bash\nlvs                        # LSize is bigger\ndf -h /data                # THIS is what the grader sees\n```\n\n**The trap:** without `-r`, `lvs` shows the new size and `df` doesn't change, because the filesystem inside the volume was never grown. If you've already extended without `-r`, recover with `xfs_growfs /data` (XFS, mounted) or `resize2fs /dev/vg_data/lv_app` (ext4).\n\n**Persistence:** nothing new is needed — `/etc/fstab` already refers to the same logical volume, which simply got bigger.",
+    "tags": [
+      "lvm",
+      "growth"
+    ]
+  },
+  {
+    "category": "Storage & LVM",
+    "q": "Add 1 GiB of swap space on the existing volume group, active now and after a reboot, and confirm it is in use.",
+    "a": "```bash\nlvcreate -n lv_swap -L 1G vg_data\nmkswap /dev/vg_data/lv_swap\nswapon /dev/vg_data/lv_swap\n```\n\n**Make it permanent** — an fstab line with type `swap` and mount point `none`:\n\n```\n/dev/vg_data/lv_swap   none   swap   defaults   0 0\n```\n\n```bash\nsystemctl daemon-reload\nswapon --show\nfree -h\n```\n\n**Verify after a reboot** — this is one of the easiest tasks to lose, because `swapon` alone looks like success:\n\n```bash\nreboot\nswapon --show      # the LV should be listed again\n```\n\n**Note:** if several swap areas exist and the task cares about which is used first, add `pri=` to the options field — a higher priority is used first, which is how you prefer a fast device over a slow one.",
+    "tags": [
+      "swap",
+      "fstab"
+    ]
+  },
+  {
+    "category": "Filesystems & mounts",
+    "q": "The NFS server server.example.com exports /export/docs. Mount it at /mnt/docs so that it is available after a reboot, and does not prevent the system from booting if the server is unreachable.",
+    "a": "```bash\ndnf install -y nfs-utils\nshowmount -e server.example.com          # confirm the export exists\nmkdir -p /mnt/docs\nmount -t nfs server.example.com:/export/docs /mnt/docs    # test by hand first\numount /mnt/docs\n```\n\n**The fstab line:**\n\n```\nserver.example.com:/export/docs   /mnt/docs   nfs   defaults,_netdev,nofail   0 0\n```\n\n```bash\nsystemctl daemon-reload\nmount -a\nfindmnt /mnt/docs\n```\n\n**Why each option matters.** `_netdev` tells systemd this mount needs the network, so it waits for networking at boot and unmounts cleanly at shutdown — without it the boot can hang or the mount can fail on a race. `nofail` is what satisfies \"must not prevent booting\": the system continues even if the server is down.\n\n**Alternative worth knowing:** if the task's emphasis is on *not* holding the mount when idle, `autofs` is the better answer — a master entry in `/etc/auto.master.d/` plus a map file, then `systemctl enable --now autofs`. Don't configure both for the same path.",
+    "tags": [
+      "nfs",
+      "fstab"
+    ]
+  },
+  {
+    "category": "Boot & recovery",
+    "q": "You have no root password and no sudo access on a machine you can reboot. Regain root, set the password to Redhat123, and leave the system able to log in normally.",
+    "a": "1. Reboot. At the GRUB menu press **`e`**.\n2. Find the line beginning `linux` and append **`rd.break`** at its end.\n3. Press **Ctrl-x** to boot.\n\nYou land at `switch_root:/#`, in the initramfs, with the real root filesystem mounted **read-only** at `/sysroot`.\n\n```bash\nmount -o remount,rw /sysroot\nchroot /sysroot\npasswd root\n#   (type Redhat123 twice)\ntouch /.autorelabel\nexit\nexit\n```\n\nThe system relabels the filesystem, reboots itself, and comes up with the new password working.\n\n**Verify:** log in as root with the new password.\n\n**The step that decides the outcome** is `touch /.autorelabel`. `passwd` rewrote `/etc/shadow` inside a chroot, where the new file gets the wrong SELinux context; without a relabel, the login process is denied access to it at the next boot and **nobody** can log in — a strictly worse position than the one you started in. The relabel takes a few minutes; let it finish.",
+    "tags": [
+      "boot",
+      "recovery"
+    ]
+  },
+  {
+    "category": "Boot & recovery",
+    "q": "The system currently boots to a graphical login. Make it boot to multi-user text mode from now on, without rebooting to prove it works.",
+    "a": "```bash\nsystemctl get-default                       # graphical.target\nsystemctl set-default multi-user.target     # what the NEXT boot does\nsystemctl get-default                       # multi-user.target  <- verify\n\nsystemctl isolate multi-user.target         # switch the RUNNING system now\n```\n\n**Why both commands:** `set-default` is the graded half — it changes the target the system boots into. `isolate` only changes the running system and would leave the default untouched, so a task worded \"from now on\" is asking for `set-default`. Running both lets you confirm the machine behaves correctly in text mode without spending a reboot on it.\n\n**If something doesn't come up as expected:**\n\n```bash\nsystemctl --failed\njournalctl -xb\n```",
+    "tags": [
+      "boot",
+      "targets"
+    ]
+  },
+  {
+    "category": "Software, scheduling & logs",
+    "q": "Configure a repository named local-extras from http://server.example.com/extras/ with GPG checking disabled, then install the nmap package from it.",
+    "a": "Create `/etc/yum.repos.d/local-extras.repo`:\n\n```ini\n[local-extras]\nname=Local Extras\nbaseurl=http://server.example.com/extras/\nenabled=1\ngpgcheck=0\n```\n\n```bash\ndnf repolist                # local-extras should appear\ndnf clean all               # if a stale cache gets in the way\ndnf install -y nmap\n```\n\n**Verify:**\n\n```bash\ndnf repolist | grep local-extras\nrpm -q nmap\ndnf info nmap | grep -i 'from repo'      # confirms WHICH repo it came from\n```\n\n**Notes.** `gpgcheck=0` is acceptable when the task supplies no key — but say it to yourself as you type it, so you notice if the task actually did provide a `gpgkey=` URL to use instead. If a later task needs a command and you don't know its package, `dnf provides '*/<command>'` is the lookup.",
+    "tags": [
+      "dnf",
+      "repos"
+    ]
+  },
+  {
+    "category": "Software, scheduling & logs",
+    "q": "Schedule /usr/local/bin/report.sh to run as user ana every weekday at 06:15, and make sure the system journal still contains today's logs after a reboot.",
+    "a": "**The scheduled job** — as a user crontab:\n\n```bash\ncrontab -e -u ana\n#   15 6 * * 1-5   /usr/local/bin/report.sh\n```\n\n```bash\ncrontab -l -u ana                 # verify\nsystemctl status crond            # cron must actually be running\n```\n\nFields are **minute hour day-of-month month day-of-week**, so `15 6 * * 1-5` is 06:15, Monday through Friday. (Had the task said to put it in `/etc/cron.d/`, the line would gain a user column: `15 6 * * 1-5 ana /usr/local/bin/report.sh`.)\n\nMake sure the script is executable, or nothing runs:\n\n```bash\nchmod +x /usr/local/bin/report.sh\n```\n\n**The persistent journal:**\n\n```bash\nmkdir -p /var/log/journal\nsystemctl restart systemd-journald\njournalctl --disk-usage             # now reports a directory under /var/log/journal\n```\n\nSetting `Storage=persistent` in `/etc/systemd/journald.conf` achieves the same thing and states the intent more explicitly. **Verify after a reboot** with `journalctl -b -1`, which is empty on a system with a volatile journal and populated on a persistent one.",
+    "tags": [
+      "cron",
+      "logs"
+    ]
+  },
+  {
+    "category": "Networking & firewalld",
+    "q": "Give this host the static address 192.168.1.10/24 with gateway 192.168.1.1 and DNS 192.168.1.53, set its hostname to web1.example.com, and make sure the settings survive a reboot.",
+    "a": "```bash\nnmcli device status                  # which device, and which profile is on it\n\nnmcli connection add type ethernet con-name static0 ifname enp1s0 \\\n  ipv4.method manual \\\n  ipv4.addresses 192.168.1.10/24 \\\n  ipv4.gateway 192.168.1.1 \\\n  ipv4.dns 192.168.1.53 \\\n  autoconnect yes\n\nnmcli connection up static0          # APPLY it — modify/add alone changes nothing live\n\nhostnamectl set-hostname web1.example.com\n```\n\n**Verify:**\n\n```bash\nip -br addr show enp1s0        # 192.168.1.10/24\nip route | grep default        # via 192.168.1.1\ncat /etc/resolv.conf           # nameserver 192.168.1.53 (generated by NetworkManager)\nhostnamectl                    # Static hostname: web1.example.com\nping -c2 192.168.1.1\n```\n\n**Notes.** If you're editing an existing profile instead, `nmcli connection modify <name> ipv4.addresses …` and then `nmcli connection up <name>` — and remember `+ipv4.dns` **appends** while plain `ipv4.dns` **replaces** the list. Don't hand-edit `/etc/resolv.conf`; NetworkManager regenerates it. The profile is stored as a keyfile in `/etc/NetworkManager/system-connections/`, which is what makes it persistent.",
+    "tags": [
+      "nmcli",
+      "networking"
+    ]
+  },
+  {
+    "category": "Networking & firewalld",
+    "q": "Install and start a web server, serve it on port 8888 instead of 80, and make it reachable from other hosts after a reboot.",
+    "a": "This task deliberately crosses three subsystems — service, firewall, SELinux.\n\n```bash\ndnf install -y httpd\nsed -i 's/^Listen 80$/Listen 8888/' /etc/httpd/conf/httpd.conf   # or edit by hand\nsystemctl enable --now httpd\n```\n\nIf it fails to start, that's expected — SELinux won't let httpd bind an unlabelled port:\n\n```bash\nsemanage port -l | grep http_port_t\nsemanage port -a -t http_port_t -p tcp 8888\nsystemctl restart httpd\n```\n\n**Open the firewall, permanently:**\n\n```bash\nfirewall-cmd --permanent --add-port=8888/tcp\nfirewall-cmd --reload\nfirewall-cmd --list-all\n```\n\n**Verify the whole chain:**\n\n```bash\nsystemctl is-enabled httpd ; systemctl is-active httpd\nss -tulpn | grep 8888                       # listening, and on 0.0.0.0 not 127.0.0.1\ncurl -s http://localhost:8888 | head -3\nausearch -m AVC -ts recent                  # should be quiet\n```\n\n**Persistence check:** `enable --now` (not just `start`), `--permanent` + `--reload` (not just the runtime rule), and `semanage port` (not a temporary workaround). All three halves, or it fails after the reboot.",
+    "tags": [
+      "firewalld",
+      "selinux",
+      "httpd"
+    ]
+  },
+  {
+    "category": "SELinux",
+    "q": "Apache must serve content from /web instead of /var/www/html. The configuration change is already done, but requests return 403. Fix it properly, with SELinux left in enforcing mode.",
+    "a": "**Confirm the diagnosis first:**\n\n```bash\ngetenforce                        # Enforcing\nls -Z /web/index.html             # likely default_t or admin_home_t\nausearch -m AVC -ts recent | audit2why\n```\n\n**Fix the label — the two-command pattern:**\n\n```bash\nsemanage fcontext -a -t httpd_sys_content_t \"/web(/.*)?\"\nrestorecon -Rv /web\n```\n\n**Verify:**\n\n```bash\nls -Z /web/index.html             # ...:httpd_sys_content_t:s0\ncurl -s http://localhost/ | head -3\nausearch -m AVC -ts recent        # quiet\n```\n\n**Why not the alternatives.** `setenforce 0` \"fixes\" it and fails the task — the requirement says enforcing. `chcon -t httpd_sys_content_t -R /web` also works right now, but policy never learned about `/web`, so the next `restorecon` or a filesystem relabel silently undoes it. `semanage fcontext -a` records the rule; `restorecon` applies it. Both, in that order.\n\nThe regex `(/.*)?` means \"this directory and everything beneath it\" — it's boilerplate worth memorising exactly.",
+    "tags": [
+      "selinux",
+      "httpd"
+    ]
+  },
+  {
+    "category": "SELinux",
+    "q": "Users report that Apache cannot serve files from their home directories, even though the Apache configuration allows it and the file permissions are correct.",
+    "a": "File labels and permissions being right points at a **boolean** — a policy switch for an optional behaviour.\n\n```bash\nausearch -m AVC -ts recent | audit2why\n#   ...was caused by: The boolean httpd_enable_homedirs was set incorrectly.\n\ngetsebool -a | grep httpd_enable_homedirs\nsetsebool -P httpd_enable_homedirs on\n```\n\n**Verify:**\n\n```bash\ngetsebool httpd_enable_homedirs      # httpd_enable_homedirs --> on\ncurl -s http://localhost/~ana/ | head -3\n```\n\n**The `-P` is the entire point of the task.** Without it the boolean flips only until the next reboot — and the exam reboots before grading. It's the SELinux equivalent of firewalld's `--permanent`.\n\n**How to find a boolean when you don't already know its name:** `audit2why` usually names it outright; failing that, `semanage boolean -l | grep <service>` lists every boolean for that service **with a description and its default**, which is more useful than `getsebool -a` when you're searching rather than checking.",
+    "tags": [
+      "selinux",
+      "booleans"
+    ]
+  },
+  {
+    "category": "Containers",
+    "q": "As the user ana, run a container from registry.access.redhat.com/ubi9/ubi named web, publishing container port 80 on host port 8080, with /home/ana/webdata mounted at /var/www/html inside.",
+    "a": "```bash\nsu - ana                     # WITH the dash: rootless podman needs a full login session\n\nmkdir -p /home/ana/webdata\npodman pull registry.access.redhat.com/ubi9/ubi:latest\n\npodman run -d --name web \\\n  -p 8080:80 \\\n  -v /home/ana/webdata:/var/www/html:Z \\\n  registry.access.redhat.com/ubi9/ubi:latest \\\n  sleep infinity\n```\n\n**Verify:**\n\n```bash\npodman ps\npodman inspect web --format '{{.HostConfig.PortBindings}}'\npodman exec web ls -l /var/www/html\nls -Z /home/ana/webdata          # relabelled to container_file_t by :Z\n```\n\n**The two details being tested.** `:Z` relabels the host directory with a private SELinux container label — without it the container is denied access and fails in a way that looks like an ordinary permission error. And rootless containers **cannot bind host ports below 1024**, which is why the mapping is `8080:80` rather than `80:80`; the container still listens on 80 internally.\n\nIf the directory is labelled correctly and writes still fail, it's the rootless UID mapping: `podman unshare chown <uid>:<gid> /home/ana/webdata`.",
+    "tags": [
+      "podman",
+      "selinux"
+    ]
+  },
+  {
+    "category": "Containers",
+    "q": "Make ana's web container start automatically when the system boots, without ana logging in.",
+    "a": "```bash\nsu - ana\nmkdir -p ~/.config/systemd/user\ncd ~/.config/systemd/user\npodman generate systemd --new --files --name web     # writes container-web.service\n\nsystemctl --user daemon-reload\nsystemctl --user enable --now container-web.service\nsystemctl --user status container-web.service\n```\n\nThen, **as root**, the step that makes it survive logout and reboot:\n\n```bash\nloginctl enable-linger ana\nloginctl show-user ana | grep Linger      # Linger=yes\n```\n\n**Verify properly — reboot and check:**\n\n```bash\nreboot\n# after it comes back, without logging in as ana:\nloginctl show-user ana | grep Linger\nsu - ana -c 'podman ps'                   # the container is running\n```\n\n**The two flags that decide this task.** `--new` makes the unit create the container on each start rather than depending on one that already exists, so the service is reproducible. `enable-linger` is what lets ana's `systemd --user` instance run when she isn't logged in — without it the service stops at logout and never starts at boot, which is exactly when grading happens.\n\n**Version note:** `podman generate systemd` is what most RHEL 9 systems have; newer Podman deprecates it in favour of **Quadlet** (`~/.config/containers/systemd/web.container`, then `systemctl --user daemon-reload`). Check `podman --version` and the machine's own docs; both paths end at `systemctl --user enable --now`.",
+    "tags": [
+      "podman",
+      "systemd"
+    ]
+  },
+  {
+    "category": "Processes & performance",
+    "q": "A server is reported as slow. Identify the top CPU and memory consumers, then reduce the priority of the offending process rather than killing it, and make sure a runaway process is stopped cleanly if it doesn't respond.",
+    "a": "**Diagnose in a fixed order — four commands, not a theory:**\n\n```bash\nnproc ; uptime            # load average only means something next to the core count\nps aux --sort=-%cpu | head\nps aux --sort=-%mem | head\nfree -h                   # read the \"available\" column, not \"free\"\ndf -h                     # a full disk looks a lot like a slow machine\n```\n\n`top` does the same interactively — `P` sorts by CPU, `M` by memory, `1` shows each core, `k` kills, `r` renices.\n\n**Lower the priority instead of killing:**\n\n```bash\nrenice -n 15 -p 1234\nps -eo pid,ni,comm --sort=-ni | head       # verify the new niceness\n```\n\n**If it must go, escalate politely:**\n\n```bash\nkill 1234                 # SIGTERM (15) — lets it clean up\nsleep 3 ; ps -p 1234      # still there?\nkill -9 1234              # SIGKILL — last resort, no cleanup\n```\n\n**The judgement being tested.** Niceness runs -20 (greedy) to 19 (generous), and only root may *lower* a value — an ordinary user can only be more generous with their own processes. `kill` defaults to SIGTERM deliberately: a database gets to flush its buffers and remove its lock file. `-9` skips all of that.\n\nTwo things worth recognising: a process stuck in state **D** (uninterruptible I/O) won't die from `-9` either — that's a storage problem. And for anything systemd manages, `systemctl stop <unit>` beats killing a PID, because systemd stops the whole cgroup instead of one process that's about to be restarted.",
+    "tags": [
+      "processes"
+    ]
+  },
+  {
+    "category": "Remote access & files",
+    "q": "Configure key-based SSH from this machine to server.example.com as user ana with no password prompt, then mirror /srv/data to /backup/data on that server so that files deleted locally are also removed there.",
+    "a": "**Keys:**\n\n```bash\nssh-keygen -t ed25519 -C \"ana@control\"      # accept the default path\nssh-copy-id ana@server.example.com\nssh ana@server.example.com 'hostname'       # must not prompt for a password\n```\n\n**If it still prompts**, it's almost always permissions — SSH refuses loosely-permissioned files without saying so:\n\n```bash\nssh ana@server.example.com 'chmod 700 ~/.ssh; chmod 600 ~/.ssh/authorized_keys'\nssh -v ana@server.example.com               # -v shows which key was offered and refused\n```\n\n**Mirror the directory:**\n\n```bash\nrsync -av --delete --dry-run /srv/data/ ana@server.example.com:/backup/data/\nrsync -av --delete /srv/data/ ana@server.example.com:/backup/data/\n```\n\n**Verify:**\n\n```bash\nssh ana@server.example.com 'ls -l /backup/data | head'\n```\n\n**Two details that decide this task.** The **trailing slash** on `/srv/data/` copies the directory's *contents*; without it you'd get `/backup/data/data/`. And `--delete` is what makes it a mirror rather than a merge — which is also what makes `--dry-run` worth the extra ten seconds, since `--delete` pointed at the wrong path removes real data.\n\nThe private key stays on this machine; only the `.pub` half ever travels.",
+    "tags": [
+      "ssh",
+      "rsync"
+    ]
+  },
+  {
+    "category": "Shell scripting",
+    "q": "Write /usr/local/bin/user-report.sh: it takes one or more usernames as arguments, prints for each whether the account exists and what its shell is, exits 1 with a usage message if given no arguments, and exits with the number of users that were not found.",
+    "a": "```bash\n#!/usr/bin/bash\n# /usr/local/bin/user-report.sh — report on the accounts named as arguments\n\nif [ $# -eq 0 ]; then\n    echo \"Usage: $0 <username> [username...]\" >&2\n    exit 1\nfi\n\nmissing=0\n\nfor user in \"$@\"; do\n    if id \"$user\" &> /dev/null; then\n        shell=$(getent passwd \"$user\" | cut -d: -f7)\n        echo \"OK       $user ($shell)\"\n    else\n        echo \"MISSING  $user\" >&2\n        missing=$((missing + 1))\n    fi\ndone\n\necho \"$missing account(s) not found\"\nexit $missing\n```\n\n```bash\nchmod +x /usr/local/bin/user-report.sh\n/usr/local/bin/user-report.sh root ana nosuchuser\necho $?                                   # 1 — one account missing\n```\n\n**Every element the objective asks for is in there:** a shebang, a usage guard using `$#`, a loop over `\"$@\"`, a conditional driven by a command's **exit status** (`if id \"$user\"` — no brackets needed, because `if` tests for exit code 0), command substitution with `$( )`, arithmetic, output to stderr with `>&2`, and a meaningful exit code.\n\n**The traps.** `chmod +x`, or it isn't a script. No spaces around `=` in assignments. Quote `\"$user\"` and `\"$@\"` so a value with a space can't break the test. And if it misbehaves, `bash -n` checks syntax and `bash -x` traces execution with variables expanded.",
+    "tags": [
+      "scripting"
+    ]
+  },
+  {
+    "category": "Layered storage",
+    "q": "Using Stratis, create a pool named mypool from /dev/vdb with a filesystem myfs, mounted persistently at /stratis-data. (Confirm first that your exam version lists this objective.)",
+    "a": "```bash\ndnf install -y stratisd stratis-cli\nsystemctl enable --now stratisd\n\nstratis pool create mypool /dev/vdb\nstratis filesystem create mypool myfs\nstratis pool list ; stratis filesystem list\n```\n\n**Mount it persistently — the part that's specific to Stratis:**\n\n```bash\nmkdir -p /stratis-data\nlsblk -o UUID /dev/stratis/mypool/myfs      # or blkid\n```\n\n```\nUUID=<the-uuid>  /stratis-data  xfs  defaults,x-systemd.requires=stratisd.service  0 0\n```\n\n```bash\nsystemctl daemon-reload\nmount -a\ndf -h /stratis-data\n```\n\n**`x-systemd.requires=stratisd.service` is the whole task.** The device under `/dev/stratis/` only exists once `stratisd` is running, so without that option the boot tries to mount something that doesn't exist yet and drops the machine into emergency mode. Mount by **UUID**, not by the `/dev/stratis/...` path.\n\n**Then reboot and verify** — this is exactly the kind of task that looks finished and isn't:\n\n```bash\nreboot\ndf -h /stratis-data\n```\n\n**Notes.** Growing the pool later is `stratis pool add-data mypool /dev/vdc`; a snapshot is `stratis filesystem snapshot mypool myfs myfs-snap`, and mounts as an independent filesystem. Stratis filesystems are thin and grow automatically, so watch `stratis pool list` for real usage rather than trusting the size the filesystem advertises.",
+    "tags": [
+      "stratis"
+    ]
+  },
+  {
+    "category": "Exam approach",
+    "q": "You have twenty minutes left and three tasks untouched. How do you spend the time?",
+    "a": "**Don't start the biggest task.** Spend the first two minutes reading all three and sorting them by *certainty*, not by size — a task you know cold is worth more than a partially-done hard one, because grading is on end state and there's no partial credit for a half-configured LVM stack.\n\n**Then, in order:**\n\n1. **Do the certain ones first.** Two finished tasks beat three attempted ones.\n2. **Reboot with five minutes to spare** and re-verify the work you already did. A single broken `/etc/fstab` line can cost several earlier tasks at once, and finding it now is the highest-value thing you can do with those minutes.\n3. **Walk the persistence checklist** on everything you completed: `systemctl is-enabled` for services, `mount -a` and `findmnt --verify` for mounts, `firewall-cmd --list-all` for rules, `getenforce` plus `getsebool` for SELinux, `swapon --show` for swap.\n4. **Leave the hardest task undone rather than half-done** if it involves partitioning or filesystems — a botched `mkfs` on the wrong device can take working tasks down with it.\n\n**The underlying judgement:** protect the points you've already earned before chasing new ones. Most failed attempts aren't short of knowledge; they're short of verification.",
+    "tags": [
+      "exam",
+      "strategy"
+    ]
+  }
+]
