@@ -38,9 +38,11 @@ Requirements: Node 18+ (developed on Node 22). The API uses `better-sqlite3` (a 
 | Feature | Notes |
 |---|---|
 | 📚 **Topics & lessons** | Markdown lessons with code highlighting, reading-time estimates, prev/next nav, and "read" tracking. |
-| 🃏 **Randomized flashcards** | Shuffled every session, with self-grading (**Again / Good / Easy**). |
+| 🃏 **Randomized flashcards** | Shuffled every session, with self-grading (**Again / Good / Easy**). Pick a session length (10 / 25 / 50 / all) so a study block is something you can finish. Keyboard throughout: <kbd>←</kbd> <kbd>→</kbd> to move, <kbd>Space</kbd> to flip, <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to grade. |
 | 🧠 **Spaced repetition** | A lightweight **Leitner box** system resurfaces hard cards sooner and eases off mastered ones. |
 | 🔥 **Streaks & progress** | Persisted to a **local SQLite database** via a tiny API, so progress survives across browsers and machines. localStorage is a fast offline cache; nothing leaves your machine. |
+| 🔎 **Search everything** | <kbd>⌘K</kbd> (or <kbd>/</kbd>) searches every topic, lesson, flashcard and interview answer — including **lesson body text**, so you can find where something was explained without remembering which topic it was in. |
+| 🌗 **Light & dark themes** | Dark, light, or follow your system. The whole palette is CSS variables, so the theme switches instantly and code blocks follow it too. Both themes are measured to clear WCAG AA contrast. |
 | 💬 **A kind tutor voice** | Encouraging, never-shaming microcopy throughout. See [`ai/TUTOR_PROMPT.md`](ai/TUTOR_PROMPT.md). |
 
 ---
@@ -64,8 +66,11 @@ study-app/
 ├── src/
 │   ├── content/loadContent.js  ← auto-discovers every topic in /content
 │   ├── lib/progress.js         ← Leitner spaced repetition; localStorage cache + SQLite sync
+│   ├── lib/search.js           ← the ⌘K index over lessons, cards and questions
+│   ├── lib/theme.js            ← dark / light / system, applied via a CSS-variable palette
 │   ├── lib/encouragement.js    ← the "nice AI" voice
-│   ├── pages/                  ← Home, Topic, Lesson, Flashcards
+│   ├── components/             ← SearchPalette, ThemeToggle, CardText
+│   ├── pages/                  ← Home, Topic, Lesson, Flashcards, Interview
 │   └── App.jsx, main.jsx
 ├── AGENTS.md                   ← instructions for AI assistants (start here if you're an AI)
 ├── CLAUDE.md                   ← points Claude Code at AGENTS.md
@@ -107,4 +112,6 @@ This repo is designed to be extended by AI coding assistants. If you're an AI (o
 ## Tech
 
 **Frontend:** React 18 · Vite 8 · Tailwind CSS 3 · react-markdown + rehype-highlight · react-router.
+
+Every colour in the UI resolves through a CSS variable (see `src/index.css` and `tailwind.config.js`), which is why light mode needed no `dark:` variant anywhere — it's one `data-theme` attribute on `<html>`. If you're adding UI, reach for the semantic tokens (`surface`, `border-line/10`, `text-muted`, `success`…) rather than a literal colour.
 **Backend:** a tiny Express + better-sqlite3 progress API (no cloud, no telemetry — the SQLite file stays on your machine and is gitignored).

@@ -2,8 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   Palette
+   ----------------------------------------------------------------------------
+   Two themes, one set of semantic tokens (see tailwind.config.js). Switching
+   is a single `data-theme` attribute on <html> — set before first paint by the
+   inline script in index.html, so a light-mode reload never flashes dark.
+
+   Values are bare `R G B` triples so Tailwind's alpha modifiers work:
+   `bg-surface/80`, `border-line/10`.
+   ========================================================================= */
+
 :root {
   color-scheme: dark;
+
+  --ink: 15 17 23; /* page */
+  --surface: 22 24 31; /* card */
+  --sunken: 11 13 18; /* well inside a card */
+
+  --line: 255 255 255; /* hairlines: use with /5 /10 /15 /20 */
+  --fill: 255 255 255; /* subtle fills: use with /5 /10 /20 */
+
+  --strong: 255 255 255;
+  --body: 226 232 240;
+  --muted: 148 163 184;
+  /* Lifted off slate-500, which measured 3.73:1 on a card — under AA, and
+     `faint` is where the "Show ▼" affordance lives. Still clearly a step
+     below `muted`, which is the job it's doing. */
+  --faint: 120 136 158;
+
+  --brand: 110 168 254;
+  --brand-soft: 158 193 255;
+  --brand-deep: 63 111 209;
+  --accent: 245 185 113;
+  --success: 110 231 183;
+  --danger: 253 164 175;
+
+  /* A modal scrim darkens in BOTH themes — tinting it with the page colour
+     makes a light theme's overlay near-white, which doesn't read as "behind a
+     dialog" at all, it reads as the page having faded out. */
+  --scrim: rgba(2, 4, 10, 0.7);
+
+  /* Ambient glow behind the page. */
+  --glow-brand: rgba(110, 168, 254, 0.08);
+  --glow-accent: rgba(245, 185, 113, 0.05);
+
+  /* Syntax highlighting (see the .hljs block near the bottom). */
+  --hl-text: 201 209 217;
+  --hl-keyword: 255 123 114;
+  --hl-entity: 210 168 255;
+  --hl-constant: 121 192 255;
+  --hl-string: 165 214 255;
+  --hl-variable: 255 166 87;
+  --hl-comment: 139 148 158;
+  --hl-tag: 126 231 135;
+  --hl-heading: 88 166 255;
+  --hl-bullet: 242 204 96;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --ink: 247 248 251;
+  --surface: 255 255 255;
+  --sunken: 241 243 248;
+
+  /* Near-black, so the same alphas that made a white hairline on dark now make
+     a grey one on white. */
+  --line: 15 23 42;
+  --fill: 15 23 42;
+
+  /* A full step darker than a naive inversion: greys picked against near-black
+     carry more apparent weight than the same greys on white, so merely-passing
+     contrast still reads washed out. Body copy here measures ~13:1. */
+  --strong: 15 23 42;
+  --body: 30 41 59;
+  --muted: 71 85 105;
+  /* Not slate-500: on this near-white ground it measures 4.48:1, a hair under
+     AA, and `faint` is exactly where small 11px text lives. */
+  --faint: 90 103 126;
+
+  --brand: 37 99 235;
+  --brand-soft: 29 78 216;
+  --brand-deep: 30 64 175;
+  /* Two steps darker than the obvious amber-700. `accent` is never plain text
+     on the page — it's inline code on a 10% fill and the streak pill on its own
+     15% tint, and against those grounds amber-700 measures 4.09 / 3.86. */
+  --accent: 146 64 14;
+  /* emerald-800, not -700: `success` is drawn on its own 15-20% tint (the
+     "marked as read" panel, the mastered stat), where -700 lands at 4.11. */
+  --success: 6 95 70;
+  --danger: 190 18 60;
+
+  --scrim: rgba(15, 23, 42, 0.4);
+
+  --glow-brand: rgba(37, 99, 235, 0.05);
+  --glow-accent: rgba(180, 83, 9, 0.04);
+
+  /* GitHub-light hues, but four of them are darkened: GitHub draws these on
+     pure white and we draw them on a tinted code block, where the originals
+     measure 3.2-4.4:1. A comment or a command name you have to squint at is a
+     bad trade for hue fidelity in a teaching app. */
+  --hl-text: 36 41 46;
+  --hl-keyword: 179 29 40; /* was 215 58 73  (4.21) */
+  --hl-entity: 111 66 193;
+  --hl-constant: 0 92 197;
+  --hl-string: 3 47 98;
+  --hl-variable: 160 68 7; /* was 227 98 9   (3.21) */
+  --hl-comment: 86 94 104; /* was 106 115 125 (4.43) */
+  --hl-tag: 22 101 52; /* was 34 134 58  (4.26) */
+  --hl-heading: 0 92 197;
+  --hl-bullet: 115 92 15;
 }
 
 html,
@@ -13,24 +122,31 @@ body,
 }
 
 body {
-  @apply bg-ink text-slate-200 antialiased;
-  background-image: radial-gradient(900px 500px at 85% -10%, rgba(110, 168, 254, 0.08), transparent),
-    radial-gradient(700px 500px at 0% 100%, rgba(245, 185, 113, 0.05), transparent);
+  @apply bg-ink text-body antialiased;
+  background-image: radial-gradient(900px 500px at 85% -10%, var(--glow-brand), transparent),
+    radial-gradient(700px 500px at 0% 100%, var(--glow-accent), transparent);
   background-attachment: fixed;
+}
+
+/* Antialiasing thins glyph stems — right for light-on-dark, which optically
+   blooms, and precisely wrong for dark-on-light, where it reads under-inked. */
+:root[data-theme='light'] body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 /* ---- Prose styling for rendered lesson Markdown ---- */
 .lesson-prose {
-  @apply text-slate-300 leading-7;
+  @apply text-body leading-7;
 }
 .lesson-prose h1 {
-  @apply text-3xl font-bold text-white mt-2 mb-4;
+  @apply text-3xl font-bold text-strong mt-2 mb-4;
 }
 .lesson-prose h2 {
-  @apply text-2xl font-semibold text-white mt-10 mb-3 pb-2 border-b border-white/10;
+  @apply text-2xl font-semibold text-strong mt-10 mb-3 pb-2 border-b border-line/10;
 }
 .lesson-prose h3 {
-  @apply text-xl font-semibold text-slate-100 mt-7 mb-2;
+  @apply text-xl font-semibold text-strong mt-7 mb-2;
 }
 .lesson-prose p {
   @apply my-4;
@@ -48,31 +164,104 @@ body {
   @apply text-brand;
 }
 .lesson-prose strong {
-  @apply text-white font-semibold;
+  @apply text-strong font-semibold;
 }
 .lesson-prose code {
-  @apply font-mono text-[0.85em] bg-white/10 text-accent px-1.5 py-0.5 rounded;
+  @apply font-mono text-[0.85em] bg-fill/10 text-accent px-1.5 py-0.5 rounded;
 }
 .lesson-prose pre {
-  @apply my-5 rounded-xl border border-white/10 bg-slate-950/80 p-4 overflow-x-auto text-sm;
+  @apply my-5 rounded-xl border border-line/10 bg-sunken/80 p-4 overflow-x-auto text-sm;
 }
 .lesson-prose pre code {
-  @apply bg-transparent text-slate-200 p-0;
+  @apply bg-transparent text-body p-0;
 }
 .lesson-prose blockquote {
-  @apply my-5 border-l-4 border-brand/60 bg-brand/5 pl-4 py-2 pr-3 rounded-r-lg text-slate-300 italic;
+  @apply my-5 border-l-4 border-brand/60 bg-brand/5 pl-4 py-2 pr-3 rounded-r-lg text-body italic;
 }
 .lesson-prose table {
   @apply my-5 w-full text-sm border-collapse;
 }
 .lesson-prose th {
-  @apply text-left font-semibold text-white border-b border-white/15 px-3 py-2 bg-white/5;
+  @apply text-left font-semibold text-strong border-b border-line/15 px-3 py-2 bg-fill/5;
 }
 .lesson-prose td {
-  @apply border-b border-white/5 px-3 py-2 align-top;
+  @apply border-b border-line/5 px-3 py-2 align-top;
 }
 .lesson-prose hr {
-  @apply my-8 border-white/10;
+  @apply my-8 border-line/10;
+}
+
+/* ---- Syntax highlighting ----
+   These are the same token groups highlight.js ships in github-dark.css /
+   github.css, but driven by the theme variables above so a code block follows
+   the app instead of pinning it to one theme. Importing either stylesheet
+   would hardcode one of them for both. */
+.hljs {
+  color: rgb(var(--hl-text));
+  background: transparent;
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  color: rgb(var(--hl-keyword));
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  color: rgb(var(--hl-entity));
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  color: rgb(var(--hl-constant));
+}
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  color: rgb(var(--hl-string));
+}
+.hljs-built_in,
+.hljs-symbol {
+  color: rgb(var(--hl-variable));
+}
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  color: rgb(var(--hl-comment));
+}
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  color: rgb(var(--hl-tag));
+}
+.hljs-subst {
+  color: rgb(var(--hl-text));
+}
+.hljs-section {
+  color: rgb(var(--hl-heading));
+  font-weight: bold;
+}
+.hljs-bullet {
+  color: rgb(var(--hl-bullet));
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
 }
 
 /* 3D flip for flashcards */
@@ -100,8 +289,34 @@ body {
   height: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  @apply bg-white/10 rounded-full;
+  @apply bg-fill/10 rounded-full;
 }
 *::-webkit-scrollbar-thumb:hover {
-  @apply bg-white/20;
+  @apply bg-fill/20;
+}
+
+/* Modal backdrop — see --scrim. */
+.scrim {
+  background: var(--scrim);
+}
+
+/* Set for one frame while the theme swaps — see applyTheme(). */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* Respect a learner's reduced-motion preference: the flip, the rise-in and
+   every hover translate become instant rather than disorienting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,9 +1,17 @@
-import { useMemo, useState, useCallback, useEffect } from 'react'
+import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getTopic, ALL_FLASHCARDS } from '../content/loadContent.js'
 import { orderForSession, gradeCard, getCardStats } from '../lib/progress.js'
 import { encouragement } from '../lib/encouragement.js'
 import CardText from '../components/CardText.jsx'
+
+// Grading keys sit under the resting fingers, in the same left-to-right order
+// as the buttons, so the shortcut and the UI teach each other.
+const GRADE_KEYS = { 1: 'again', 2: 'good', 3: 'easy' }
+
+// Session sizes. `null` means "however many there are".
+const SIZES = [10, 25, 50, null]
+const DEFAULT_LIMIT = 25
 
 export default function FlashcardsPage() {
   const { topicId } = useParams()
@@ -13,14 +21,20 @@ export default function FlashcardsPage() {
 
   // Session config chosen on the setup screen.
   const [session, setSession] = useState(null) // { cards, index, results, flipped }
+  // "Study all" across every topic is 900-odd cards — a number nobody finishes,
+  // and an unfinishable session is one you don't start. A cap turns it into
+  // something you can actually sit down and complete.
+  const [limit, setLimit] = useState(DEFAULT_LIMIT)
+  const gradeRef = useRef(() => {})
 
   const startSession = useCallback(
     (onlyDue) => {
-      const cards = orderForSession(deck, { onlyDue, shuffle: true })
+      const ordered = orderForSession(deck, { onlyDue, shuffle: true })
+      const cards = limit ? ordered.slice(0, limit) : ordered
       if (cards.length === 0) return
       setSession({ cards, index: 0, flipped: false, results: { again: 0, good: 0, easy: 0 }, lastMsg: '' })
     },
-    [deck],
+    [deck, limit],
   )
 
   // Free navigation between cards (does not grade — just moves the cursor).
@@ -34,10 +48,16 @@ export default function FlashcardsPage() {
     setSession((s) => (s ? { ...s, flipped: !s.flipped } : s))
   }, [])
 
-  // Keyboard shortcuts during an active session: ← previous, → next, Space/Enter flip.
+  // Keyboard shortcuts during an active session: ← previous, → next, Space/Enter
+  // flip, and 1/2/3 to grade once the answer is showing. Grading was the one
+  // action that still required the mouse, and it's the only one that changes
+  // when a card comes back.
   useEffect(() => {
     const onKey = (e) => {
       if (!session || session.index >= session.cards.length) return
+      if (/^(input|textarea|select)$/i.test(e.target?.tagName || '')) return
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+
       if (e.key === 'ArrowRight') {
         e.preventDefault()
         goNext()
@@ -47,6 +67,9 @@ export default function FlashcardsPage() {
       } else if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault()
         toggleFlip()
+      } else if (session.flipped && GRADE_KEYS[e.key]) {
+        e.preventDefault()
+        gradeRef.current(GRADE_KEYS[e.key])
       }
     }
     window.addEventListener('keydown', onKey)
@@ -65,7 +88,16 @@ export default function FlashcardsPage() {
   }
 
   if (!session) {
-    return <SetupScreen title={title} deck={deck} topicId={topicId} onStart={startSession} />
+    return (
+      <SetupScreen
+        title={title}
+        deck={deck}
+        topicId={topicId}
+        onStart={startSession}
+        limit={limit}
+        onLimitChange={setLimit}
+      />
+    )
   }
 
   if (session.index >= session.cards.length) {
@@ -84,13 +116,17 @@ export default function FlashcardsPage() {
       lastMsg: encouragement.afterGrade(grade),
     }))
   }
+  // The key handler is registered above the early returns (hooks can't be
+  // conditional), so it reaches the grader through a ref rather than closing
+  // over a value that doesn't exist yet.
+  gradeRef.current = handleGrade
 
   const progress = Math.round((session.index / session.cards.length) * 100)
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
-      <div className="flex items-center justify-between text-sm text-slate-400">
-        <Link to={topicId ? `/topic/${topicId}` : '/'} className="hover:text-slate-200">
+      <div className="flex items-center justify-between text-sm text-muted">
+        <Link to={topicId ? `/topic/${topicId}` : '/'} className="hover:text-body">
           ← Exit session
         </Link>
         <span>
@@ -98,7 +134,7 @@ export default function FlashcardsPage() {
         </span>
       </div>
 
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-fill/10">
         <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${progress}%` }} />
       </div>
 
@@ -117,23 +153,29 @@ export default function FlashcardsPage() {
         <NavArrow dir="next" onClick={goNext} title="Next card (→)" />
       </div>
 
-      <p className="text-center text-xs text-slate-600">
-        Use <Kbd>←</Kbd> <Kbd>→</Kbd> to move between cards · <Kbd>Space</Kbd> to flip
+      <p className="text-center text-xs text-faint">
+        <Kbd>←</Kbd> <Kbd>→</Kbd> to move · <Kbd>Space</Kbd> to flip
+        {session.flipped && (
+          <>
+            {' '}
+            · <Kbd>1</Kbd> <Kbd>2</Kbd> <Kbd>3</Kbd> to grade
+          </>
+        )}
       </p>
 
       {session.flipped ? (
         <div>
-          <p className="mb-2 text-center text-sm text-slate-400">How well did you know it? Be honest — it tunes when this card returns.</p>
+          <p className="mb-2 text-center text-sm text-muted">How well did you know it? Be honest — it tunes when this card returns.</p>
           <div className="grid grid-cols-3 gap-3">
-            <GradeButton onClick={() => handleGrade('again')} className="bg-rose-500/15 text-rose-300 hover:bg-rose-500/25">
+            <GradeButton onClick={() => handleGrade('again')} shortcut="1" className="bg-danger/15 text-danger hover:bg-danger/25">
               Again
               <span className="block text-[11px] font-normal opacity-70">show soon</span>
             </GradeButton>
-            <GradeButton onClick={() => handleGrade('good')} className="bg-brand/15 text-brand-soft hover:bg-brand/25">
+            <GradeButton onClick={() => handleGrade('good')} shortcut="2" className="bg-brand/15 text-brand-soft hover:bg-brand/25">
               Good
               <span className="block text-[11px] font-normal opacity-70">got it</span>
             </GradeButton>
-            <GradeButton onClick={() => handleGrade('easy')} className="bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25">
+            <GradeButton onClick={() => handleGrade('easy')} shortcut="3" className="bg-success/15 text-success hover:bg-success/25">
               Easy
               <span className="block text-[11px] font-normal opacity-70">too simple</span>
             </GradeButton>
@@ -142,7 +184,7 @@ export default function FlashcardsPage() {
       ) : (
         <button
           onClick={() => setSession((s) => ({ ...s, flipped: true }))}
-          className="w-full rounded-xl bg-white/5 py-3 font-medium text-slate-200 hover:bg-white/10"
+          className="w-full rounded-xl bg-fill/5 py-3 font-medium text-body hover:bg-fill/10"
         >
           Reveal answer
         </button>
@@ -153,28 +195,39 @@ export default function FlashcardsPage() {
 
 function Flashcard({ card, flipped, onFlip }) {
   return (
-    <div className="card-3d h-72 w-full cursor-pointer select-none" onClick={onFlip}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label={flipped ? 'Answer. Activate to show the question.' : 'Question. Activate to reveal the answer.'}
+      onKeyDown={(e) => {
+        // Space/Enter are handled globally, but a focusable control has to
+        // respond to them itself or keyboard users get a dead element.
+        if (e.key === ' ' || e.key === 'Enter') e.preventDefault()
+      }}
+      className="card-3d h-72 w-full cursor-pointer select-none rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand"
+      onClick={onFlip}
+    >
       <div className={`card-inner relative h-full w-full ${flipped ? 'is-flipped' : ''}`}>
         {/* Front — question */}
-        <div className="card-face absolute inset-0 flex flex-col rounded-2xl border border-white/10 bg-slate-850 p-6">
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Question</span>
+        <div className="card-face absolute inset-0 flex flex-col overflow-auto rounded-2xl border border-line/10 bg-surface p-6">
+          <span className="text-xs font-semibold uppercase tracking-wide text-faint">Question</span>
           <div className="flex flex-1 items-center justify-center text-center">
-            <p className="text-lg font-medium text-white">
+            <p className="text-lg font-medium text-strong">
               <CardText text={card.q} />
             </p>
           </div>
           {card.hint && (
-            <p className="text-center text-xs text-slate-500">
+            <p className="text-center text-xs text-faint">
               💡 Hint: <CardText text={card.hint} />
             </p>
           )}
-          <p className="text-center text-xs text-slate-600">tap to flip</p>
+          <p className="text-center text-xs text-faint">tap to flip</p>
         </div>
         {/* Back — answer */}
-        <div className="card-face card-back absolute inset-0 flex flex-col overflow-auto rounded-2xl border border-brand/30 bg-gradient-to-br from-slate-850 to-slate-950 p-6">
+        <div className="card-face card-back absolute inset-0 flex flex-col overflow-auto rounded-2xl border border-brand/30 bg-gradient-to-br from-surface to-sunken p-6">
           <span className="text-xs font-semibold uppercase tracking-wide text-brand-soft">Answer</span>
           <div className="flex flex-1 items-center justify-center text-center">
-            <p className="whitespace-pre-line text-base text-slate-100">
+            <p className="whitespace-pre-line text-base text-strong">
               <CardText text={card.a} />
             </p>
           </div>
@@ -192,7 +245,7 @@ function NavArrow({ dir, onClick, disabled, title }) {
       disabled={disabled}
       title={title}
       aria-label={isPrev ? 'Previous card' : 'Next card'}
-      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xl text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 disabled:hover:bg-white/5"
+      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line/10 bg-fill/5 text-xl text-body transition hover:bg-fill/10 hover:text-strong disabled:cursor-not-allowed disabled:opacity-25 disabled:hover:bg-fill/5"
     >
       {isPrev ? '‹' : '›'}
     </button>
@@ -201,56 +254,97 @@ function NavArrow({ dir, onClick, disabled, title }) {
 
 function Kbd({ children }) {
   return (
-    <kbd className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">
+    <kbd className="rounded border border-line/15 bg-fill/5 px-1.5 py-0.5 font-mono text-[10px] text-muted">
       {children}
     </kbd>
   )
 }
 
-function GradeButton({ children, className, onClick }) {
+function GradeButton({ children, className, onClick, shortcut }) {
   return (
-    <button onClick={onClick} className={`rounded-xl py-3 text-center font-semibold transition ${className}`}>
+    <button
+      onClick={onClick}
+      title={shortcut ? `Press ${shortcut}` : undefined}
+      className={`relative rounded-xl py-3 text-center font-semibold transition ${className}`}
+    >
+      {shortcut && (
+        <span aria-hidden="true" className="absolute left-2 top-1.5 font-mono text-[10px] opacity-50">
+          {shortcut}
+        </span>
+      )}
       {children}
     </button>
   )
 }
 
-function SetupScreen({ title, deck, topicId, onStart }) {
+function SizePicker({ value, onChange, max }) {
+  return (
+    <div className="mt-6">
+      <div className="text-xs font-semibold uppercase tracking-wide text-muted">Session length</div>
+      <div className="mt-2 flex flex-wrap justify-center gap-2">
+        {SIZES.map((size) => {
+          // Don't offer a cap bigger than the deck — "50" beside a 22-card
+          // topic promises cards that aren't there.
+          if (size !== null && size >= max) return null
+          const active = value === size
+          return (
+            <button
+              key={String(size)}
+              onClick={() => onChange(size)}
+              aria-pressed={active}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                active
+                  ? 'bg-brand text-ink'
+                  : 'border border-line/10 bg-fill/5 text-body hover:bg-fill/10'
+              }`}
+            >
+              {size === null ? `All (${max})` : size}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function SetupScreen({ title, deck, topicId, onStart, limit, onLimitChange }) {
   const stats = useMemo(() => getCardStats(deck), [deck])
   return (
     <div className="mx-auto max-w-xl space-y-6">
-      <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-sm text-slate-400 hover:text-slate-200">
+      <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-sm text-muted hover:text-body">
         ← Back
       </Link>
-      <div className="animate-rise rounded-3xl border border-white/10 bg-slate-850 p-8 text-center">
+      <div className="animate-rise rounded-3xl border border-line/10 bg-surface p-8 text-center">
         <div className="text-5xl">🃏</div>
-        <h1 className="mt-3 text-2xl font-bold text-white">Flashcards · {title}</h1>
-        <p className="mt-2 text-slate-400">
+        <h1 className="mt-3 text-2xl font-bold text-strong">Flashcards · {title}</h1>
+        <p className="mt-2 text-muted">
           Cards are shuffled fresh each session and the ones you find hard come back sooner. Take it at
           your own pace — there's no wrong speed.
         </p>
         <div className="mt-6 grid grid-cols-3 gap-3 text-center">
           <Stat label="Total" value={stats.total} />
-          <Stat label="Due now" value={stats.due} accent="#6ea8fe" />
-          <Stat label="Mastered" value={stats.mastered} accent="#86efac" />
+          <Stat label="Due now" value={stats.due} tone="brand" />
+          <Stat label="Mastered" value={stats.mastered} tone="success" />
         </div>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <SizePicker value={limit} onChange={onLimitChange} max={stats.total} />
+
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
             onClick={() => onStart(true)}
             disabled={stats.due === 0}
             className="rounded-xl bg-brand px-5 py-2.5 font-medium text-ink shadow-lg shadow-brand/20 hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Study due cards ({stats.due})
+            Review due ({capped(stats.due, limit)})
           </button>
           <button
             onClick={() => onStart(false)}
-            className="rounded-xl bg-white/5 px-5 py-2.5 font-medium text-slate-200 hover:bg-white/10"
+            className="rounded-xl bg-fill/5 px-5 py-2.5 font-medium text-body hover:bg-fill/10"
           >
-            Study all ({stats.total})
+            Study any ({capped(stats.total, limit)})
           </button>
         </div>
         {stats.due === 0 && (
-          <p className="mt-4 text-sm text-emerald-300">
+          <p className="mt-4 text-sm text-success">
             🎉 Nothing due right now — you're all caught up. Reviewing all is still great practice.
           </p>
         )}
@@ -264,17 +358,17 @@ function SummaryScreen({ title, session, onRestart, topicId }) {
   const total = again + good + easy
   return (
     <div className="mx-auto max-w-xl space-y-6">
-      <div className="animate-rise rounded-3xl border border-white/10 bg-slate-850 p-8 text-center">
+      <div className="animate-rise rounded-3xl border border-line/10 bg-surface p-8 text-center">
         <div className="text-5xl">✨</div>
-        <h1 className="mt-3 text-2xl font-bold text-white">Session complete</h1>
-        <p className="mt-2 text-slate-300">{encouragement.sessionDone()}</p>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="mt-3 text-2xl font-bold text-strong">Session complete</h1>
+        <p className="mt-2 text-body">{encouragement.sessionDone()}</p>
+        <p className="mt-1 text-sm text-faint">
           You reviewed {total} card{total === 1 ? '' : 's'} from {title}.
         </p>
         <div className="mt-6 grid grid-cols-3 gap-3">
-          <Stat label="Again" value={again} accent="#fda4af" />
-          <Stat label="Good" value={good} accent="#9ec1ff" />
-          <Stat label="Easy" value={easy} accent="#86efac" />
+          <Stat label="Again" value={again} tone="danger" />
+          <Stat label="Good" value={good} tone="brand" />
+          <Stat label="Easy" value={easy} tone="success" />
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
@@ -285,7 +379,7 @@ function SummaryScreen({ title, session, onRestart, topicId }) {
           </button>
           <Link
             to={topicId ? `/topic/${topicId}` : '/'}
-            className="rounded-xl bg-white/5 px-5 py-2.5 font-medium text-slate-200 hover:bg-white/10"
+            className="rounded-xl bg-fill/5 px-5 py-2.5 font-medium text-body hover:bg-fill/10"
           >
             Done for now
           </Link>
@@ -295,19 +389,31 @@ function SummaryScreen({ title, session, onRestart, topicId }) {
   )
 }
 
-function Stat({ label, value, accent }) {
+// Tones are classes, not hex, so the number follows the theme like everything
+// else — an inline colour is the one thing a CSS-variable palette can't reach.
+const STAT_TONE = {
+  brand: 'text-brand',
+  success: 'text-success',
+  danger: 'text-danger',
+  neutral: 'text-strong',
+}
+
+function Stat({ label, value, tone = 'neutral' }) {
   return (
-    <div className="rounded-xl bg-white/5 p-3">
-      <div className="text-2xl font-bold" style={{ color: accent || '#fff' }}>
-        {value}
-      </div>
-      <div className="text-xs text-slate-400">{label}</div>
+    <div className="rounded-xl bg-fill/5 p-3">
+      <div className={`text-2xl font-bold ${STAT_TONE[tone] || STAT_TONE.neutral}`}>{value}</div>
+      <div className="text-xs text-muted">{label}</div>
     </div>
   )
 }
 
+// What a button will actually deal you, once the session cap is applied.
+function capped(n, limit) {
+  return limit ? Math.min(n, limit) : n
+}
+
 function Empty({ children }) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/15 p-10 text-center text-slate-400">{children}</div>
+    <div className="rounded-2xl border border-dashed border-line/15 p-10 text-center text-muted">{children}</div>
   )
 }

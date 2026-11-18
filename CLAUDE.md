@@ -45,7 +45,9 @@ Discovery is automatic (`src/content/loadContent.js` via `import.meta.glob`) —
 - `src/lib/progress.js` — Leitner spaced repetition; localStorage cache + sync to the local SQLite API (`hydrate`/`save`).
 - `server/index.js` — Express + better-sqlite3 progress API (`/api/state`, `/api/reset`); DB at `data/studyforge.db` (gitignored).
 - `src/lib/encouragement.js` — the kind tutor voice in the UI.
-- `src/pages/` — Home, TopicPage, LessonPage, FlashcardsPage.
+- `src/pages/` — Home, TopicPage, LessonPage, FlashcardsPage, InterviewPage.
+- `src/lib/theme.js` + `src/components/ThemeToggle.jsx` — dark / light / follow-system. The palette is CSS variables in `src/index.css`, so switching is one attribute on `<html>` and no component carries a `dark:` variant. An inline script in `index.html` applies the saved theme **before first paint** (doing it only in React flashes dark for a frame on every light-mode load), and `applyTheme` suppresses transitions for one frame so the page never renders half-swapped. Syntax highlighting is themed the same way — `index.css` defines the highlight.js token groups from variables rather than importing `github-dark.css`, which would pin code blocks to one theme.
+- `src/lib/search.js` + `src/components/SearchPalette.jsx` — ⌘K / `/` search over topics, lessons, flashcards and interview answers. It indexes lesson **bodies**, not just titles, because the question you actually have is "where was this explained?".
 
 ## Guardrails
 

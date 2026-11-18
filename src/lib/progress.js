@@ -96,12 +96,26 @@ export async function hydrate() {
   }
 }
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10)
+// Calendar dates are LOCAL, never UTC. `toISOString()` yields the UTC date, so
+// anywhere west of Greenwich an evening session is filed under *tomorrow*:
+// study at 8pm and again at 10am the next morning and the streak sees a single
+// day instead of two, while a card graded that evening comes back a day late.
+// Both failures are silent — the streak just quietly stops counting.
+function dateStr(d = new Date()) {
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${month}-${day}`
 }
 
+function todayStr() {
+  return dateStr()
+}
+
+// Both dates are parsed as local midnight (no trailing Z), and rounded rather
+// than floored: across a daylight-saving boundary a "day" is 23 or 25 hours,
+// and flooring 23 hours gives 0 — a card that would never come due.
 function daysBetween(a, b) {
-  return Math.floor((new Date(b) - new Date(a)) / 86400000)
+  return Math.round((Date.parse(`${b}T00:00:00`) - Date.parse(`${a}T00:00:00`)) / 86400000)
 }
 
 // ---- Lessons ----
@@ -110,6 +124,15 @@ export function markLessonRead(topicId, slug) {
   const state = load()
   state.lessonsRead[`${topicId}:${slug}`] = todayStr()
   bumpStreak(state)
+  save(state)
+}
+
+// Undo a mis-click. Deliberately does NOT touch the streak: you did open the
+// app today, and taking a day back because you corrected a checkbox would be
+// exactly the kind of petty bookkeeping this app is supposed to avoid.
+export function markLessonUnread(topicId, slug) {
+  const state = load()
+  delete state.lessonsRead[`${topicId}:${slug}`]
   save(state)
 }
 
@@ -149,7 +172,7 @@ export function gradeCard(cardId, grade) {
   const interval = BOX_INTERVALS_DAYS[c.box] ?? 0
   const due = new Date()
   due.setDate(due.getDate() + interval)
-  c.due = due.toISOString().slice(0, 10)
+  c.due = dateStr(due)
   state.cards[cardId] = c
   bumpStreak(state)
   save(state)

@@ -28,7 +28,7 @@ export default function CardText({ text }) {
       parts.push(
         <code
           key={`c${i}`}
-          className="rounded bg-white/10 px-1 py-0.5 font-mono text-[0.9em] text-brand-soft"
+          className="rounded bg-fill/10 px-1 py-0.5 font-mono text-[0.9em] text-brand-soft"
         >
           {chunk.slice(1, -1)}
         </code>,
@@ -40,7 +40,7 @@ export default function CardText({ text }) {
       if (!piece) return
       if (piece.startsWith('**') && piece.endsWith('**') && piece.length > 4) {
         parts.push(
-          <strong key={`b${i}-${j}`} className="font-semibold text-white">
+          <strong key={`b${i}-${j}`} className="font-semibold text-strong">
             {piece.slice(2, -2)}
           </strong>,
         )

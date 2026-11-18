@@ -53,7 +53,7 @@ export default function InterviewPage() {
 
   if (questions.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-white/15 p-10 text-center text-slate-400">
+      <div className="rounded-2xl border border-dashed border-line/15 p-10 text-center text-muted">
         Nothing to practise here yet.{' '}
         <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-brand-soft underline">
           {topicId ? 'Back to topic' : 'Browse topics'}
@@ -64,24 +64,24 @@ export default function InterviewPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-sm text-slate-400 hover:text-slate-200">
+      <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-sm text-muted hover:text-body">
         ← {topicId ? 'Back to topic' : 'Home'}
       </Link>
 
-      <header className="animate-rise rounded-3xl border border-white/10 bg-gradient-to-br from-slate-850 to-slate-950 p-7">
+      <header className="animate-rise rounded-3xl border border-line/10 bg-gradient-to-br from-surface to-sunken p-7">
         <div className="text-4xl">{emoji}</div>
-        <h1 className="mt-2 text-2xl font-bold text-white">
+        <h1 className="mt-2 text-2xl font-bold text-strong">
           {heading} · {title}
         </h1>
-        <p className="mt-2 max-w-2xl text-slate-400">{intro}</p>
+        <p className="mt-2 max-w-2xl text-muted">{intro}</p>
         <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
           <button
             onClick={toggleAll}
-            className="rounded-xl bg-white/5 px-4 py-2 font-medium text-slate-200 hover:bg-white/10"
+            className="rounded-xl bg-fill/5 px-4 py-2 font-medium text-body hover:bg-fill/10"
           >
             {allRevealed ? 'Hide all answers' : 'Reveal all answers'}
           </button>
-          <span className="text-slate-500">
+          <span className="text-faint">
             {questions.length} question{questions.length === 1 ? '' : 's'} · {groups.length} section
             {groups.length === 1 ? '' : 's'}
           </span>
@@ -90,7 +90,7 @@ export default function InterviewPage() {
 
       {groups.map(([category, items]) => (
         <section key={category} className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">{category}</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{category}</h2>
           <ol className="space-y-3">
             {items.map((q, i) => {
               const isOpen = revealed.has(q.id)
@@ -98,21 +98,21 @@ export default function InterviewPage() {
               return (
                 <li
                   key={q.id}
-                  className="overflow-hidden rounded-2xl border border-white/10 bg-slate-850"
+                  className="overflow-hidden rounded-2xl border border-line/10 bg-surface"
                 >
                   <button
                     onClick={() => toggleOne(q.id)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-start gap-3 px-5 py-4 text-left transition hover:bg-white/5"
+                    className="flex w-full items-start gap-3 px-5 py-4 text-left transition hover:bg-fill/5"
                   >
-                    <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/5 text-xs font-semibold text-slate-400">
+                    <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-fill/5 text-xs font-semibold text-muted">
                       {i + 1}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block font-medium text-white">{q.q}</span>
+                      <span className="block font-medium text-strong">{q.q}</span>
                       <span className="mt-1 flex flex-wrap items-center gap-1.5">
                         {src && (
-                          <span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-slate-400">
+                          <span className="rounded-full bg-fill/5 px-2 py-0.5 text-[11px] text-muted">
                             {src.emoji} {src.title}
                           </span>
                         )}
@@ -126,12 +126,12 @@ export default function InterviewPage() {
                         ))}
                       </span>
                     </span>
-                    <span className="mt-0.5 shrink-0 text-xs text-slate-500">
+                    <span className="mt-0.5 shrink-0 text-xs text-faint">
                       {isOpen ? 'Hide ▲' : 'Show ▼'}
                     </span>
                   </button>
                   {isOpen && (
-                    <div className="border-t border-white/10 bg-slate-950/40 px-5 py-4">
+                    <div className="border-t border-line/10 bg-sunken/40 px-5 py-4">
                       <span className="text-xs font-semibold uppercase tracking-wide text-brand-soft">
                         Model answer
                       </span>

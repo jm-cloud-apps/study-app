@@ -59,13 +59,13 @@ export default function PasswordGate({ children }) {
     <div className="flex min-h-screen items-center justify-center p-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm animate-rise rounded-3xl border border-white/10 bg-slate-850 p-8 text-center shadow-2xl"
+        className="w-full max-w-sm animate-rise rounded-3xl border border-line/10 bg-surface p-8 text-center shadow-2xl"
       >
         <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-brand to-brand-deep text-2xl shadow-lg shadow-brand/20">
           🎓
         </div>
-        <h1 className="mt-4 text-xl font-bold text-white">StudyForge</h1>
-        <p className="mt-1 text-sm text-slate-400">Enter the password to continue.</p>
+        <h1 className="mt-4 text-xl font-bold text-strong">StudyForge</h1>
+        <p className="mt-1 text-sm text-muted">Enter the password to continue.</p>
 
         <input
           type="password"
@@ -75,10 +75,10 @@ export default function PasswordGate({ children }) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Password"
-          className="mt-6 w-full rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-center text-white outline-none focus:border-brand"
+          className="mt-6 w-full rounded-xl border border-line/10 bg-sunken/70 px-4 py-3 text-center text-strong outline-none focus:border-brand"
         />
 
-        {error && <p className="mt-3 text-sm text-rose-300">{error}</p>}
+        {error && <p className="mt-3 text-sm text-danger">{error}</p>}
 
         <button
           type="submit"
@@ -88,7 +88,7 @@ export default function PasswordGate({ children }) {
           {checking ? 'Checking…' : 'Unlock'}
         </button>
 
-        <p className="mt-4 text-[11px] leading-relaxed text-slate-500">
+        <p className="mt-4 text-[11px] leading-relaxed text-faint">
           This is a light access gate for a personal study site, not strong security.
         </p>
       </form>
