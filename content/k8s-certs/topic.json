@@ -1,0 +1,12 @@
+{
+  "id": "k8s-certs",
+  "title": "Kubernetes Certs (CKA · CKAD · CKS)",
+  "emoji": "🏅",
+  "blurb": "Hands-on prep for the three CNCF Kubernetes exams: kubectl speed, then a CKA track (kubeadm, RBAC, Helm/Kustomize, Gateway API, storage, troubleshooting), a CKAD track (app design, deployment strategies, probes, security contexts) and a CKS track (CIS hardening, AppArmor/seccomp, Pod Security, supply chain, Falco and audit logs).",
+  "accent": "#326ce5",
+  "order": 6.1,
+  "interviewTitle": "Practice tasks",
+  "interviewNoun": "practice tasks",
+  "interviewEmoji": "🧪",
+  "interviewIntro": "Exam-shaped tasks with worked solutions, grouped by exam. Read the task, do it on a practice cluster (kind, minikube, or a kubeadm lab), then reveal the solution and compare — especially the verification step. Every solution ends the way the grader checks: is the object in the right namespace, on the right host, in the state the task described?"
+}
