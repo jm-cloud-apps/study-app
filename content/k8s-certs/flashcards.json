@@ -1,0 +1,830 @@
+[
+  {
+    "q": "What do the CKA, CKAD and CKS exams have in common in format?",
+    "a": "Each is **two hours of live, performance-based tasks** (15–20 of them) on real clusters, online and proctored, graded on the end state, with the official Kubernetes docs allowed.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "Which of the three Kubernetes exams has a prerequisite, and what is it?",
+    "a": "The **CKS** requires a current **CKA**. The CKA and CKAD have no prerequisites.",
+    "tags": [
+      "exam",
+      "cks"
+    ]
+  },
+  {
+    "q": "What are the passing scores for the CKA, CKAD and CKS (per the Linux Foundation FAQ, Nov 2026)?",
+    "a": "CKA **66%**, CKAD **66%**, CKS **67%**. Check the official FAQ when you book, since policies change.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "What is the single most important habit at the start of every exam task?",
+    "a": "**Switch to the context (and note the namespace) the task gives you**, after `ssh`-ing to the host it names. A correct object in the wrong cluster or namespace scores zero.",
+    "hint": "Right object, right…",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "On the exam's SSH hosts, what's preconfigured for you, and what isn't on the `base` node?",
+    "a": "The SSH hosts have `kubectl` with the **`k` alias and bash completion**, plus `yq`, `curl`, `wget` and man pages. The `base` node has none of these, so always `ssh` to the task's host first.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "How do you copy and paste inside the exam terminal?",
+    "a": "`Ctrl+Shift+C` / `Ctrl+Shift+V` (or the right-click menu). Elsewhere on the remote desktop it's `Ctrl+C` / `Ctrl+V`.",
+    "tags": [
+      "exam"
+    ]
+  },
+  {
+    "q": "Which documentation sites does the CKA allow that the CKAD doesn't?",
+    "a": "**gateway-api.sigs.k8s.io**. Both allow kubernetes.io/docs, kubernetes.io/blog and helm.sh/docs.",
+    "tags": [
+      "exam",
+      "cka"
+    ]
+  },
+  {
+    "q": "What does `--dry-run=client -o yaml` let you do, and why is it the core exam speed trick?",
+    "a": "It prints the manifest an imperative command **would** create, without creating it. You save it to a file, add the fields the generator lacks, then apply. You rarely write YAML from scratch.",
+    "tags": [
+      "kubectl"
+    ]
+  },
+  {
+    "q": "How do you look up the exact field names for a Pod's container securityContext from the live cluster?",
+    "a": "`kubectl explain pod.spec.containers.securityContext` (add `--recursive` for the whole tree). It reads the schema from the API server, so it's right for that version and works for CRDs too.",
+    "tags": [
+      "kubectl"
+    ]
+  },
+  {
+    "q": "A running Pod's spec won't change with `kubectl edit`. How do you apply your change?",
+    "a": "Most Pod fields are immutable. kubectl saves your edited copy under `/tmp` and prints the path; `kubectl replace --force -f <that file>` deletes and recreates the Pod with the change.",
+    "tags": [
+      "kubectl"
+    ]
+  },
+  {
+    "q": "Write a command that prints every node's name and kubelet version, one per line.",
+    "a": "`k get nodes -o jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.status.nodeInfo.kubeletVersion}{\"\\n\"}{end}'`",
+    "tags": [
+      "kubectl"
+    ]
+  },
+  {
+    "q": "How do you make every later command in a context default to namespace `payments`?",
+    "a": "`k config set-context --current --namespace=payments`. Remember you did it, and pass `-n` explicitly when a later task names a different namespace.",
+    "tags": [
+      "kubectl"
+    ]
+  },
+  {
+    "q": "Why does editing `/etc/kubernetes/manifests/kube-apiserver.yaml` change the running API server?",
+    "a": "The control plane runs as **static Pods**: the kubelet watches that directory and recreates a Pod whenever its manifest changes. No `kubectl` is involved.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "In a kubeadm upgrade, which nodes run `kubeadm upgrade apply` and which run `kubeadm upgrade node`?",
+    "a": "`upgrade apply` runs on the **first control-plane node only**. Every other control-plane node and every worker runs `upgrade node`.",
+    "hint": "Mixing these up is the classic mistake.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "What is the order of steps to upgrade a kubeadm worker node?",
+    "a": "Upgrade the kubeadm package → `kubeadm upgrade node` → **drain** the node → upgrade kubelet and kubectl → `systemctl daemon-reload && systemctl restart kubelet` → **uncordon**.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "Why can't you jump a kubeadm cluster from 1.35 to 1.37 in one upgrade?",
+    "a": "kubeadm upgrades go **one minor version at a time**. Version skew rules only support adjacent minors, so 1.35 → 1.36 → 1.37.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "A worker's join token has expired. How do you get a working join command?",
+    "a": "On a control-plane node: `kubeadm token create --print-join-command`. Tokens expire after 24 hours by default.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "Where do you find the certificate paths needed for `etcdctl snapshot save`?",
+    "a": "In the flags of the etcd static Pod manifest, `/etc/kubernetes/manifests/etcd.yaml` (`--trusted-ca-file`, `--cert-file`, `--key-file`, usually under `/etc/kubernetes/pki/etcd/`).",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "Nodes stay `NotReady` right after `kubeadm init` and `join`. What's the most likely reason?",
+    "a": "**No CNI plugin is installed yet.** Pod networking isn't configured until you apply a network plugin.",
+    "tags": [
+      "cka",
+      "lifecycle"
+    ]
+  },
+  {
+    "q": "What's the difference between a Role and a RoleBinding?",
+    "a": "A **Role** says *what*: verbs on resources in one namespace. A **RoleBinding** says *who* and *where*: it grants a Role (or ClusterRole) to users, groups or ServiceAccounts in its namespace.",
+    "tags": [
+      "cka",
+      "rbac"
+    ]
+  },
+  {
+    "q": "You bind a ClusterRole with a RoleBinding in namespace `ci`. Where do the permissions apply?",
+    "a": "**Only in `ci`.** A RoleBinding always scopes the grant to its own namespace, even when it references a ClusterRole. That's how one ClusterRole is reused across namespaces.",
+    "tags": [
+      "cka",
+      "rbac"
+    ]
+  },
+  {
+    "q": "How do you check whether ServiceAccount `deployer` in `ci` can create Deployments there?",
+    "a": "`k auth can-i create deployments -n ci --as=system:serviceaccount:ci:deployer`",
+    "tags": [
+      "cka",
+      "rbac",
+      "cks"
+    ]
+  },
+  {
+    "q": "Kubernetes has no user database. What makes someone a 'user'?",
+    "a": "Presenting a credential an authenticator trusts, typically a **client certificate signed by the cluster CA**. The cert's **CN** is the username and its **O** fields are the groups.",
+    "tags": [
+      "cka",
+      "rbac"
+    ]
+  },
+  {
+    "q": "Helm vs Kustomize: what is the core difference?",
+    "a": "**Helm templates**: charts with placeholders filled from values, installed as versioned releases. **Kustomize patches**: plain valid YAML with overlays layered on top, built into kubectl (`k apply -k`).",
+    "tags": [
+      "cka",
+      "ckad",
+      "helm"
+    ]
+  },
+  {
+    "q": "How do you roll a Helm release back to its previous revision?",
+    "a": "`helm rollback <release> -n <namespace>` (add a revision number to target a specific one; `helm history` lists them).",
+    "tags": [
+      "cka",
+      "ckad",
+      "helm"
+    ]
+  },
+  {
+    "q": "What's the relationship between a CRD and an operator?",
+    "a": "A **CRD** teaches the API server a new resource type, which on its own only stores objects. An **operator** is a controller that watches those objects and does the work they describe.",
+    "tags": [
+      "cka",
+      "ckad",
+      "extensions"
+    ]
+  },
+  {
+    "q": "Name the three plugin interfaces Kubernetes delegates to, and what each handles.",
+    "a": "**CRI**: running containers (containerd, CRI-O). **CNI**: Pod networking (Calico, Cilium). **CSI**: storage provisioning and attachment.",
+    "tags": [
+      "cka",
+      "extensions"
+    ]
+  },
+  {
+    "q": "Why do Pods see a changed ConfigMap via a volume but not via `envFrom`?",
+    "a": "Mounted ConfigMaps are **refreshed in place** after a short delay (unless mounted with `subPath`). Environment variables are read **once at container start**, so they need a `rollout restart`.",
+    "tags": [
+      "cka",
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "An HPA shows `<unknown>/70%` in TARGETS. Name two likely causes.",
+    "a": "**metrics-server** isn't installed or healthy, or the Pods have **no CPU request** (utilisation is a percentage of the request). `k describe hpa` says which.",
+    "tags": [
+      "cka",
+      "workloads"
+    ]
+  },
+  {
+    "q": "Taints, tolerations and node affinity: which repels, which permits, which attracts?",
+    "a": "**Taints repel** (on the node), **tolerations permit** (on the Pod), **affinity attracts** (on the Pod). Dedicating nodes needs the taint *and* affinity together.",
+    "hint": "A toleration alone doesn't send a Pod anywhere.",
+    "tags": [
+      "cka",
+      "scheduling"
+    ]
+  },
+  {
+    "q": "What do the taint effects NoSchedule, PreferNoSchedule and NoExecute do?",
+    "a": "**NoSchedule** blocks new non-tolerating Pods; **PreferNoSchedule** avoids the node if possible; **NoExecute** also **evicts** running Pods that don't tolerate it.",
+    "tags": [
+      "cka",
+      "scheduling"
+    ]
+  },
+  {
+    "q": "What happens when a container exceeds its memory limit, and when it exceeds its CPU limit?",
+    "a": "Memory: it's **OOMKilled**. CPU: it's **throttled**, not killed.",
+    "tags": [
+      "cka",
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "How do you remove the taint `gpu=true:NoSchedule` from node `worker3`?",
+    "a": "`k taint node worker3 gpu=true:NoSchedule-` (the trailing `-` removes it).",
+    "tags": [
+      "cka",
+      "scheduling"
+    ]
+  },
+  {
+    "q": "A Service exists but has no endpoints. What are the two most likely causes?",
+    "a": "A **selector/label mismatch** between the Service and the Pods, or the Pods aren't **ready** (a failing readiness probe removes them on purpose).",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "In a Service, what's the difference between `port` and `targetPort`?",
+    "a": "`port` is what clients connect to on the Service; `targetPort` is the **container port** the traffic is sent to.",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "Under a NetworkPolicy's `ingress.from`, what's the difference between one list item with both a podSelector and a namespaceSelector, and two separate items?",
+    "a": "**One item = AND**: Pods with that label *in* those namespaces. **Two items = OR**: Pods with the label (same namespace) *or* any Pod in those namespaces.",
+    "hint": "Watch the dash.",
+    "tags": [
+      "cka",
+      "ckad",
+      "cks",
+      "networking"
+    ]
+  },
+  {
+    "q": "You added a default-deny egress policy and now nothing can resolve names. Why, and how do you fix it?",
+    "a": "Egress deny blocks **DNS** too. Add an egress rule allowing **UDP and TCP port 53** to the kube-dns/CoreDNS Pods.",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "What is the fully qualified DNS name of Service `api` in namespace `shop`?",
+    "a": "`api.shop.svc.cluster.local` (with the default cluster domain).",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "Name the three core Gateway API resources and who typically owns each.",
+    "a": "**GatewayClass** (infrastructure provider), **Gateway** (cluster operator: listeners, ports, TLS), **HTTPRoute** (application team: hosts, paths, backends).",
+    "tags": [
+      "cka",
+      "networking"
+    ]
+  },
+  {
+    "q": "How does the Gateway API make canary traffic splitting a standard feature?",
+    "a": "HTTPRoute `backendRefs` take a **`weight`**, so one route can send, say, 90% to `api-v1` and 10% to `api-v2`, with no controller-specific annotations.",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "An Ingress resource exists but nothing serves it. What's missing?",
+    "a": "An **Ingress controller**. The Ingress is only configuration; `ingressClassName` must name a controller that's actually running (`k get ingressclass`).",
+    "tags": [
+      "cka",
+      "ckad",
+      "networking"
+    ]
+  },
+  {
+    "q": "Explain PV, PVC and StorageClass in one line each.",
+    "a": "**PVC**: a namespaced request for storage. **PV**: a real piece of storage that satisfies it. **StorageClass**: a factory that provisions PVs dynamically.",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "q": "What does `volumeBindingMode: WaitForFirstConsumer` change?",
+    "a": "Provisioning waits until a **Pod using the claim is scheduled**, so the volume is created where the Pod lands. A PVC Pending until then is normal.",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "q": "Is ReadWriteOnce per Pod or per node? What mode limits a volume to a single Pod?",
+    "a": "**RWO is per node**: several Pods on one node can mount it. **ReadWriteOncePod (RWOP)** limits it to a single Pod cluster-wide.",
+    "hint": "Two Pods on the same node…",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "q": "What's the difference between the Delete and Retain reclaim policies?",
+    "a": "**Delete** removes the PV and its storage when the PVC is deleted. **Retain** keeps the data; the PV becomes `Released` and needs manual cleanup or re-binding.",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "q": "A PVC requests class `manual` and an available PV has class `standard`. Will they bind?",
+    "a": "**No.** Binding needs a matching `storageClassName`, a compatible access mode and enough capacity.",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "q": "What's the first place to look when a Pod misbehaves?",
+    "a": "The **Events** at the bottom of `k describe pod`. Scheduling, image-pull, probe, mount and OOM problems are spelled out there.",
+    "tags": [
+      "cka",
+      "ckad",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "How do you see the logs of a container that crashed and restarted?",
+    "a": "`k logs <pod> --previous` (plus `-c <container>` for multi-container Pods).",
+    "tags": [
+      "cka",
+      "ckad",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "A node is NotReady. What are your first two commands once you're on it?",
+    "a": "`sudo systemctl status kubelet` and `sudo journalctl -u kubelet -n 50`. The kubelet nearly always says why.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "`kubectl` says 'connection refused' after an API server manifest edit. How do you investigate?",
+    "a": "On the control-plane node: `sudo crictl ps -a` to find the apiserver container, `sudo crictl logs <id>` (or the files under `/var/log/pods/`), then fix the manifest and wait for the kubelet to recreate it.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "New Pods stay Pending with no events at all. Which component do you suspect?",
+    "a": "The **kube-scheduler**. With it down, nothing even attempts scheduling, so no events are written.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "Why must a backup of a static Pod manifest not be kept in `/etc/kubernetes/manifests/`?",
+    "a": "The kubelet runs **every** manifest in that directory, so a backup there becomes a second, conflicting static Pod. Keep backups elsewhere.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "How do you decide between a Job and a Deployment?",
+    "a": "Ask **does it finish?** Work that completes is a **Job** (or CronJob); work that runs forever is a Deployment (or StatefulSet/DaemonSet).",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "What makes an init container a native sidecar?",
+    "a": "Setting **`restartPolicy: Always`** on it. It starts before the app containers, keeps running alongside them and is stopped after them (stable since Kubernetes 1.33).",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "A Pod shows `Init:0/2`. What does it mean and how do you find out why?",
+    "a": "It's still running its **first init container**. `k logs <pod> -c <init-container-name>` shows what it's waiting for.",
+    "tags": [
+      "ckad",
+      "troubleshooting"
+    ]
+  },
+  {
+    "q": "What do a Job's `completions`, `parallelism` and `backoffLimit` control?",
+    "a": "**completions**: total successful Pods needed. **parallelism**: how many run at once. **backoffLimit**: retries before the Job is marked failed.",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "How do you run a CronJob once, immediately?",
+    "a": "`k create job <name> --from=cronjob/<cronjob-name>`",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "When would you choose a StatefulSet over a Deployment?",
+    "a": "When each replica needs a **stable identity** (`db-0`, `db-1`…), **its own persistent volume** (`volumeClaimTemplates`) and ordered startup.",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "What single change cuts a blue/green deployment over to green?",
+    "a": "Change the **Service selector** from `version: blue` to `version: green`. Rollback is the reverse change, and it's instant because the blue Pods are still running.",
+    "tags": [
+      "ckad",
+      "deployment"
+    ]
+  },
+  {
+    "q": "With 9 stable Pods and 1 canary Pod behind one Service, roughly what share of traffic hits the canary, and why is that approximate?",
+    "a": "About **10%**. The split follows Pod count per connection, not per request, so it's only approximate. Weighted HTTPRoutes or a mesh give exact percentages.",
+    "tags": [
+      "ckad",
+      "deployment"
+    ]
+  },
+  {
+    "q": "Why do readiness probes make rolling updates safe?",
+    "a": "A rollout only proceeds as new Pods become **ready**. Without a readiness probe, 'ready' just means 'started', so a broken version can roll out completely.",
+    "tags": [
+      "ckad",
+      "deployment"
+    ]
+  },
+  {
+    "q": "What do `maxSurge: 1` and `maxUnavailable: 0` mean for a 4-replica rolling update?",
+    "a": "At most **5** Pods may exist during the rollout, and **never fewer than 4** ready. Capacity never dips.",
+    "tags": [
+      "ckad",
+      "deployment"
+    ]
+  },
+  {
+    "q": "Why does Kustomize's configMapGenerator trigger a rollout when a value changes?",
+    "a": "It appends a **content hash** to the ConfigMap's name and rewrites references. A new value means a new name, which changes the Pod template.",
+    "tags": [
+      "ckad",
+      "deployment"
+    ]
+  },
+  {
+    "q": "Liveness vs readiness: what happens when each fails?",
+    "a": "**Liveness** failure **restarts** the container. **Readiness** failure removes the Pod from Service endpoints **without** restarting it.",
+    "hint": "One restarts, one redirects.",
+    "tags": [
+      "ckad",
+      "observability"
+    ]
+  },
+  {
+    "q": "Why shouldn't a liveness probe check the database?",
+    "a": "A database blip would make **every replica restart at once**, turning a small outage into a big one. Dependency checks belong in **readiness**.",
+    "tags": [
+      "ckad",
+      "observability"
+    ]
+  },
+  {
+    "q": "What problem does a startupProbe solve?",
+    "a": "It gives a **slow-starting** app its own generous budget. Liveness and readiness don't run until it succeeds, so the liveness probe can stay strict without causing restart loops.",
+    "tags": [
+      "ckad",
+      "observability"
+    ]
+  },
+  {
+    "q": "How do you get a shell next to a distroless container that has no shell of its own?",
+    "a": "`k debug -it <pod> --image=busybox:1.36 --target=<container>` adds an **ephemeral container** that shares the target's process namespace.",
+    "tags": [
+      "ckad",
+      "observability"
+    ]
+  },
+  {
+    "q": "A manifest fails with 'no matches for kind CronJob in version batch/v1beta1'. How do you fix it?",
+    "a": "That API version was **removed**. Change `apiVersion` to the served one (`batch/v1`; check with `k api-resources` or `k explain cronjob`) and adjust any fields that changed.",
+    "tags": [
+      "ckad",
+      "observability"
+    ]
+  },
+  {
+    "q": "Name a securityContext field that exists only at Pod level, and three that exist only at container level.",
+    "a": "Pod only: **`fsGroup`**. Container only: **`allowPrivilegeEscalation`**, **`capabilities`**, **`readOnlyRootFilesystem`** (also `privileged`).",
+    "tags": [
+      "ckad",
+      "security"
+    ]
+  },
+  {
+    "q": "A container with `runAsNonRoot: true` shows `CreateContainerConfigError`. Why?",
+    "a": "The image runs as **root** (or as a non-numeric user) and no numeric `runAsUser` is set, so the kubelet refuses to start it. The setting is working as intended.",
+    "tags": [
+      "ckad",
+      "security"
+    ]
+  },
+  {
+    "q": "After adding a CPU ResourceQuota, new Pods are rejected. What's the cleanest fix?",
+    "a": "Add a **LimitRange** with `default` and `defaultRequest`, so Pods without requests and limits get them automatically. A compute quota makes those values mandatory.",
+    "tags": [
+      "ckad",
+      "workloads"
+    ]
+  },
+  {
+    "q": "A Pod never calls the Kubernetes API. Which two settings reduce the risk from its identity?",
+    "a": "Give it a **dedicated ServiceAccount** with minimal RBAC, and set **`automountServiceAccountToken: false`**.",
+    "tags": [
+      "ckad",
+      "cks",
+      "security"
+    ]
+  },
+  {
+    "q": "In what order does an API request pass through the three gates?",
+    "a": "**Authentication** (who are you?) → **authorization** (may you? usually RBAC) → **admission** (should this object be accepted or changed?).",
+    "tags": [
+      "ckad",
+      "security"
+    ]
+  },
+  {
+    "q": "How do you decode the value of key `TOKEN` in Secret `api-keys`?",
+    "a": "`k get secret api-keys -o jsonpath='{.data.TOKEN}' | base64 -d`",
+    "tags": [
+      "ckad"
+    ]
+  },
+  {
+    "q": "What does kube-bench do?",
+    "a": "It checks the cluster's components against the **CIS Kubernetes Benchmark** and prints PASS/FAIL/WARN per check, with the remediation for each failure.",
+    "tags": [
+      "cks",
+      "hardening"
+    ]
+  },
+  {
+    "q": "How do you block Pods from reaching the cloud metadata endpoint while allowing all other egress?",
+    "a": "An egress NetworkPolicy with `ipBlock: { cidr: 0.0.0.0/0, except: [\"169.254.169.254/32\"] }`.",
+    "tags": [
+      "cks",
+      "hardening"
+    ]
+  },
+  {
+    "q": "How do you verify a downloaded kubelet binary?",
+    "a": "Compare `sha512sum` of the binary with the **published hash for that exact version** (the `.sha512` file at dl.k8s.io), e.g. with `sha512sum --check`.",
+    "tags": [
+      "cks",
+      "hardening"
+    ]
+  },
+  {
+    "q": "Name four RBAC permissions that are more dangerous than they look.",
+    "a": "`get`/`list` on **secrets** (list returns the contents), **`pods/exec`**, **`create` pods** (can mount any Secret or ServiceAccount), and **`escalate`/`bind`/`impersonate`**.",
+    "tags": [
+      "cks",
+      "rbac"
+    ]
+  },
+  {
+    "q": "Which API server settings keep authorization and kubelets in check?",
+    "a": "`--authorization-mode=Node,RBAC` (never AlwaysAllow) and the **NodeRestriction** admission plugin, so kubelets may only modify their own Node and Pods.",
+    "tags": [
+      "cks",
+      "hardening"
+    ]
+  },
+  {
+    "q": "Which kubelet config settings disable unauthenticated access?",
+    "a": "In `/var/lib/kubelet/config.yaml`: `authentication.anonymous.enabled: false`, `authorization.mode: Webhook`, and `readOnlyPort: 0`. Then restart the kubelet.",
+    "tags": [
+      "cks",
+      "hardening"
+    ]
+  },
+  {
+    "q": "An AppArmor-confined Pod fails to start on one node but runs on another. Why?",
+    "a": "The AppArmor **profile isn't loaded on that node**. Kubernetes doesn't distribute profiles; load it with `apparmor_parser` on every node where the Pod may run.",
+    "tags": [
+      "cks",
+      "system"
+    ]
+  },
+  {
+    "q": "How does a Pod reference a Localhost AppArmor profile since Kubernetes 1.30?",
+    "a": "`securityContext.appArmorProfile: { type: Localhost, localhostProfile: <profile name> }`. The **name** is declared inside the profile, which may differ from its filename.",
+    "tags": [
+      "cks",
+      "system"
+    ]
+  },
+  {
+    "q": "Where does a custom seccomp profile go, and how does the Pod refer to it?",
+    "a": "Under the kubelet's seccomp directory (default `/var/lib/kubelet/seccomp/`), referenced as `seccompProfile: { type: Localhost, localhostProfile: <path relative to that dir> }`.",
+    "tags": [
+      "cks",
+      "system"
+    ]
+  },
+  {
+    "q": "AppArmor vs seccomp: what does each restrict?",
+    "a": "**AppArmor**: files, capabilities and network access per program. **seccomp**: which **system calls** a process may make.",
+    "tags": [
+      "cks",
+      "system"
+    ]
+  },
+  {
+    "q": "What are the three Pod Security Standards levels?",
+    "a": "**privileged** (anything), **baseline** (blocks known privilege escalations like privileged, hostPath, host namespaces) and **restricted** (adds non-root, no escalation, drop ALL, seccomp).",
+    "tags": [
+      "cks",
+      "pod-security"
+    ]
+  },
+  {
+    "q": "What do the PSA modes enforce, warn and audit do with a violating Pod?",
+    "a": "**enforce**: rejects it. **warn**: allows it with a warning to the user. **audit**: allows it and records it in the audit log.",
+    "tags": [
+      "cks",
+      "pod-security"
+    ]
+  },
+  {
+    "q": "A namespace is labelled `enforce=restricted` but a privileged Pod still runs there. Why?",
+    "a": "PSA acts at **admission**, so it doesn't evict existing Pods. New Pods that violate it (e.g. on the next rollout) will be rejected.",
+    "tags": [
+      "cks",
+      "pod-security"
+    ]
+  },
+  {
+    "q": "In an EncryptionConfiguration, why does the order of providers matter?",
+    "a": "The **first provider encrypts new writes**; the others are only used to decrypt. `identity` first would keep storing Secrets in plain text.",
+    "tags": [
+      "cks",
+      "secrets"
+    ]
+  },
+  {
+    "q": "After enabling encryption at rest, how do you encrypt Secrets that already exist?",
+    "a": "Rewrite them: `k get secrets -A -o json | k replace -f -`.",
+    "tags": [
+      "cks",
+      "secrets"
+    ]
+  },
+  {
+    "q": "What does a RuntimeClass do?",
+    "a": "It selects a different **container runtime handler** for a Pod (`runtimeClassName`), for example gVisor's `runsc`, to sandbox untrusted workloads. The handler must already be configured on the node.",
+    "tags": [
+      "cks",
+      "isolation"
+    ]
+  },
+  {
+    "q": "Name two ways to encrypt Pod-to-Pod traffic named in the CKS curriculum.",
+    "a": "**Cilium** transparent encryption (WireGuard or IPsec) and **Istio** mutual TLS (a `PeerAuthentication` in `STRICT` mode).",
+    "tags": [
+      "cks",
+      "isolation"
+    ]
+  },
+  {
+    "q": "Why pin an image by digest instead of a tag?",
+    "a": "A **tag can be moved** to different content; a **digest** (`@sha256:…`) identifies exactly one image and can't change.",
+    "tags": [
+      "cks",
+      "supply-chain"
+    ]
+  },
+  {
+    "q": "What's the difference between what Trivy checks and what kubesec checks?",
+    "a": "**Trivy** scans **images** for known vulnerabilities (CVEs). **kubesec** (like KubeLinter) analyses **manifests** for risky settings.",
+    "tags": [
+      "cks",
+      "supply-chain"
+    ]
+  },
+  {
+    "q": "What is an SBOM, and why does it matter when a new CVE is announced?",
+    "a": "A **Software Bill of Materials** lists every component and version in an artifact (SPDX or CycloneDX). It answers 'are we affected?' in seconds.",
+    "tags": [
+      "cks",
+      "supply-chain"
+    ]
+  },
+  {
+    "q": "In ImagePolicyWebhook, what does `defaultAllow: false` do, and why is it the secure choice?",
+    "a": "If the policy backend is unreachable, images are **denied**. It fails closed, so an outage can't become a bypass.",
+    "tags": [
+      "cks",
+      "supply-chain"
+    ]
+  },
+  {
+    "q": "How can you allow only images from `registry.example.com` without running a webhook?",
+    "a": "A **ValidatingAdmissionPolicy** (GA since 1.30) with a CEL expression such as `object.spec.containers.all(c, c.image.startsWith('registry.example.com/'))`, plus a binding with `validationActions: [Deny]`.",
+    "tags": [
+      "cks",
+      "supply-chain"
+    ]
+  },
+  {
+    "q": "Where should you change a Falco rule, and why not in the default rules file?",
+    "a": "In **`/etc/falco/falco_rules.local.yaml`**. A rule with the same name loaded later overrides the default, and the default file is replaced on upgrades.",
+    "tags": [
+      "cks",
+      "runtime"
+    ]
+  },
+  {
+    "q": "Falco reports a container ID. How do you find which Pod it belongs to?",
+    "a": "On that node, `sudo crictl ps --id <id>` (or `crictl inspect`) shows the container, its Pod name and namespace.",
+    "tags": [
+      "cks",
+      "runtime"
+    ]
+  },
+  {
+    "q": "In a Kubernetes audit policy, which rule applies when several match?",
+    "a": "The **first matching rule wins**, so put specific rules first and the catch-all last.",
+    "tags": [
+      "cks",
+      "audit"
+    ]
+  },
+  {
+    "q": "List the audit levels from least to most detail.",
+    "a": "`None` < `Metadata` (who/what/when) < `Request` (+ request body) < `RequestResponse` (+ response body).",
+    "tags": [
+      "cks",
+      "audit"
+    ]
+  },
+  {
+    "q": "You added `--audit-policy-file` to the API server and it won't start. What's the most common cause?",
+    "a": "The policy file (and the log directory) aren't **mounted into the API server Pod** with `hostPath` volumes, so the process can't see them.",
+    "tags": [
+      "cks",
+      "audit"
+    ]
+  },
+  {
+    "q": "Which settings make a container immutable at runtime?",
+    "a": "`readOnlyRootFilesystem: true`, no `privileged`, `allowPrivilegeEscalation: false`, and `emptyDir` mounts only where writes are truly needed.",
+    "tags": [
+      "cks",
+      "runtime"
+    ]
+  }
+]

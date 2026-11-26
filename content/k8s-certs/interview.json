@@ -1,0 +1,256 @@
+[
+  {
+    "category": "CKA · Cluster lifecycle",
+    "q": "Upgrade the control-plane node `cp1` of a kubeadm cluster from v1.36.x to v1.37.1. Workloads must be moved off the node while its kubelet is upgraded, and the node must be schedulable again afterwards.",
+    "a": "```bash\nssh cp1\nsudo -i\n# point apt at the v1.37 repo (one repo per minor on pkgs.k8s.io)\nsed -i 's#/v1.36/#/v1.37/#' /etc/apt/sources.list.d/kubernetes.list\napt-mark unhold kubeadm && apt-get update && apt-get install -y kubeadm='1.37.1-*' && apt-mark hold kubeadm\nkubeadm version\nkubeadm upgrade plan\nkubeadm upgrade apply v1.37.1\n\nkubectl drain cp1 --ignore-daemonsets\napt-mark unhold kubelet kubectl\napt-get install -y kubelet='1.37.1-*' kubectl='1.37.1-*'\napt-mark hold kubelet kubectl\nsystemctl daemon-reload && systemctl restart kubelet\nkubectl uncordon cp1\n```\n\n**Verify:**\n\n```bash\nkubectl get nodes            # cp1 shows v1.37.1 and Ready\nkubectl -n kube-system get pods -o wide | grep cp1   # control-plane Pods running\n```\n\n**Notes.** `upgrade apply` is right here because `cp1` is the first control-plane node; any other node would use `kubeadm upgrade node`. Drain before restarting the kubelet, and don't forget the uncordon: a node left `SchedulingDisabled` is a classic lost mark. If `kubectl` isn't configured as root on `cp1`, run drain and uncordon from wherever it is.",
+    "tags": [
+      "cka",
+      "upgrade"
+    ]
+  },
+  {
+    "category": "CKA · Cluster lifecycle",
+    "q": "Take an etcd snapshot of the cluster to `/opt/etcd-backup.db` on the control-plane node.",
+    "a": "```bash\nssh cp1\nsudo -i\ngrep -E 'trusted-ca-file|cert-file|key-file|listen-client-urls' /etc/kubernetes/manifests/etcd.yaml\n\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n  --cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n  --cert=/etc/kubernetes/pki/etcd/server.crt \\\n  --key=/etc/kubernetes/pki/etcd/server.key \\\n  snapshot save /opt/etcd-backup.db\n```\n\n**Verify:**\n\n```bash\nls -lh /opt/etcd-backup.db\netcdutl snapshot status /opt/etcd-backup.db -w table    # hash, revision, keys, size\n```\n\n**Notes.** Read the cert paths from the etcd manifest rather than trusting memory; labs sometimes move them. A restore uses `etcdutl snapshot restore … --data-dir <new dir>`, then points the etcd static Pod's data `hostPath` at that directory.",
+    "tags": [
+      "cka",
+      "etcd"
+    ]
+  },
+  {
+    "category": "CKA · Cluster lifecycle",
+    "q": "A new worker `node3` has kubeadm, kubelet and containerd installed. Join it to the cluster.",
+    "a": "```bash\n# on the control plane: a fresh join command (tokens expire after 24h)\nkubeadm token create --print-join-command\n\n# on node3, as root, run exactly what it printed:\nssh node3\nsudo kubeadm join 10.0.0.10:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>\n```\n\n**Verify:**\n\n```bash\nkubectl get nodes          # node3 appears; Ready once the CNI DaemonSet Pod starts on it\n```\n\n**If the join fails**, the error is usually one of: swap still on, IP forwarding off (`sysctl net.ipv4.ip_forward`), containerd not running, or the kubelet not installed at a matching version. `journalctl -u kubelet` on node3 shows the cause.",
+    "tags": [
+      "cka",
+      "kubeadm"
+    ]
+  },
+  {
+    "category": "CKA · RBAC & extensions",
+    "q": "In namespace `ci`, create ServiceAccount `deployer`. It must be able to create, update and delete Deployments in `ci` only, and must not be able to read Secrets.",
+    "a": "```bash\nk create sa deployer -n ci\nk create role deployer -n ci --verb=get,list,watch,create,update,patch,delete --resource=deployments\nk create rolebinding deployer -n ci --role=deployer --serviceaccount=ci:deployer\n```\n\n**Verify each clause:**\n\n```bash\nk auth can-i create deployments -n ci --as=system:serviceaccount:ci:deployer        # yes\nk auth can-i delete deployments -n ci --as=system:serviceaccount:ci:deployer        # yes\nk auth can-i create deployments -n default --as=system:serviceaccount:ci:deployer   # no\nk auth can-i get secrets -n ci --as=system:serviceaccount:ci:deployer               # no\n```\n\n**Notes.** Role + RoleBinding keeps it in one namespace. The `--serviceaccount` value is `namespace:name`. A ClusterRoleBinding here would be the wrong answer, because it grants everywhere.",
+    "tags": [
+      "cka",
+      "rbac"
+    ]
+  },
+  {
+    "category": "CKA · RBAC & extensions",
+    "q": "Install the chart `acme/web` (repository `https://charts.acme.example`) as release `shop` in a new namespace `shop`, with `replicaCount=3`. Then upgrade it to `replicaCount=4`, and roll back.",
+    "a": "```bash\nhelm repo add acme https://charts.acme.example\nhelm repo update\nhelm install shop acme/web -n shop --create-namespace --set replicaCount=3\nhelm upgrade shop acme/web -n shop --set replicaCount=4\nhelm history shop -n shop\nhelm rollback shop 1 -n shop\n```\n\n**Verify:**\n\n```bash\nhelm list -n shop                # STATUS deployed, REVISION 3 (the rollback is a new revision)\nhelm get values shop -n shop     # replicaCount: 3 again\nk get deploy -n shop\n```\n\n**Notes.** A rollback creates a *new* revision that copies an old one, so after install → upgrade → rollback, the history shows three revisions. Use the repository name and URL exactly as the task gives them.",
+    "tags": [
+      "cka",
+      "ckad",
+      "helm"
+    ]
+  },
+  {
+    "category": "CKA · Workloads & scheduling",
+    "q": "Make sure only Pods that tolerate `dedicated=gpu:NoSchedule` can run on `worker3`, and that Deployment `trainer` (namespace `ml`) runs **only** on `worker3`.",
+    "a": "```bash\nk taint node worker3 dedicated=gpu:NoSchedule\nk label node worker3 dedicated=gpu\nk edit deploy trainer -n ml\n```\n\nAdd to the Pod template's `spec`:\n\n```yaml\ntolerations:\n- { key: dedicated, operator: Equal, value: gpu, effect: NoSchedule }\nnodeSelector:\n  dedicated: gpu\n```\n\n**Verify:**\n\n```bash\nk get pods -n ml -l app=trainer -o wide       # NODE column: worker3 for every Pod\nk describe node worker3 | grep -i taint\n```\n\n**Notes.** The taint keeps others off; the toleration *allows* trainer on; the nodeSelector (or node affinity) *sends* it there. Without the selector, trainer could still land anywhere.",
+    "tags": [
+      "cka",
+      "scheduling"
+    ]
+  },
+  {
+    "category": "CKA · Workloads & scheduling",
+    "q": "Deployment `web` in `shop` must autoscale between 2 and 6 replicas, targeting 60% CPU. metrics-server is installed.",
+    "a": "```bash\nk get deploy web -n shop -o jsonpath='{.spec.template.spec.containers[0].resources}'   # any CPU request?\nk set resources deploy web -n shop --requests=cpu=200m   # only if there's no request yet\nk autoscale deploy web -n shop --min=2 --max=6 --cpu-percent=60\n```\n\n**Verify:**\n\n```bash\nk get hpa -n shop               # TARGETS shows a number/60%, not <unknown>\nk describe hpa web -n shop      # events explain scaling decisions\n```\n\n**Notes.** Utilisation is a percentage of the **request**, so without a CPU request the HPA can't compute anything. If your kubectl version suggests a newer flag spelling, `k autoscale --help` is the authority.",
+    "tags": [
+      "cka",
+      "hpa"
+    ]
+  },
+  {
+    "category": "CKA · Networking",
+    "q": "In namespace `shop`, only Pods labelled `app=frontend` may connect to Pods labelled `app=api`, and only on TCP 8080. Everything else to `api` must be blocked.",
+    "a": "```yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata: { name: api-allow-frontend, namespace: shop }\nspec:\n  podSelector: { matchLabels: { app: api } }\n  policyTypes: [Ingress]\n  ingress:\n  - from:\n    - podSelector: { matchLabels: { app: frontend } }\n    ports:\n    - { protocol: TCP, port: 8080 }\n```\n\n**Verify from both sides:**\n\n```bash\nk run t1 -n shop --rm -it --image=busybox:1.36 --restart=Never -l app=frontend -- wget -qO- -T 3 http://api:8080   # works\nk run t2 -n shop --rm -it --image=busybox:1.36 --restart=Never -- wget -qO- -T 3 http://api:8080                   # times out\n```\n\n**Notes.** Selecting `api` with an Ingress policy makes ingress to it deny-by-default, except what's listed. The `podSelector` under `from` without a `namespaceSelector` means the same namespace only. Testing with a labelled and an unlabelled Pod proves both halves.",
+    "tags": [
+      "cka",
+      "ckad",
+      "networkpolicy"
+    ]
+  },
+  {
+    "category": "CKA · Networking",
+    "q": "Expose Service `api` (port 8080, namespace `shop`) at `http://shop.example.com/api` through the existing Gateway `main` in namespace `infra`, using the Gateway API.",
+    "a": "```yaml\napiVersion: gateway.networking.k8s.io/v1\nkind: HTTPRoute\nmetadata: { name: shop-api, namespace: shop }\nspec:\n  parentRefs:\n  - { name: main, namespace: infra }\n  hostnames: [\"shop.example.com\"]\n  rules:\n  - matches:\n    - path: { type: PathPrefix, value: /api }\n    backendRefs:\n    - { name: api, port: 8080 }\n```\n\n**Verify:**\n\n```bash\nk describe httproute shop-api -n shop      # Conditions: Accepted=True, ResolvedRefs=True\nk get gateway main -n infra                # its address\ncurl -H 'Host: shop.example.com' http://<gateway-address>/api\n```\n\n**Notes.** If `Accepted` is False, check that the Gateway's listener allows routes from namespace `shop` (`allowedRoutes`) and that the hostname matches the listener. gateway-api.sigs.k8s.io is allowed during the CKA.",
+    "tags": [
+      "cka",
+      "gateway-api"
+    ]
+  },
+  {
+    "category": "CKA · Storage",
+    "q": "Create a PersistentVolume `pv-logs` (2Gi, RWO, `hostPath` `/mnt/logs`, class `manual`, Retain). Create PVC `logs` in `app` that binds to it, and mount it at `/var/log/app` in a new Pod `logger` (image `busybox:1.36`, command `sleep 3600`).",
+    "a": "```yaml\napiVersion: v1\nkind: PersistentVolume\nmetadata: { name: pv-logs }\nspec:\n  capacity: { storage: 2Gi }\n  accessModes: [ReadWriteOnce]\n  persistentVolumeReclaimPolicy: Retain\n  storageClassName: manual\n  hostPath: { path: /mnt/logs }\n---\napiVersion: v1\nkind: PersistentVolumeClaim\nmetadata: { name: logs, namespace: app }\nspec:\n  storageClassName: manual\n  accessModes: [ReadWriteOnce]\n  resources: { requests: { storage: 2Gi } }\n---\napiVersion: v1\nkind: Pod\nmetadata: { name: logger, namespace: app }\nspec:\n  containers:\n  - name: logger\n    image: busybox:1.36\n    command: [\"sleep\", \"3600\"]\n    volumeMounts: [{ name: logs, mountPath: /var/log/app }]\n  volumes:\n  - name: logs\n    persistentVolumeClaim: { claimName: logs }\n```\n\n**Verify:**\n\n```bash\nk get pv pv-logs                 # STATUS Bound, CLAIM app/logs\nk get pvc logs -n app            # Bound\nk exec -n app logger -- sh -c 'echo ok > /var/log/app/t && cat /var/log/app/t'\n```\n\n**Notes.** Class, access mode and size must all be compatible for the bind. Using the same `storageClassName` on both makes the intent explicit and stops a default StorageClass from provisioning a different volume.",
+    "tags": [
+      "cka",
+      "storage"
+    ]
+  },
+  {
+    "category": "CKA · Troubleshooting",
+    "q": "Node `worker2` is `NotReady`. Fix it so it's Ready, and make sure the fix survives a reboot.",
+    "a": "```bash\nk describe node worker2 | sed -n '/Conditions/,/Addresses/p'\nssh worker2\nsudo systemctl status kubelet          # inactive? failed? disabled?\nsudo journalctl -u kubelet -n 50 --no-pager\n```\n\n**Typical fixes, depending on what the journal says:**\n\n```bash\nsudo systemctl enable --now kubelet                       # stopped and/or disabled\nsudo vi /var/lib/kubelet/config.yaml                      # a broken path or value\nsystemctl cat kubelet                                     # shows drop-ins and their paths\nsudo systemctl daemon-reload && sudo systemctl restart kubelet\nsudo systemctl enable --now containerd                    # runtime down\n```\n\n**Verify:**\n\n```bash\nexit\nk get nodes                   # worker2 Ready (may take ~30s)\n```\n\n**Notes.** \"Survives a reboot\" means `enable`, not just `start`. Read the journal before changing anything: exam faults are usually one deliberate typo, and the kubelet names it.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "category": "CKA · Troubleshooting",
+    "q": "After a change, `kubectl` returns `connection refused`. The API server on `cp1` is down. Bring it back.",
+    "a": "```bash\nssh cp1\nsudo -i\ncrictl ps -a | grep kube-apiserver           # Exited? restarting?\ncrictl logs <container-id> 2>&1 | tail -20    # the reason, e.g. a bad flag or missing file\nls /var/log/pods/ | grep apiserver           # logs survive here if the container is gone\ncp /etc/kubernetes/manifests/kube-apiserver.yaml /root/apiserver.bak\nvi /etc/kubernetes/manifests/kube-apiserver.yaml   # fix the flag/path/indentation it complained about\nwatch crictl ps                              # wait for kube-apiserver to be Running\n```\n\n**Verify:**\n\n```bash\nkubectl get nodes\nkubectl -n kube-system get pod -l component=kube-apiserver\n```\n\n**Notes.** Keep the backup **outside** the manifests directory. If there's no container at all, the kubelet couldn't parse the YAML: check indentation, and `journalctl -u kubelet` mentions the manifest.",
+    "tags": [
+      "cka",
+      "troubleshooting"
+    ]
+  },
+  {
+    "category": "CKAD · Design & build",
+    "q": "Create Pod `web` in `apps` with an `nginx:1.27` container and a native sidecar `logger` (`busybox:1.36`) that runs `tail -F /var/log/nginx/access.log`. Both share an `emptyDir` mounted at `/var/log/nginx`.",
+    "a": "```yaml\napiVersion: v1\nkind: Pod\nmetadata: { name: web, namespace: apps }\nspec:\n  initContainers:\n  - name: logger\n    image: busybox:1.36\n    restartPolicy: Always                 # makes it a native sidecar\n    command: [\"sh\", \"-c\", \"tail -F /var/log/nginx/access.log\"]\n    volumeMounts: [{ name: logs, mountPath: /var/log/nginx }]\n  containers:\n  - name: nginx\n    image: nginx:1.27\n    volumeMounts: [{ name: logs, mountPath: /var/log/nginx }]\n  volumes:\n  - name: logs\n    emptyDir: {}\n```\n\n**Verify:**\n\n```bash\nk get pod web -n apps                       # READY 2/2\nk exec -n apps web -c nginx -- curl -s localhost >/dev/null\nk logs -n apps web -c logger                # the access-log line appears\n```\n\n**Notes.** If the task's cluster predates native sidecars, or the task says \"add a second container\", list the logger under `containers:` instead. Read the wording. Note that the nginx image's access.log is a symlink to stdout; mounting the `emptyDir` over `/var/log/nginx` replaces it with a real file the sidecar can tail.",
+    "tags": [
+      "ckad",
+      "multi-container"
+    ]
+  },
+  {
+    "category": "CKAD · Design & build",
+    "q": "Create a CronJob `cleanup` in `apps` that runs `busybox:1.36` with `echo cleaning` every 15 minutes, never runs two at once, and keeps only the last 2 successful Jobs. Then trigger one run immediately.",
+    "a": "```bash\nk create cronjob cleanup -n apps --image=busybox:1.36 --schedule=\"*/15 * * * *\" \\\n  --dry-run=client -o yaml -- sh -c 'echo cleaning' > cleanup.yaml\nvi cleanup.yaml\n```\n\nAdd under `spec:` (the CronJob's, not the Pod's):\n\n```yaml\nconcurrencyPolicy: Forbid\nsuccessfulJobsHistoryLimit: 2\n```\n\n```bash\nk apply -f cleanup.yaml\nk create job cleanup-now -n apps --from=cronjob/cleanup\n```\n\n**Verify:**\n\n```bash\nk get cronjob cleanup -n apps -o yaml | grep -E 'schedule|concurrencyPolicy|successfulJobsHistoryLimit'\nk logs -n apps job/cleanup-now           # cleaning\n```",
+    "tags": [
+      "ckad",
+      "cronjob"
+    ]
+  },
+  {
+    "category": "CKAD · Deployment",
+    "q": "Deployments `web-blue` (v1) and `web-green` (v2) run in `shop`; their Pods are labelled `app=web` plus `version=blue` or `version=green`. Service `web` currently sends traffic to blue. Switch all traffic to green with no downtime.",
+    "a": "```bash\nk get pods -n shop -l app=web --show-labels        # confirm the labels\nk get pods -n shop -l app=web,version=green        # green is Running and READY first\nk patch svc web -n shop -p '{\"spec\":{\"selector\":{\"app\":\"web\",\"version\":\"green\"}}}'\n```\n\n**Verify:**\n\n```bash\nk get endpointslices -n shop -l kubernetes.io/service-name=web -o wide   # only green Pod IPs\nk run t -n shop --rm -it --image=busybox:1.36 --restart=Never -- wget -qO- http://web\n```\n\n**Notes.** Check green is ready *before* the switch; that's what makes it zero-downtime. Leave blue running unless told to remove it, because it's your instant rollback.",
+    "tags": [
+      "ckad",
+      "blue-green"
+    ]
+  },
+  {
+    "category": "CKAD · Deployment",
+    "q": "Deployment `api` (4 replicas, Pods `app=api,track=stable`) sits behind Service `api` selecting `app=api`. Add a canary running `myapp:2.0` that gets roughly 20% of traffic.",
+    "a": "```bash\nk get deploy api -n shop -o yaml > canary.yaml\nvi canary.yaml\n#   metadata.name: api-canary ; replicas: 1\n#   selector.matchLabels and template labels: app: api, track: canary\n#   container image: myapp:2.0 ; remove status, uid, resourceVersion, creationTimestamp\nk apply -f canary.yaml\n```\n\n**Verify:**\n\n```bash\nk get pods -n shop -l app=api -L track                 # 4 stable + 1 canary\nk get endpointslices -n shop -l kubernetes.io/service-name=api -o wide   # 5 endpoints\n```\n\n**Notes.** One canary out of five Pods gives about 20%, per connection. The Service's selector (`app=api`) must match both tracks, while each Deployment's own selector must include `track` so the two Deployments don't fight over each other's Pods.",
+    "tags": [
+      "ckad",
+      "canary"
+    ]
+  },
+  {
+    "category": "CKAD · Observability",
+    "q": "Deployment `api` (port 8080) restarts constantly. It takes about 60 seconds to start, and its liveness probe begins after 5 seconds. Fix it so it starts reliably, gets traffic only when `/ready` succeeds, and is still restarted if `/healthz` fails once it's running.",
+    "a": "```yaml\n# in the container spec\nstartupProbe:\n  httpGet: { path: /healthz, port: 8080 }\n  periodSeconds: 5\n  failureThreshold: 24        # up to 120s to start\nreadinessProbe:\n  httpGet: { path: /ready, port: 8080 }\n  periodSeconds: 5\nlivenessProbe:\n  httpGet: { path: /healthz, port: 8080 }\n  periodSeconds: 10\n  failureThreshold: 3\n```\n\n**Verify:**\n\n```bash\nk rollout status deploy/api -n shop\nk get pods -n shop -l app=api          # RESTARTS stops climbing; READY 1/1 after startup\nk describe pod -n shop -l app=api | grep -A3 -E 'Liveness|Readiness|Startup'\n```\n\n**Notes.** The startupProbe gives the slow start its own budget, so the liveness probe can stay strict. Raising the liveness `initialDelaySeconds` would also work, but it delays failure detection for the Pod's whole life.",
+    "tags": [
+      "ckad",
+      "probes"
+    ]
+  },
+  {
+    "category": "CKAD · Configuration & security",
+    "q": "Create Pod `secure` in `apps` using image `nginxinc/nginx-unprivileged:1.27` (it listens on 8080 and writes only under `/tmp`). It must run as user 101, be unable to escalate privileges, drop all capabilities and have a read-only root filesystem.",
+    "a": "```yaml\napiVersion: v1\nkind: Pod\nmetadata: { name: secure, namespace: apps }\nspec:\n  securityContext:\n    runAsUser: 101\n    runAsNonRoot: true\n  containers:\n  - name: nginx\n    image: nginxinc/nginx-unprivileged:1.27\n    ports: [{ containerPort: 8080 }]\n    securityContext:\n      allowPrivilegeEscalation: false\n      readOnlyRootFilesystem: true\n      capabilities: { drop: [\"ALL\"] }\n    volumeMounts:\n    - { name: tmp, mountPath: /tmp }\n  volumes:\n  - { name: tmp, emptyDir: {} }\n```\n\n**Verify:**\n\n```bash\nk get pod secure -n apps                         # Running\nk exec -n apps secure -- id                      # uid=101\nk exec -n apps secure -- touch /test             # Read-only file system\nk exec -n apps secure -- curl -s localhost:8080 | head -3\n```\n\n**Notes.** A read-only root filesystem needs a writable `emptyDir` wherever the app genuinely writes, here `/tmp`. If it crash-loops, `k logs` names the path it couldn't write, and that tells you which mount is missing. Stock `nginx` would fail as user 101, because it binds port 80 and writes under `/var/cache/nginx`. That's why unprivileged images exist.",
+    "tags": [
+      "ckad",
+      "security"
+    ]
+  },
+  {
+    "category": "CKAD · Configuration & security",
+    "q": "Namespace `team` must be limited to 2 CPU and 4Gi memory in requests, and any container created without requests should get 100m CPU and 128Mi memory automatically.",
+    "a": "```bash\nk create quota team-q -n team --hard=requests.cpu=2,requests.memory=4Gi\n```\n\n```yaml\napiVersion: v1\nkind: LimitRange\nmetadata: { name: defaults, namespace: team }\nspec:\n  limits:\n  - type: Container\n    defaultRequest: { cpu: 100m, memory: 128Mi }\n```\n\n**Verify:**\n\n```bash\nk describe quota team-q -n team\nk run probe -n team --image=nginx:1.27\nk get pod probe -n team -o jsonpath='{.spec.containers[0].resources}'   # requests filled in\n```\n\n**Notes.** Without the LimitRange, the quota would reject every Pod that doesn't declare requests. The two work as a pair.",
+    "tags": [
+      "ckad",
+      "quota"
+    ]
+  },
+  {
+    "category": "CKS · Cluster hardening",
+    "q": "kube-bench reports that the kubelet on `worker1` allows anonymous requests and uses `AlwaysAllow` authorization. Fix both.",
+    "a": "```bash\nssh worker1\nsudo vi /var/lib/kubelet/config.yaml\n```\n\n```yaml\nauthentication:\n  anonymous: { enabled: false }\n  webhook: { enabled: true }\nauthorization:\n  mode: Webhook\n```\n\n```bash\nsudo systemctl restart kubelet\nsudo systemctl status kubelet        # active (running)\n```\n\n**Verify:**\n\n```bash\nkube-bench run --targets node 2>/dev/null | grep -E 'anonymous|authorization'   # now PASS\nexit; k get nodes                                                              # worker1 Ready\n```",
+    "tags": [
+      "cks",
+      "kubelet"
+    ]
+  },
+  {
+    "category": "CKS · Cluster hardening",
+    "q": "ServiceAccount `default` in namespace `web` must no longer mount API tokens into Pods, and Deployment `site` (which never calls the API) must run with its own ServiceAccount `site` that has no RBAC bindings.",
+    "a": "```bash\nk patch sa default -n web -p '{\"automountServiceAccountToken\": false}'\nk create sa site -n web\nk patch sa site -n web -p '{\"automountServiceAccountToken\": false}'\nk set serviceaccount deploy/site site -n web\n```\n\n**Verify:**\n\n```bash\nk get pods -n web -l app=site -o jsonpath='{.items[0].spec.serviceAccountName}'          # site\nk exec -n web deploy/site -- ls /var/run/secrets/kubernetes.io/serviceaccount 2>&1        # No such file\nk auth can-i --list -n web --as=system:serviceaccount:web:site | head                     # only the basics\n```",
+    "tags": [
+      "cks",
+      "serviceaccounts"
+    ]
+  },
+  {
+    "category": "CKS · System hardening",
+    "q": "The AppArmor profile file `/opt/k8s-deny-write` exists on `worker1`. Load it, and run Pod `writer` (image `busybox:1.36`, `sleep 3600`) in `default` confined by it.",
+    "a": "```bash\nssh worker1\nsudo apparmor_parser -q /opt/k8s-deny-write\nsudo aa-status | grep k8s            # note the exact profile NAME it prints\nexit\n```\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata: { name: writer }\nspec:\n  nodeName: worker1\n  containers:\n  - name: writer\n    image: busybox:1.36\n    command: [\"sleep\", \"3600\"]\n    securityContext:\n      appArmorProfile:\n        type: Localhost\n        localhostProfile: k8s-deny-write      # the name from aa-status\n```\n\n**Verify:**\n\n```bash\nk exec writer -- cat /proc/1/attr/current     # k8s-deny-write (enforce)\nk exec writer -- touch /tmp/x                 # Permission denied\n```\n\n**Notes.** The profile is only loaded on worker1, so the Pod must run there (`nodeName` or a nodeSelector). Use the name declared inside the profile, which may differ from the filename.",
+    "tags": [
+      "cks",
+      "apparmor"
+    ]
+  },
+  {
+    "category": "CKS · Microservice vulnerabilities",
+    "q": "Namespace `payments` must reject any new Pod that doesn't meet the `restricted` Pod Security Standard. Then fix Deployment `checkout` so its Pods are admitted.",
+    "a": "```bash\nk label ns payments pod-security.kubernetes.io/enforce=restricted pod-security.kubernetes.io/enforce-version=latest --overwrite\nk rollout restart deploy/checkout -n payments\nk get events -n payments --sort-by=.lastTimestamp | grep -i podsecurity   # what's violated\nk edit deploy checkout -n payments\n```\n\nAdd to the Pod template:\n\n```yaml\nspec:\n  securityContext:\n    runAsNonRoot: true\n    seccompProfile: { type: RuntimeDefault }\n  containers:\n  - name: checkout\n    securityContext:\n      allowPrivilegeEscalation: false\n      capabilities: { drop: [\"ALL\"] }\n```\n\n**Verify:**\n\n```bash\nk rollout status deploy/checkout -n payments\nk get pods -n payments                 # new Pods Running\n```\n\n**Notes.** The label alone doesn't touch running Pods. The restart is what surfaces the violations, which the events list precisely. If the image runs as root, `runAsNonRoot` also needs a numeric `runAsUser` (or a non-root image).",
+    "tags": [
+      "cks",
+      "pod-security"
+    ]
+  },
+  {
+    "category": "CKS · Microservice vulnerabilities",
+    "q": "Enable encryption at rest for Secrets using `aescbc`, keep existing Secrets readable, and make sure every existing Secret ends up encrypted.",
+    "a": "```bash\nssh cp1 ; sudo -i\nmkdir -p /etc/kubernetes/enc\nhead -c 32 /dev/urandom | base64            # the key\ncat > /etc/kubernetes/enc/enc.yaml <<'YAML'\napiVersion: apiserver.config.k8s.io/v1\nkind: EncryptionConfiguration\nresources:\n- resources: [\"secrets\"]\n  providers:\n  - aescbc:\n      keys:\n      - name: key1\n        secret: <paste the base64 key>\n  - identity: {}\nYAML\ncp /etc/kubernetes/manifests/kube-apiserver.yaml /root/\nvi /etc/kubernetes/manifests/kube-apiserver.yaml\n#   - --encryption-provider-config=/etc/kubernetes/enc/enc.yaml\n#   volumeMounts:  - { name: enc, mountPath: /etc/kubernetes/enc, readOnly: true }\n#   volumes:       - { name: enc, hostPath: { path: /etc/kubernetes/enc, type: DirectoryOrCreate } }\nwatch crictl ps                              # wait for the apiserver\nkubectl get secrets -A -o json | kubectl replace -f -\n```\n\n**Verify:**\n\n```bash\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt \\\n  --key=/etc/kubernetes/pki/etcd/server.key \\\n  get /registry/secrets/default/<some-secret> | hexdump -C | head   # k8s:enc:aescbc:v1:key1\n```\n\n**Notes.** `aescbc` first means new writes are encrypted; `identity` second keeps old plain-text data readable until it's rewritten. The volume mount is essential, or the API server can't read the file and won't start.",
+    "tags": [
+      "cks",
+      "secrets"
+    ]
+  },
+  {
+    "category": "CKS · Supply chain",
+    "q": "Pods in namespace `web` must only use images from `registry.example.com/`. Enforce it without a webhook.",
+    "a": "```yaml\napiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingAdmissionPolicy\nmetadata: { name: web-registry }\nspec:\n  failurePolicy: Fail\n  matchConstraints:\n    resourceRules:\n    - apiGroups: [\"\"]\n      apiVersions: [\"v1\"]\n      operations: [\"CREATE\", \"UPDATE\"]\n      resources: [\"pods\"]\n  validations:\n  - expression: \"object.spec.containers.all(c, c.image.startsWith('registry.example.com/'))\"\n    message: \"images in web must come from registry.example.com\"\n---\napiVersion: admissionregistration.k8s.io/v1\nkind: ValidatingAdmissionPolicyBinding\nmetadata: { name: web-registry }\nspec:\n  policyName: web-registry\n  validationActions: [\"Deny\"]\n  matchResources:\n    namespaceSelector:\n      matchLabels: { kubernetes.io/metadata.name: web }\n```\n\n**Verify:**\n\n```bash\nk run ok  -n web --image=registry.example.com/nginx:1.27 --dry-run=server   # allowed\nk run bad -n web --image=nginx:1.27 --dry-run=server                        # denied, with your message\n```\n\n**Notes.** `--dry-run=server` runs admission without creating anything, which is perfect for testing policies. To also cover init containers, extend the CEL expression to check `object.spec.initContainers` when present.",
+    "tags": [
+      "cks",
+      "admission"
+    ]
+  },
+  {
+    "category": "CKS · Supply chain",
+    "q": "Find the Pods in namespace `legacy` whose images have CRITICAL vulnerabilities, according to Trivy, and delete only those Pods.",
+    "a": "```bash\nk get pods -n legacy -o jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.spec.containers[*].image}{\"\\n\"}{end}'\n\nfor img in $(k get pods -n legacy -o jsonpath='{.items[*].spec.containers[*].image}' | tr ' ' '\\n' | sort -u); do\n  echo \"== $img\"; trivy image --severity CRITICAL --quiet \"$img\" | grep -E 'Total|CRITICAL' | head -3\ndone\n\nk delete pod <pod-a> <pod-b> -n legacy      # only the ones whose images had CRITICAL findings\n```\n\n**Verify:** `k get pods -n legacy` shows only the clean Pods remaining.\n\n**Notes.** List first, decide, then delete exactly those. Deleting extra Pods is graded as wrong too. If a Pod belongs to a Deployment it will come back, so read whether the task wants the Pod or its controller removed.",
+    "tags": [
+      "cks",
+      "trivy"
+    ]
+  },
+  {
+    "category": "CKS · Runtime security",
+    "q": "Configure API server auditing: log Secret changes in `RequestResponse`, everything else in `Metadata`, to `/var/log/kubernetes/audit/audit.log`, keeping 2 backups of at most 50 MB.",
+    "a": "```bash\nssh cp1 ; sudo -i\nmkdir -p /etc/kubernetes/audit /var/log/kubernetes/audit\ncat > /etc/kubernetes/audit/policy.yaml <<'YAML'\napiVersion: audit.k8s.io/v1\nkind: Policy\nomitStages: [\"RequestReceived\"]\nrules:\n- level: RequestResponse\n  resources: [{ group: \"\", resources: [\"secrets\"] }]\n  verbs: [\"create\", \"update\", \"patch\", \"delete\"]\n- level: Metadata\nYAML\ncp /etc/kubernetes/manifests/kube-apiserver.yaml /root/\nvi /etc/kubernetes/manifests/kube-apiserver.yaml\n```\n\nAdd:\n\n```yaml\n- --audit-policy-file=/etc/kubernetes/audit/policy.yaml\n- --audit-log-path=/var/log/kubernetes/audit/audit.log\n- --audit-log-maxbackup=2\n- --audit-log-maxsize=50\n# volumeMounts:\n- { name: audit-policy, mountPath: /etc/kubernetes/audit/policy.yaml, readOnly: true }\n- { name: audit-log, mountPath: /var/log/kubernetes/audit/ }\n# volumes:\n- { name: audit-policy, hostPath: { path: /etc/kubernetes/audit/policy.yaml, type: File } }\n- { name: audit-log, hostPath: { path: /var/log/kubernetes/audit/, type: DirectoryOrCreate } }\n```\n\n**Verify:**\n\n```bash\nwatch crictl ps                                   # apiserver back\nkubectl create secret generic audit-test --from-literal=a=b\ngrep audit-test /var/log/kubernetes/audit/audit.log | tail -1 | jq .level   # \"RequestResponse\"\n```\n\n**Notes.** Specific rule first, catch-all last (first match wins). Missing volume mounts are the number-one reason the API server won't come back.",
+    "tags": [
+      "cks",
+      "audit"
+    ]
+  },
+  {
+    "category": "CKS · Runtime security",
+    "q": "Falco is running on `worker1`. Change the rule `Terminal shell in container` so its output is `%evt.time,%container.id,%proc.name`, then identify the Pod that triggers it.",
+    "a": "```bash\nssh worker1 ; sudo -i\ngrep -n -A12 'rule: Terminal shell in container' /etc/falco/falco_rules.yaml   # copy the rule\nvi /etc/falco/falco_rules.local.yaml\n```\n\nPaste the whole rule into the local file and change only its output:\n\n```yaml\n- rule: Terminal shell in container\n  desc: A shell was used as the entrypoint/exec point into a container with an attached terminal.\n  condition: <unchanged, copied from the default rule>\n  output: \"%evt.time,%container.id,%proc.name\"\n  priority: NOTICE\n```\n\n```bash\nsystemctl list-units | grep falco          # find the unit name\nsystemctl restart falco-modern-bpf         # (use the name it printed)\njournalctl -u falco-modern-bpf -f          # wait for a line: time,<container-id>,bash\ncrictl ps --id <container-id>              # POD column names the Pod\ncrictl inspect <container-id> | grep -E 'io.kubernetes.pod.(name|namespace)'\n```\n\n**Notes.** Overriding in `falco_rules.local.yaml` replaces the rule of the same name and survives Falco updates. Copy the condition exactly; only the output was asked to change. Recent Falco versions also accept an `override:` block that replaces just the `output` field. falco.org/docs (\"Rules → Overriding\") shows both styles.",
+    "tags": [
+      "cks",
+      "falco"
+    ]
+  }
+]
