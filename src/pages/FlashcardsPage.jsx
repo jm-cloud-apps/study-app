@@ -4,6 +4,7 @@ import { getTopic, ALL_FLASHCARDS } from '../content/loadContent.js'
 import { orderForSession, gradeCard, getCardStats } from '../lib/progress.js'
 import { encouragement } from '../lib/encouragement.js'
 import CardText from '../components/CardText.jsx'
+import { topTags, filterByTags } from '../lib/tags.js'
 
 // Grading keys sit under the resting fingers, in the same left-to-right order
 // as the buttons, so the shortcut and the UI teach each other.
@@ -25,16 +26,22 @@ export default function FlashcardsPage() {
   // and an unfinishable session is one you don't start. A cap turns it into
   // something you can actually sit down and complete.
   const [limit, setLimit] = useState(DEFAULT_LIMIT)
+  // Focus tags narrow the deck to one slice of a topic (e.g. only the CKS
+  // cards). Empty means the whole deck. Reset when you move to another topic,
+  // whose tags are different words.
+  const [focus, setFocus] = useState([])
+  useEffect(() => setFocus([]), [topicId])
+  const activeDeck = useMemo(() => filterByTags(deck, focus), [deck, focus])
   const gradeRef = useRef(() => {})
 
   const startSession = useCallback(
     (onlyDue) => {
-      const ordered = orderForSession(deck, { onlyDue, shuffle: true })
+      const ordered = orderForSession(activeDeck, { onlyDue, shuffle: true })
       const cards = limit ? ordered.slice(0, limit) : ordered
       if (cards.length === 0) return
       setSession({ cards, index: 0, flipped: false, results: { again: 0, good: 0, easy: 0 }, lastMsg: '' })
     },
-    [deck, limit],
+    [activeDeck, limit],
   )
 
   // Free navigation between cards (does not grade — just moves the cursor).
@@ -92,6 +99,9 @@ export default function FlashcardsPage() {
       <SetupScreen
         title={title}
         deck={deck}
+        activeDeck={activeDeck}
+        focus={focus}
+        onFocusChange={setFocus}
         topicId={topicId}
         onStart={startSession}
         limit={limit}
@@ -101,7 +111,14 @@ export default function FlashcardsPage() {
   }
 
   if (session.index >= session.cards.length) {
-    return <SummaryScreen title={title} session={session} onRestart={() => startSession(false)} topicId={topicId} />
+    return (
+      <SummaryScreen
+        title={focus.length ? `${title} (${focus.join(', ')})` : title}
+        session={session}
+        onRestart={() => startSession(false)}
+        topicId={topicId}
+      />
+    )
   }
 
   const card = session.cards[session.index]
@@ -286,7 +303,9 @@ function SizePicker({ value, onChange, max }) {
           // Don't offer a cap bigger than the deck — "50" beside a 22-card
           // topic promises cards that aren't there.
           if (size !== null && size >= max) return null
-          const active = value === size
+          // A cap at or above the deck (e.g. 50 after Focus narrowed it to 36)
+          // deals the whole deck, so "All" is what's really selected.
+          const active = value === size || (size === null && value !== null && value >= max)
           return (
             <button
               key={String(size)}
@@ -307,8 +326,38 @@ function SizePicker({ value, onChange, max }) {
   )
 }
 
-function SetupScreen({ title, deck, topicId, onStart, limit, onLimitChange }) {
-  const stats = useMemo(() => getCardStats(deck), [deck])
+function FocusPicker({ deck, focus, onChange }) {
+  const tags = useMemo(() => topTags(deck), [deck])
+  if (tags.length === 0) return null
+  const toggle = (tag) =>
+    onChange(focus.includes(tag) ? focus.filter((t) => t !== tag) : [...focus, tag])
+  const chip = (active) =>
+    `rounded-full px-3 py-1 text-sm font-medium transition ${
+      active ? 'bg-brand text-ink' : 'border border-line/10 bg-fill/5 text-body hover:bg-fill/10'
+    }`
+  return (
+    <div className="mt-6">
+      <div className="text-xs font-semibold uppercase tracking-wide text-muted">Focus</div>
+      <p className="mt-1 text-xs text-faint">Study one slice of the deck, or pick several. Leave it on All for everything.</p>
+      <div className="mt-2 flex flex-wrap justify-center gap-2">
+        <button onClick={() => onChange([])} aria-pressed={focus.length === 0} className={chip(focus.length === 0)}>
+          All
+        </button>
+        {tags.map(({ tag, count }) => {
+          const active = focus.includes(tag)
+          return (
+            <button key={tag} onClick={() => toggle(tag)} aria-pressed={active} className={chip(active)}>
+              {tag} <span className="opacity-60">{count}</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function SetupScreen({ title, deck, activeDeck, focus, onFocusChange, topicId, onStart, limit, onLimitChange }) {
+  const stats = useMemo(() => getCardStats(activeDeck), [activeDeck])
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <Link to={topicId ? `/topic/${topicId}` : '/'} className="text-sm text-muted hover:text-body">
@@ -326,6 +375,7 @@ function SetupScreen({ title, deck, topicId, onStart, limit, onLimitChange }) {
           <Stat label="Due now" value={stats.due} tone="brand" />
           <Stat label="Mastered" value={stats.mastered} tone="success" />
         </div>
+        <FocusPicker deck={deck} focus={focus} onChange={onFocusChange} />
         <SizePicker value={limit} onChange={onLimitChange} max={stats.total} />
 
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-center">

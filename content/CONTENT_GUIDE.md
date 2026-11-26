@@ -108,7 +108,7 @@ An array of card objects:
 | `q` | yes | The question (front). One idea per card. |
 | `a` | yes | The answer (back). Complete but concise; `\n` renders as a line break. |
 | `hint` | optional | Shown under the question to scaffold recall. |
-| `tags` | optional | Free-form labels for future filtering. |
+| `tags` | optional | Labels that power the flashcards page's **Focus** filter: a tag on 3+ cards (but not on every card) becomes a chip learners can study by. Use a few consistent tags per topic (e.g. an exam or sub-area), not a unique tag per card. |
 
 ### Card text: what renders, and what doesn't
 
