@@ -53,6 +53,15 @@
   },
   {
     "category": "Everyday Situations",
+    "q": "You're at a bus terminal and want to go to Laoag. Find the right bus, ask how much a ticket is, buy one, ask when it leaves, and check that it stops in Vigan.",
+    "a": "> **Manang, sadino ti bus a mapan Laoag?**\n> *(Dayta.)*\n> **Sagmamano ti tiket a mapan Laoag?**\n> *(The clerk tells you the price.)*\n> **Maysa man a tiket a mapan Laoag.**\n> **Kaano nga agrubuat ti bus a mapan Laoag?**\n> *(Alas dos.)*\n> **Agsardeng aya daytoy a bus idiay Vigan?**\n> *(Wen.)*\n> **Agyamanak, manang!**\n\nNotes:\n- **___ a mapan Laoag** (\"___ going to Laoag\") does the work of \"to Laoag\" in every line: it's the linker **a** plus **mapan** (go).\n- **Maysa man a tiket** = \"one ticket, please\": **man** softens the request (lesson 10).\n- **agrubuat** = leave, set off; **agsardeng** = stop. Both are **ag-** verbs (lesson 7).\n- **aya** marks a yes/no question, like **kadi** (lesson 11).\n- Expect the time in Spanish (**Alas dos**, lesson 12).\n\nAll of these lines come from the Wikivoyage Ilocano phrasebook's bus section.",
+    "tags": [
+      "travel",
+      "questions"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
     "q": "You feel ill on a trip. Tell your host you're sick, that your stomach hurts, and that you need a doctor; then thank them.",
     "a": "> **Manang, agsakitak. Agsakit ti tianko.**\n> **Masapulko ti doktor.**\n> *(…)*\n> **Agyamanak unay, manang.**\n\nBreaking it down:\n- **Agsakitak** = *ag-* + *sakit* (pain, illness) + *-ak*: \"I'm sick.\"\n- **Agsakit ti tianko** = \"my stomach hurts\": *tian* ends in a consonant, so \"my\" stays whole as **-ko**. Swap the body part: **ulok** (my head), **ngipenko** (my tooth).\n- **Masapulko** = \"I need\": *masapul* + *-ko* (lesson 9).\n\nIn a real emergency, the one-word versions carry: **Tulong!** (help) and **Agannadka!** (look out).",
     "tags": [
