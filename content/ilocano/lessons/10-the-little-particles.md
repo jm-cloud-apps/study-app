@@ -52,7 +52,7 @@ Compare:
 
 For a more formal "please", there's also a dedicated word: **Pangngaasim** (to one person) or **Pangngaasiyo** (polite or plural), placed at the start: **Pangngaasiyo, umaykayo man ditoy.**
 
-Ilocano conversation leans on this gentleness, especially with elders. Adding **man** to a request costs nothing and buys a lot of goodwill. Add **apo** (lesson 12) and you're as polite as Ilocano gets.
+Ilocano conversation leans on this gentleness, especially with elders. Adding **man** to a request costs nothing and buys a lot of goodwill. Add **apo** (lesson 13) and you're as polite as Ilocano gets.
 
 ## Explaining and concluding: ngamin and ngarud
 

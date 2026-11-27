@@ -1,19 +1,41 @@
 import { useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import { getLesson } from '../content/loadContent.js'
 import { isLessonRead, markLessonRead, markLessonUnread } from '../lib/progress.js'
+import { rememberLesson } from '../lib/recent.js'
 
 export default function LessonPage() {
   const { topicId, slug } = useParams()
   const data = getLesson(topicId, slug)
+  const navigate = useNavigate()
 
-  // Scroll to top whenever we move between lessons.
+  // Scroll to top whenever we move between lessons, and remember this one
+  // for the home page's "pick up where you left off".
   useEffect(() => {
     window.scrollTo({ top: 0 })
-  }, [topicId, slug])
+    if (data) rememberLesson(topicId, slug)
+  }, [topicId, slug, data])
+
+  // ← / → step between lessons. Ignored while typing, with modifiers held
+  // (browser back/forward shortcuts), or while a dialog such as search is open.
+  const prevSlug = data?.prev?.slug
+  const nextSlug = data?.next?.slug
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || e.defaultPrevented) return
+      if (/^(input|textarea|select)$/i.test(e.target?.tagName || '') || e.target?.isContentEditable) return
+      if (document.querySelector('[role="dialog"]')) return
+      const to = e.key === 'ArrowLeft' ? prevSlug : e.key === 'ArrowRight' ? nextSlug : null
+      if (!to) return
+      e.preventDefault()
+      navigate(`/topic/${topicId}/lesson/${to}`)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [navigate, topicId, prevSlug, nextSlug])
 
   if (!data) {
     return (
@@ -28,6 +50,7 @@ export default function LessonPage() {
 
   const { topic, lesson, prev, next } = data
   const read = isLessonRead(topic.id, lesson.slug)
+  const position = topic.lessons.findIndex((l) => l.slug === lesson.slug) + 1
 
   return (
     <article className="space-y-8">
@@ -39,6 +62,10 @@ export default function LessonPage() {
         <Link to={`/topic/${topic.id}`} className="hover:text-body">
           {topic.title}
         </Link>
+        <span className="ml-auto text-xs text-faint">
+          Lesson {position} of {topic.lessons.length} · {lesson.minutes} min
+          <span className="hidden sm:inline"> · ← → to move</span>
+        </span>
       </div>
 
       <div className="lesson-prose animate-rise max-w-none">

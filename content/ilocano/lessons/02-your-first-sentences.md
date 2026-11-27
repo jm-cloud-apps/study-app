@@ -32,7 +32,7 @@ The first thirty seconds decide how a conversation goes. Ilocano speakers, espec
 
 You'll hear **Mayat met** ("fine, too") just as often. **mayat** means "fine, willing", and **Mayat met, agyamanak** is a perfectly natural reply.
 
-To an elder, switch to the plural **kayo** and add **apo** (lesson 12): **Naimbag met, apo. Dakayo?**
+To an elder, switch to the plural **kayo** and add **apo** (lesson 13): **Naimbag met, apo. Dakayo?**
 
 ## Yes, no, and thank you
 
