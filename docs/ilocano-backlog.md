@@ -13,7 +13,7 @@ into the content.
 
 - [x] 1. **Body parts for "my ___ hurts" (lesson 14).** The doctor table only has *ulo* and *tian*. Add a small sourced body-part table and a card, and fix *tianak* → **tianko** (*tian* ends in a consonant, so lesson 3's rule gives *-ko*), in the lesson and in the "feel ill" drill. — PR #12
 - [x] 2. **Linker cards.** Only one card covers *a / nga*. Add cards for the word-order flip (*napintas a balay = balay a napintas*) and the linker after numbers and demonstratives (*dua a balay*, *daytoy a balay*). — PR #13
-- [ ] 3. **Lesson 14 shopping and leave-taking cards.** No cards cover *Alaekon* (and its parts), *Mano amin?*, *Maysa pay*, *Nalpasakon* or *Agpakadaakon*.
+- [x] 3. **Lesson 14 shopping and leave-taking cards.** No cards cover *Alaekon* (and its parts), *Mano amin?*, *Maysa pay*, *Nalpasakon* or *Agpakadaakon*. *Alaekon* and *Agpakadaakon* already had cards; added two for *Maysa pay / Nalpasakon / Diak kayat* and *Ania ti adda? / Kayatko ti ___ / Mano amin?* (*amin* = all, Wiktionary). — PR #14
 - [ ] 4. **Days and time-word cards (lesson 12).** No card for the parts of the day (*bigat / malem / rabii*), *lawas / bulan / tawen*, or *idi* + time vs *intono* + time.
 - [ ] 5. **Speaking drill: a jeepney ride.** The only travel drill is asking directions. Add one for the fare, *Para, manong!* and *Ditoy laeng*.
 - [ ] 6. **Speaking drill: time and plans.** No drill uses clock time or *intono*. Add one: ask the time, answer with *alas …*, and make a plan for Saturday.

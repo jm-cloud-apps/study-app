@@ -864,6 +864,26 @@
     ]
   },
   {
+    "q": "Shopping: say \"One more\", \"I'm done\" and \"I don't want it\".",
+    "a": "**Maysa pay.** (one more: *maysa* = one, *pay* = still, more) · **Nalpasakon.** (I'm done now: **-ak** = I, **-on** = now) · **Diak kayat.** (I don't want it: **di** + *-ko* = **diak**, lesson 9).",
+    "hint": "Each one reuses a piece you know: pay, -ak + -on, diak.",
+    "tags": [
+      "phrases",
+      "travel",
+      "shopping"
+    ]
+  },
+  {
+    "q": "At a carinderia: ask what they have, order something, and ask the total.",
+    "a": "**Ania ti adda?** (what is there?) · **Kayatko ti ___.** (I'd like ___) · **Mano amin?** (how much altogether?: *mano* = how much, *amin* = all). Pointing at a pot and saying **Daytoy** (this one) works too.",
+    "hint": "ania = what; amin = all.",
+    "tags": [
+      "phrases",
+      "travel",
+      "shopping"
+    ]
+  },
+  {
     "q": "Say \"Help!\", \"Look out!\" and \"I'm lost\".",
     "a": "**Tulong!** · **Agannadka!** · **Naiyaw-awanak.**",
     "hint": "Emergency phrases.",
