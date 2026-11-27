@@ -49,7 +49,7 @@ export default function TopicPage() {
               to={`/flashcards/${topic.id}`}
               className="rounded-xl bg-brand px-4 py-2 font-medium text-ink hover:bg-brand-soft"
             >
-              🃏 {cards.due} due · study
+              🃏 {cards.reviews > 0 ? `${cards.reviews} due · study` : `Study ${cards.total} cards`}
             </Link>
           )}
           {topic.lessons.length > 1 && (

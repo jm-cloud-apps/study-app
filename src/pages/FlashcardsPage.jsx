@@ -370,9 +370,10 @@ function SetupScreen({ title, deck, activeDeck, focus, onFocusChange, topicId, o
           Cards are shuffled fresh each session and the ones you find hard come back sooner. Take it at
           your own pace — there's no wrong speed.
         </p>
-        <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+        <div className="mt-6 grid grid-cols-4 gap-3 text-center">
           <Stat label="Total" value={stats.total} />
-          <Stat label="Due now" value={stats.due} tone="brand" />
+          <Stat label="Due now" value={stats.reviews} tone="brand" />
+          <Stat label="New" value={stats.fresh} />
           <Stat label="Mastered" value={stats.mastered} tone="success" />
         </div>
         <FocusPicker deck={deck} focus={focus} onChange={onFocusChange} />
@@ -384,7 +385,7 @@ function SetupScreen({ title, deck, activeDeck, focus, onFocusChange, topicId, o
             disabled={stats.due === 0}
             className="rounded-xl bg-brand px-5 py-2.5 font-medium text-ink shadow-lg shadow-brand/20 hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Review due ({capped(stats.due, limit)})
+            {stats.reviews > 0 ? 'Review due' : 'Learn new'} ({capped(stats.due, limit)})
           </button>
           <button
             onClick={() => onStart(false)}
@@ -393,6 +394,9 @@ function SetupScreen({ title, deck, activeDeck, focus, onFocusChange, topicId, o
             Study any ({capped(stats.total, limit)})
           </button>
         </div>
+        {stats.reviews > 0 && stats.fresh > 0 && (
+          <p className="mt-3 text-xs text-faint">Due cards come first, then new ones fill the session.</p>
+        )}
         {stats.due === 0 && (
           <p className="mt-4 text-sm text-success">
             🎉 Nothing due right now — you're all caught up. Reviewing all is still great practice.
