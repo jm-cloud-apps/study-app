@@ -734,6 +734,32 @@
     ]
   },
   {
+    "q": "Say \"morning\", \"afternoon\" and \"night\", and use each in a greeting.",
+    "a": "**bigat** · **malem** · **rabii**. **Naimbag a bigat / malem / rabii** (good morning / afternoon / evening). **Naimbag a rabii** doubles as \"good night\". **bigat** also turns up in **intono bigat** (tomorrow).",
+    "hint": "The greetings are naimbag a + the part of the day.",
+    "tags": [
+      "time",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Say \"week\", \"month\" and \"year\", then \"three weeks\".",
+    "a": "**lawas** · **bulan** (also \"moon\") · **tawen**. A number joins its noun with the linker: **tallo a lawas** (three weeks), **dua a bulan** (two months).",
+    "hint": "Number + a / nga + noun, as in dua a balay.",
+    "tags": [
+      "time",
+      "numbers"
+    ]
+  },
+  {
+    "q": "Say \"last Monday\", \"on Saturday\" (coming) and \"next week\". What does each front word do?",
+    "a": "**idi Lunes** · **intono Sabado** · **intono umay a lawas** (*the coming week*). **idi** looks back to the past; **intono** (short form **inton**) looks forward. The days of the week are Spanish.",
+    "hint": "idi = past, intono = future.",
+    "tags": [
+      "time"
+    ]
+  },
+  {
     "q": "Ask \"How much is this?\" and react \"That's expensive!\"",
     "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaklaka?** = Is there a cheaper one?)",
     "hint": "mano = how much.",
