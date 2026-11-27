@@ -1,0 +1,133 @@
+[
+  {
+    "category": "Introducing Yourself",
+    "q": "Introduce yourself out loud: greet, give your name, say where you're from, and say you're learning Ilocano.",
+    "a": "A natural version:\n\n> **Naimbag a bigat! Siak ni ___. Taga-___ ak. Agad-adalak iti Ilokano.**\n>\n> *Good morning! I'm ___. I'm from ___. I'm learning Ilocano.*\n\nBreaking it down:\n- **Siak ni ___**: stand-alone *siak* plus **ni**, the marker for a name (lesson 4).\n- **Taga-___ ak**: *taga-* + place = \"from\".\n- **Agad-adalak**: the ongoing form of **agadal** (study), doubling the first syllable *ad-* (lesson 7), with **-ak** attached.\n\nTo an elder, add **apo**: *Naimbag a bigat, apo!* And when they say **Nalaingka!**, reply **Bassit laeng, agyamanak** (\"just a little, thanks\").",
+    "tags": [
+      "basics"
+    ]
+  },
+  {
+    "category": "Introducing Yourself",
+    "q": "Someone asks **Kumustaka?** Give a natural reply, then turn the question back. Then do it again as if they were your grandmother.",
+    "a": "**To a friend:**\n> **Naimbag met, agyamanak. Sika?**\n\n**To your grandmother:**\n> **Naimbag met, apo. Dakayo?**\n\nWhat changed:\n- **sika → dakayo**: the plural \"you\" shows respect to one person (lesson 13).\n- **agyamanak → apo**: *apo* is the respect word, like Tagalog *po*.\n- **met** (\"too\") stays: it warms the answer either way.\n\nIf she asked **Kumustakayo?**, she was being polite back. Many grandparents use *-ka* with grandchildren, and that's normal.",
+    "tags": [
+      "basics",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You're at a market stall. Ask the price, react that it's expensive, ask for a cheaper one, and buy two.",
+    "a": "> **Manang, mano daytoy?**\n> *(Singkuenta.)*\n> **Ay, nangina met! Adda kadi nalaka?**\n> *(Daytoy, kuarenta.)*\n> **Sige, gumatangak iti dua. Agyamanak!**\n\nNotes:\n- **Manang** for an older woman vendor is friendly, not presumptuous.\n- **mano** = how much; **daytoy** = this (near me). Ask about the item in *her* hand with **dayta**.\n- Prices come back in **Spanish numbers** (*singkuenta*, *kuarenta*) or English: not the native *limapulo*.\n- **gumatangak iti dua**: actor-focus *gumatang* + **-ak**; **iti** because \"two (of them)\" is indefinite.",
+    "tags": [
+      "numbers",
+      "shopping"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You arrive at a relative's house at lunchtime. Announce yourself, greet the family, accept food, compliment it, and decline a third helping.",
+    "a": "> **Addadtoyak! Naimbag a malem, apo!**\n> *(Mangantayon!)*\n> **Agyamanak, apo.** *(eat)* **Naimas! Nagimasen ti pinakbetyo!**\n> *(Adda pay?)*\n> **Bassit laeng, apo. Agyamanak unay!**\n\nWhat's going on:\n- **Addadtoyak!** = \"I'm here!\" (*adda* + *ditoy* + *-ak*): the classic arrival call.\n- **Mangantayon!** = \"Let's eat now!\", which you'll hear before you've sat down.\n- **Nagimasen!** is the exclamation form (*nag-…-en*), stronger than **Naimas unay**.\n- Refuse **softly**: *bassit laeng* (\"just a little\") rather than a bare **Saan**.\n\n> 💡 Before the meal, if you've genuinely just eaten elsewhere, **Nanganakon, agyamanak** is the polite way out.",
+    "tags": [
+      "culture",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "A neighbour calls out **Papanam?** as you walk by, and then **Nanganka kadin?** Answer both naturally.",
+    "a": "> **Papanam?** — **Idiay tiendaan, Manong.** (To the market.)\n> **Nanganka kadin?** — **Wen, nanganakon. Dakayo?**\n\nBoth are **greetings** more than questions:\n- **Papanam?** is *papanan* (\"destination\") + **-m**: \"your destination?\". A vague answer is fine: **Idiay laeng** (\"just over there\").\n- **Nanganka kadin?** stacks **kadi** (question) + **-n** (already): \"have you eaten yet?\"\n- **Nanganakon** = *nangan* + *-ak* + *-on* (\"I've eaten already\").\n\nAsking back (**Dakayo?** to an elder, **Sika?** to a peer) keeps it friendly.",
+    "tags": [
+      "questions",
+      "culture"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Say \"I bought a mango\" and then \"I bought the mango\". Explain why the verb changes.",
+    "a": "> **Gimmatangak iti mangga.** — \"I bought a mango.\"\n> **Ginatangko ti mangga.** — \"I bought the mango.\"\n\n- The first is **actor focus** (*gumatang* → completed **gimmatang**). The sentence is about **me** (**-ak** set), and the mango is indefinite, marked **iti**.\n- The second is **-en focus** (*gatangen* → completed **ginatang**). The sentence is about **the mango**, marked **ti** and definite, and I'm the doer in the **-ko** set.\n\n🔑 Choosing the focus is also how Ilocano says *a* vs *the*. When the object is specific (*the* mango you pointed at), reach for the **-en** form.",
+    "tags": [
+      "focus",
+      "verbs"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Conjugate **agluto** (to cook) through all four aspect forms, then say \"I'll cook tomorrow\".",
+    "a": "| Form | Ilocano | Meaning |\n|---|---|---|\n| Neutral | **agluto** | to cook |\n| Ongoing | **aglutluto** | is cooking |\n| Completed | **nagluto** | cooked, has cooked |\n| Past ongoing | **naglutluto** | was cooking, used to cook |\n\n\"I'll cook tomorrow\": **Aglutoakto intono bigat.**\n\n- The future is the **neutral** form + pronoun + **-to**: *agluto-ak-to*.\n- **intono bigat** = tomorrow (*intono* points forward; *bigat* = morning).\n\nCommon slip: putting **-to** before the pronoun (*aglutotoak*). The order is always **verb + pronoun + -to**.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Negate each of these: **Napanak idiay Vigan.** · **Estudianteka.** · **Adda kape.**",
+    "a": "| Original | Negated | Why |\n|---|---|---|\n| **Napanak idiay Vigan.** | **Saanak a napan idiay Vigan.** / **Diak napan idiay Vigan.** | verb: *saan* + linker, or *di* without |\n| **Estudianteka.** | **Saanka nga estudiante.** | a noun: *saan* + linker (*nga* before a vowel) |\n| **Adda kape.** | **Awan ti kape.** | existence: **awan**, never *saan* |\n\nTwo things to notice:\n1. **The pronoun jumps onto the negative**: *-ak* moves from *napan* to *saan* (**Saanak**), and with *di* + *-ko* you get **diak**.\n2. **awan** replaces *adda* entirely: it's not \"not there is\" but its own word.",
+    "tags": [
+      "negation",
+      "pronouns"
+    ]
+  },
+  {
+    "category": "Grammar Under Pressure",
+    "q": "Translate: \"Ana's dog is big\", \"Give it to Ben\", and \"The children are at school\".",
+    "a": "> **Dakkel ti aso ni Ana.** — \"Ana's dog is big.\"\n> **Itedmo ken ni Ben.** — \"Give it to Ben.\"\n> **Adda dagiti ubbing iti eskuelaan.** — \"The children are at school.\"\n\n- Owner after the thing: *ti aso* **ni Ana** (**ni** because Ana is a name).\n- **ken ni** is the oblique for names (\"to Ben\"); **ited** is an *i-* verb, \"give (it)\".\n- **dagiti** = plural *ti*; **ubbing** doubles the *b* for plural; **iti** = at.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "Make **Itedmo kaniak** (Give it to me) sound (a) gentle, (b) respectful to an elder, and (c) like a reasoned request.",
+    "a": "| Version | Ilocano | Feel |\n|---|---|---|\n| plain | **Itedmo kaniak.** | flat, can sound like an order |\n| (a) gentle | **Itedmo man kaniak.** | *man* softens: \"could you…\" |\n| (b) respectful | **Itedyo man kaniak, apo.** | plural *-yo* + *apo* for an elder |\n| (c) reasoned | **Itedmo man kaniak. Masapulko ngamin.** | *ngamin*: \"I need it, you see\" |\n\nParticles do most of the work of politeness in Ilocano. **man** is the single highest-value one to adopt: add it to every request and you'll sound kind instead of bossy.",
+    "tags": [
+      "particles",
+      "politeness"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "React naturally to each: you learn your friend is from Laoag; someone tells you gas prices went up (you only heard it from others); you guess Lola is at home.",
+    "a": "> **Taga-Laoag ka gayam!** — \"Oh, so you're from Laoag!\" (**gayam** = so it turns out, like *pala*)\n> **Nangina kano ti gasolina.** — \"Gas is expensive, they say.\" (**kano** = reportedly, like *daw*)\n> **Adda ngata ni Lola idiay balay.** — \"Lola's probably at home.\" (**ngata** = maybe, like *yata*)\n\nThese three particles say **how you know** something: you've just realised it, someone told you, or you're guessing. Using them correctly is one of the clearest signs of a learner who's listening to real speech.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "category": "Sounding Natural",
+    "q": "Use the ending **-n** (already/now) to say: \"I've eaten already\", \"Let's go now\", \"I'm leaving now\", and \"He's gone already\".",
+    "a": "> **Nanganakon.** — I've eaten already.\n> **Mapantayon!** — Let's go now!\n> **Innakon.** — I'm leaving now.\n> **Napanen.** — He's gone already.\n\nThe shape changes with what comes before it:\n- after a vowel: **-n** (*mapantayo* → **mapantayon**)\n- after a consonant: **-en** (*napan* → **napanen**)\n- after **-ak**: **-akon** (*nanganak* → **nanganakon**)\n\nIt's one of the most frequent sounds in Ilocano. Once you notice it, you'll hear it in nearly every goodbye.",
+    "tags": [
+      "particles",
+      "aspect"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "Your Tagalog-speaking friend is visiting your Ilocano family. Warn them about three words that will trip them up.",
+    "a": "1. **saan** = **no** (not \"where\"). If they answer *Saan?* to \"Do you want some?\", they've just refused.\n2. **bigat** = **morning** (not \"heavy\"). **Naimbag a bigat** is \"Good morning\".\n3. **sabong** = **flower** (not \"cockfight\").\n\nBonus: **mano** means \"how much?\", so **Mano daytoy?** is a price question, not a request to bless.\n\nHelpful overlaps they *can* lean on: **apo** works like *po*, **laeng** like *lang*, **gayam** like *pala*, **kano** like *daw*, and **ditoy** is close to *dito*.",
+    "tags": [
+      "tagalog",
+      "culture"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "Explain when to use **apo**, **kayo**, **manong/manang** and **ading**, with an example of each.",
+    "a": "| Word | When | Example |\n|---|---|---|\n| **apo** | ending phrases to elders or anyone you honour | **Wen, apo.** |\n| **kayo / dakayo** | the polite \"you\" for one older person | **Kumustakayo, apo?** |\n| **manong / manang** | addressing an older man / woman, family or stranger | **Manong, sadino ti terminal?** |\n| **ading** | addressing someone younger | **Ading, umayka man ditoy.** |\n\nThe combination matters more than any single word. **Kumustakayo, apo?** (plural *kayo* plus *apo*) is the respectful default with any grandparent-aged speaker. Using *-ka* with an elder you've just met can sound too familiar.",
+    "tags": [
+      "politeness",
+      "family"
+    ]
+  },
+  {
+    "category": "Culture & Register",
+    "q": "Name three things about Ilocano culture you could bring up to start a conversation with an older Ilocano speaker.",
+    "a": "Any of these will light up a conversation:\n\n- **Food**: *pinakbet*, *dinengdeng*, *bagnet*, **Vigan longganisa**, **empanada**, and **basi** (sugarcane wine). Ask **Ania ti paborito yo a taraon?** (\"What's your favourite food?\").\n- **Places**: **Vigan** (the UNESCO heritage city and its **burnay** jars), Laoag, Batac, Paoay's church, the sand dunes of Ilocos Norte.\n- **Songs and stories**: the folk songs **Pamulinawen** and **Manang Biday**, and the epic **Biag ni Lam-ang**.\n- **Migration**: many families have relatives in **Hawaii** or **California**, where the first-generation \"Manongs\" are remembered.\n\nThen listen: the best Ilocano practice is letting an elder tell you a story.",
+    "tags": [
+      "culture"
+    ]
+  }
+]
