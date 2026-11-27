@@ -115,7 +115,7 @@ const writeState = db.transaction((state) => {
     const card = isPlainObject(c) ? c : {}
     q.insCard.run(
       cardId,
-      toInt(card.box, { min: 1, max: 5, fallback: 1 }),
+      toInt(card.box, { min: 1, max: 7, fallback: 1 }), // MAX_BOX in src/lib/progress.js
       String(card.due ?? ''),
       toInt(card.seen, { fallback: 0 }),
       toInt(card.correct, { fallback: 0 }),

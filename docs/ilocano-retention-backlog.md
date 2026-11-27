@@ -18,7 +18,7 @@ only to fix a mistake.
 ## Backlog
 
 - [x] 1. **Stable flashcard ids.** Progress is keyed by array position (`ilocano:12`), so inserting a card moves every later card's progress onto the wrong card. Key it by the question text instead, and migrate existing progress once (every topic, local cache and server snapshot). Cards are now `<topic>:c:<hash of q>`; old positional keys move to the card at that position today, once, in the browser cache and the server snapshot. The validator now rejects duplicate questions. — PR #22
-- [ ] 2. **Longer Leitner spacing.** The top box comes back every 16 days; a language you want to keep for years needs steps beyond that (e.g. 30 and 60 days). Add boxes without demoting anyone's existing cards.
+- [x] 2. **Longer Leitner spacing.** The top box comes back every 16 days; a language you want to keep for years needs steps beyond that (e.g. 30 and 60 days). Add boxes without demoting anyone's existing cards. Added box 6 (30 days) and box 7 (60 days); the server's clamp went from 5 to 7, or it would have quietly knocked them back to box 5. — PR #23
 - [ ] 3. **"Due today" on Home.** Home doesn't say how many cards are waiting. Show a total and the topics with due cards, each linking to its review.
 - [ ] 4. **Production cards, lessons 1–5.** Add English→Ilocano ("Say…") cards where these lessons only have recognition or grammar cards.
 - [ ] 5. **Production cards, lessons 6–10.** Same, for the middle lessons.
