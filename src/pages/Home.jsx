@@ -42,8 +42,8 @@ function TopicCard({ topic }) {
           </span>
           {/* Due is the number that decides whether to open this topic today;
               the deck size alone never changes and so never tells you anything. */}
-          <span className={cards.due > 0 ? 'text-brand-soft' : undefined}>
-            {cards.due > 0 ? `${cards.due} due` : `${cards.total} cards`}
+          <span className={cards.reviews > 0 ? 'text-brand-soft' : undefined}>
+            {cards.reviews > 0 ? `${cards.reviews} due` : `${cards.total} cards`}
           </span>
         </div>
         <ProgressBar value={lessons.read} total={lessons.total} accent={topic.accent} />
@@ -60,9 +60,15 @@ function TodayStrip({ lessonsRead, lessonsTotal, cards }) {
     <div className="grid gap-3 sm:grid-cols-4">
       <Metric
         label="Due today"
-        value={cards.due}
-        tone={cards.due > 0 ? 'brand' : 'success'}
-        note={cards.due > 0 ? 'cards ready to review' : 'all caught up'}
+        value={cards.reviews}
+        tone={cards.reviews > 0 ? 'brand' : cards.fresh === cards.total ? 'neutral' : 'success'}
+        note={
+          cards.reviews > 0
+            ? 'cards ready to review'
+            : cards.fresh === cards.total
+              ? 'study a deck to start'
+              : 'all caught up'
+        }
       />
       <Metric label="Mastered" value={cards.mastered} tone="success" note={`of ${cards.total} cards`} />
       <Metric label="Lessons read" value={lessonsRead} tone="neutral" note={`of ${lessonsTotal}`} />
@@ -117,6 +123,34 @@ function ResumeCard() {
   )
 }
 
+// Which decks have reviews waiting today, most first. A review is a card you've
+// already studied whose date has come: the ones that slip if you skip a day.
+// Never-seen cards don't count, or every untouched topic would be "due".
+function DueToday() {
+  const due = TOPICS.map((topic) => ({ topic, reviews: getCardStats(topic.flashcards).reviews }))
+    .filter((d) => d.reviews > 0)
+    .sort((a, b) => b.reviews - a.reviews)
+  if (due.length === 0) return null
+  return (
+    <section>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Reviews due today</h2>
+      <div className="flex flex-wrap gap-2">
+        {due.map(({ topic, reviews }) => (
+          <Link
+            key={topic.id}
+            to={`/flashcards/${topic.id}`}
+            className="flex items-center gap-2 rounded-xl border border-line/10 bg-surface px-3 py-2 text-sm transition hover:border-line/20 hover:bg-surface/80"
+          >
+            <span>{topic.emoji}</span>
+            <span className="font-medium text-strong">{topic.title}</span>
+            <span className="text-brand-soft">{reviews} due</span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 const TONE = {
   brand: 'text-brand',
   success: 'text-success',
@@ -156,8 +190,8 @@ export default function Home({ onOpenSearch }) {
             to="/flashcards"
             className="rounded-xl bg-brand px-4 py-2 font-medium text-ink shadow-lg shadow-brand/20 hover:bg-brand-soft"
           >
-            {cards.due > 0
-              ? `🃏 Review ${cards.due} due card${cards.due === 1 ? '' : 's'}`
+            {cards.reviews > 0
+              ? `🃏 Review ${cards.reviews} due card${cards.reviews === 1 ? '' : 's'}`
               : `🃏 Study all flashcards (${ALL_FLASHCARDS.length})`}
           </Link>
           {ALL_INTERVIEW.length > 0 && (
@@ -183,6 +217,8 @@ export default function Home({ onOpenSearch }) {
       <ResumeCard />
 
       <TodayStrip lessonsRead={lessonsRead} lessonsTotal={totalLessons} cards={cards} />
+
+      <DueToday />
 
       <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">Topics</h2>

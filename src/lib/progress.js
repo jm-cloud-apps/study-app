@@ -220,16 +220,22 @@ export function gradeCard(cardId, grade) {
   return c
 }
 
+// `due` is everything a "Review due" session would deal: cards you've seen whose
+// date has come (`reviews`) plus cards you've never seen (`fresh`, always due).
+// Report them apart: a never-opened deck of 117 cards isn't "117 due today",
+// and lumping them together buried the handful of real reviews.
 export function getCardStats(cards) {
   const state = load()
-  let due = 0
+  let reviews = 0
+  let fresh = 0
   let mastered = 0 // box 4+ counts as "sticking"
   for (const card of cards) {
     const c = cardState(state, card.id)
-    if (daysBetween(c.due, todayStr()) >= 0) due += 1
+    if (c.seen === 0) fresh += 1
+    else if (daysBetween(c.due, todayStr()) >= 0) reviews += 1
     if (c.box >= 4) mastered += 1
   }
-  return { due, mastered, total: cards.length }
+  return { due: reviews + fresh, reviews, fresh, mastered, total: cards.length }
 }
 
 // Order a deck for a session: due-and-lowest-box first, then a stable shuffle of
@@ -247,7 +253,16 @@ export function orderForSession(cards, { onlyDue = false, shuffle = true } = {})
     }
   }
   // Lower boxes (less learned) bubble to the front, but shuffle breaks ties.
-  pool.sort((a, b) => a.meta.box - b.meta.box)
+  // In a due session, cards you've already seen come before new ones: with a
+  // session cap, a box-3 review used to sort behind every unseen box-1 card and
+  // could go weeks without coming up.
+  pool.sort((a, b) => {
+    if (onlyDue) {
+      const fresh = (a.meta.seen === 0) - (b.meta.seen === 0)
+      if (fresh !== 0) return fresh
+    }
+    return a.meta.box - b.meta.box
+  })
   return pool.map((p) => p.card)
 }
 
