@@ -11,9 +11,14 @@ import { TOPICS } from '../content/loadContent.js'
 const KEY = 'studyforge.progress.v1'
 const API = '/api/state'
 
-// Leitner boxes 1..5. Lower box = seen sooner / more often. A correct answer
+// Leitner boxes 1..7. Lower box = seen sooner / more often. A correct answer
 // promotes a card up a box; a miss sends it back to box 1 (re-learn).
-const BOX_INTERVALS_DAYS = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16 }
+// Boxes 6 and 7 (a month, two months) were added after 1..5: without them a
+// well-known card came back every 16 days forever, which is too often for the
+// long haul. Nothing moves down: a box-5 card simply has further to climb.
+// Keep MAX_BOX in sync with the server's clamp (server/index.js).
+const BOX_INTERVALS_DAYS = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16, 6: 30, 7: 60 }
+export const MAX_BOX = 7
 
 const EMPTY = () => ({ lessonsRead: {}, cards: {}, streak: { count: 0, last: null } })
 
@@ -203,7 +208,7 @@ export function gradeCard(cardId, grade) {
   } else {
     c.correct += 1
     const step = grade === 'easy' ? 2 : 1
-    c.box = Math.min(5, c.box + step)
+    c.box = Math.min(MAX_BOX, c.box + step)
   }
   const interval = BOX_INTERVALS_DAYS[c.box] ?? 0
   const due = new Date()

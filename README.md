@@ -39,7 +39,7 @@ Requirements: Node 18+ (developed on Node 22). The API uses `better-sqlite3` (a 
 |---|---|
 | 📚 **Topics & lessons** | Markdown lessons with code highlighting, reading-time estimates, prev/next nav, and "read" tracking. |
 | 🃏 **Randomized flashcards** | Shuffled every session, with self-grading (**Again / Good / Easy**). Pick a session length (10 / 25 / 50 / all) so a study block is something you can finish. Keyboard throughout: <kbd>←</kbd> <kbd>→</kbd> to move, <kbd>Space</kbd> to flip, <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to grade. |
-| 🧠 **Spaced repetition** | A lightweight **Leitner box** system resurfaces hard cards sooner and eases off mastered ones. |
+| 🧠 **Spaced repetition** | A lightweight **Leitner box** system resurfaces hard cards sooner and eases off mastered ones: seven boxes, from same day up to every 60 days. |
 | 🔥 **Streaks & progress** | Persisted to a **local SQLite database** via a tiny API, so progress survives across browsers and machines. localStorage is a fast offline cache; nothing leaves your machine. |
 | 🔎 **Search everything** | <kbd>⌘K</kbd> (or <kbd>/</kbd>) searches every topic, lesson, flashcard and interview answer — including **lesson body text**, so you can find where something was explained without remembering which topic it was in. |
 | 🌗 **Light & dark themes** | Dark, light, or follow your system. The whole palette is CSS variables, so the theme switches instantly and code blocks follow it too. Both themes are measured to clear WCAG AA contrast. |
