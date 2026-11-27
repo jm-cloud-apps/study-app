@@ -524,6 +524,32 @@
     ]
   },
   {
+    "q": "Say \"It's hot today\", then, with feeling, \"It's so hot!\"",
+    "a": "**Napudot ita.** · **Nagpudoten!**\n**na-** adjective for the plain statement; **nag-…-en** for the exclamation.",
+    "hint": "na- vs nag-…-en",
+    "tags": [
+      "adjectives"
+    ]
+  },
+  {
+    "q": "Say \"Your house is beautiful\" and \"a big problem.\"",
+    "a": "**Napintas ti balaymo.** · **dakkel a problema**\nThe adjective can be the whole predicate, or join a noun with the linker **a**.",
+    "hint": "Predicate first; linker before a consonant.",
+    "tags": [
+      "adjectives",
+      "linker"
+    ]
+  },
+  {
+    "q": "Say \"This is the most delicious pinakbet!\"",
+    "a": "**Daytoy ti kaimasan a pinakbet!**\n**ka-** + *imas* + **-an** = the most delicious.",
+    "hint": "ka-…-an",
+    "tags": [
+      "adjectives",
+      "comparison"
+    ]
+  },
+  {
     "q": "What are the main actor-focus verb affixes?",
     "a": "**ag-** (agbasa, read), **-um-** (gumatang, buy), **mang-** (mangan, eat), and **ma-** for a few verbs (maturog, sleep; mapan, go).",
     "hint": "Four patterns.",
@@ -594,6 +620,41 @@
     ]
   },
   {
+    "q": "Say \"I've read\", \"I'm reading\" and \"They bought (something).\"",
+    "a": "**Nagbasaak.** · **Agbasbasaak.** · **Gimmatangda.**\nCompleted **nag-**; ongoing doubles the first syllable; **-um-** verbs take **-imm-** when completed.",
+    "hint": "Completed, ongoing, completed -um-",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "Say \"I'll go\" and ask \"Will you buy (it)?\"",
+    "a": "**Mapanakto.** · **Gumatangkanto?**\nThe future ending **-to** goes on the pronoun; after a vowel it's **-nto**.",
+    "hint": "-to / -nto",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "Ask your family \"Are you (all) going home on Saturday?\"",
+    "a": "**Agawidkayonto kadi intono Sabado?**\n*agawid* + **-kayo** (you all) + **-nto** (will) + **kadi** (question) + **intono Sabado**.",
+    "hint": "agawid + you all + will",
+    "tags": [
+      "verbs",
+      "time"
+    ]
+  },
+  {
+    "q": "Tell one person \"Eat.\" Then tell the kids \"Go take a bath, all of you.\"",
+    "a": "**Manganka.** · **Agdigoskayo.**\nA command is the neutral verb + **-ka** (one person) or **-kayo** (several).",
+    "hint": "Neutral verb + you",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
     "q": "What do the focus affixes **-en**, **i-** and **-an** focus on?",
     "a": "**-en**: the thing affected (basaen, read it); **i-**: the thing given/put/said (ited, give it); **-an**: the person or place targeted (suratan, write to someone).",
     "hint": "Three kinds of 'thing'.",
@@ -653,6 +714,31 @@
     "tags": [
       "focus",
       "aspect"
+    ]
+  },
+  {
+    "q": "Say \"I bought the coffee\" and \"Look at it!\"",
+    "a": "**Ginatangko ti kape.** · **Kitaem!**\n**-en** focus: the thing affected is the focus; the doer takes the **-ko** set (**-ko**, **-m**).",
+    "hint": "-en focus: the thing is the focus",
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "q": "Ask \"What are you doing?\" and say \"I'll do it.\"",
+    "a": "**Ania ti aramidem?** · **Aramidek.**\nThe **-en** ending fuses with the doer: **-em** (by you), **-ek** (by me), as in lesson 8's table.",
+    "hint": "-en meets -mo / -ko",
+    "tags": [
+      "focus",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Say \"Write to Grandma\" and \"Mom said that you should eat.\"",
+    "a": "**Suratam ni Lola.** · **Imbaga ni Nanang a manganka.**\n**-an** focuses the receiver (*suratan*); **i-** the thing said (*ibaga* → completed **imbaga**).",
+    "hint": "-an and i- verbs",
+    "tags": [
+      "focus"
     ]
   },
   {
@@ -735,6 +821,40 @@
     ]
   },
   {
+    "q": "Say \"I want to eat\" and ask \"Do you want to come?\"",
+    "a": "**Kayatko ti mangan.** · **Kayatmo ti umay?**\n**kayat** + **-ko / -mo**, then **ti** + the neutral verb.",
+    "hint": "kayat + -ko set",
+    "tags": [
+      "pseudo-verbs"
+    ]
+  },
+  {
+    "q": "Say \"I can't speak Ilocano\" and \"I managed to buy a ticket.\"",
+    "a": "**Diak makapagsao iti Ilokano.** · **Nakagatangak iti tiket.**\n**makapag-** / **maka-** = able to; completed **naka-** = managed to.",
+    "hint": "maka- and naka-",
+    "tags": [
+      "pseudo-verbs",
+      "verbs"
+    ]
+  },
+  {
+    "q": "Say \"I didn't go\" two ways.",
+    "a": "**Saanak a napan.** · **Diak napan.**\n**saan** takes the linker; **di** doesn't. The **-ak** jumps onto the negative.",
+    "hint": "saan vs di",
+    "tags": [
+      "negation",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Say \"You're not a student\" and \"I'm not tired.\"",
+    "a": "**Saanka nga estudiante.** · **Saanak a nabannog.**\nPronoun on **saan**, then the linker (**nga** before a vowel).",
+    "hint": "saan + pronoun + linker",
+    "tags": [
+      "negation"
+    ]
+  },
+  {
     "q": "What does the ending **-n** (*-en*, *-on*) add, as in **Nanganakon**?",
     "a": "\"**Already / now**\": **Nanganakon** = I've eaten already; **Mapantayon** = let's go now.",
     "hint": "A tiny time word.",
@@ -792,6 +912,56 @@
     "tags": [
       "particles",
       "syntax"
+    ]
+  },
+  {
+    "q": "Say \"Let's go now!\" and \"He's gone already.\"",
+    "a": "**Mapantayon!** · **Napanen.**\nThe ending **-n** (*-en*, *-on*) adds \"now, already\".",
+    "hint": "-n = now / already",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "Ask gently: \"Come here, please.\"",
+    "a": "**Umayka man ditoy.**\n**man** softens a request.",
+    "hint": "Which particle softens?",
+    "tags": [
+      "particles",
+      "politeness"
+    ]
+  },
+  {
+    "q": "Say \"I can't sleep. It's hot, you see.\"",
+    "a": "**Saanak a makaturog. Napudot ngamin.**\n**ngamin** gives the reason: \"because, you see\".",
+    "hint": "ngamin",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "You just found out where someone's from. Say \"Oh, you're from Vigan!\"",
+    "a": "**Taga-Vigan ka gayam!**\n**gayam** = so it turns out (like Tagalog *pala*).",
+    "hint": "Surprise particle",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "Pass on what you heard: \"Ben's coming, apparently.\" Then guess: \"He'll probably come.\"",
+    "a": "**Umay kano ni Ben.** · **Umay ngata.**\n**kano** = reportedly (like *daw*); **ngata** = probably (like *yata*).",
+    "hint": "kano / ngata",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "Ask \"Have you eaten yet?\" and answer \"Not yet, still not.\"",
+    "a": "**Nanganka kadin?** · **Saan pay laeng.**\n**kadi** + **-n** = \"…yet?\"; **pay laeng** = still.",
+    "hint": "kadi + -n",
+    "tags": [
+      "particles",
+      "questions"
     ]
   },
   {
