@@ -69,6 +69,15 @@
     ]
   },
   {
+    "category": "Everyday Situations",
+    "q": "A cousin asks you the time, then wants to plan a trip to Vigan. Tell them it's two in the afternoon, suggest going on Saturday at nine in the morning, and say you'll go home tonight.",
+    "a": "> *(Ania nga oras ita?)*\n> **Alas dos iti malem.**\n> **Mapantayonto idiay Vigan intono Sabado?**\n> **Alas nueve iti bigat.**\n> **Agawidakto intono rabii.**\n\nBreaking it down:\n- **Alas dos iti malem** = \"two in the afternoon\": a Spanish number for the hour, then **iti bigat / malem** for the part of the day (lesson 12). The phrasebook spells it **a las dos**; both are the same words.\n- **Mapantayonto** = **mapan** (go) + **-tayo** (we, including you) + **-nto** (will). It's the same future build as **Agawidkayonto** in lesson 7.\n- **intono Sabado** / **intono rabii**: **intono** points forward (lesson 12), so it's \"this coming Saturday\" and \"tonight\".\n- **Agawidakto** = **agawid** (go home) + **-ak** (I) + **-to** (will): \"I'll go home.\"\n\n🔑 Don't answer the time with native numbers: **tallo nga oras** means \"three hours\", not \"three o'clock\".",
+    "tags": [
+      "time",
+      "aspect"
+    ]
+  },
+  {
     "category": "Grammar Under Pressure",
     "q": "Say \"I bought a mango\" and then \"I bought the mango\". Explain why the verb changes.",
     "a": "> **Gimmatangak iti mangga.** — \"I bought a mango.\"\n> **Ginatangko ti mangga.** — \"I bought the mango.\"\n\n- The first is **actor focus** (*gumatang* → completed **gimmatang**). The sentence is about **me** (**-ak** set), and the mango is indefinite, marked **iti**.\n- The second is **-en focus** (*gatangen* → completed **ginatang**). The sentence is about **the mango**, marked **ti** and definite, and I'm the doer in the **-ko** set.\n\n🔑 Choosing the focus is also how Ilocano says *a* vs *the*. When the object is specific (*the* mango you pointed at), reach for the **-en** form.",
