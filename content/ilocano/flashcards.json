@@ -59,6 +59,15 @@
     ]
   },
   {
+    "q": "Say \"Ana is beautiful\" and \"The food is delicious.\" Which word comes first?",
+    "a": "**Napintas ni Ana.** · **Naimas ti taraon.**\nThe describing word (the predicate) comes first, then the subject with its marker.",
+    "hint": "Predicate first, like Tagalog.",
+    "tags": [
+      "foundations",
+      "syntax"
+    ]
+  },
+  {
     "q": "How do you ask \"How are you?\" to one person, and to an elder or a group?",
     "a": "**Kumustaka?** to one person; **Kumustakayo?** to several people or politely to one older person.",
     "hint": "The pronoun ending changes.",
@@ -202,6 +211,40 @@
     ]
   },
   {
+    "q": "Say \"I'm hungry\", \"You're clever\" and \"They came.\"",
+    "a": "**Mabisinak.** · **Nalaingka.** · **Immayda.**\nThe pronoun is an ending on the first word: **-ak** (I), **-ka** (you), **-da** (they).",
+    "hint": "-ak set endings.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Say \"my house\", \"your name\" and \"your dog.\"",
+    "a": "**balayko** · **naganmo** · **asom**\n**-ko / -mo** stay whole after a consonant and shrink to **-k / -m** after a vowel (*aso* → **asom**).",
+    "hint": "-ko set endings; watch the last sound.",
+    "tags": [
+      "pronouns",
+      "possession"
+    ]
+  },
+  {
+    "q": "A host offers food to you and your companion. Say \"We've already eaten.\"",
+    "a": "**Nangankamin.**\n**-kami** = we, not you (the host wasn't eating with you); **-n** = already.",
+    "hint": "Which \"we\" leaves the listener out?",
+    "tags": [
+      "pronouns",
+      "politeness"
+    ]
+  },
+  {
+    "q": "Someone asks **Siasino ti napan?** (\"Who went?\"). Answer \"Me.\" Then say \"*You're* the clever one.\"",
+    "a": "**Siak.** · **Sika ti nalaing.**\nStand-alone pronouns, for a one-word answer or for emphasis.",
+    "hint": "siak, sika…",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
     "q": "Which marker does the jobs of both Tagalog *ang* and *ng*?",
     "a": "**ti** (plural **dagiti**). It marks the subject, the owner and the doer; **word order and the verb** tell them apart.",
     "hint": "Ilocano has fewer markers.",
@@ -255,6 +298,47 @@
     "q": "How can Ilocano make a noun plural without **dagiti**?",
     "a": "By **doubling a sound** in the noun: **ubing → ubbing** (children), **lalaki → lallaki** (men), **anak → annak**.",
     "hint": "Gemination again.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Say \"The house is big\" and \"the dog's name.\"",
+    "a": "**Dakkel ti balay.** · **ti nagan ti aso**\n**ti** marks both the subject and the owner.",
+    "hint": "One core marker does both jobs.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Say \"Ben's dog is big.\"",
+    "a": "**Dakkel ti aso ni Ben.**\n**ti** before the common noun (*aso*), **ni** before the name (*Ben*, the owner).",
+    "hint": "Thing or name?",
+    "tags": [
+      "markers",
+      "possession"
+    ]
+  },
+  {
+    "q": "Say \"I bought (some) bread\" and \"I went to Vigan.\"",
+    "a": "**Gimmatangak iti tinapay.** · **Napanak idiay Vigan.**\n**iti** = *a / some* thing after an actor verb; **idiay** for a named or distant place.",
+    "hint": "iti for \"some\", idiay for a named place.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Say \"Give it to Ben\" and \"Grandma came.\"",
+    "a": "**Itedmo ken ni Ben.** · **Immay ni Lola.**\n**ken ni** = to a named person; **ni** = a named person in the core.",
+    "hint": "Names take ni / ken ni.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Say \"coffee and milk\" and \"coffee or tea.\"",
+    "a": "**kape ken gatas** · **kape wenno tsaa**",
+    "hint": "ken / wenno",
     "tags": [
       "markers"
     ]
@@ -324,6 +408,58 @@
     "hint": "property + -k / -m.",
     "tags": [
       "possession"
+    ]
+  },
+  {
+    "q": "Say \"Come here\" and ask \"Is the book there (by you)?\"",
+    "a": "**Umayka ditoy.** · **Adda dita ti libro?**\n**ditoy** = here (by me), **dita** = there (by you).",
+    "hint": "here / there by you",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "Your friend is holding something. Say \"This is delicious\" about your own plate, then \"That's mine\" about theirs.",
+    "a": "**Naimas daytoy.** · **Kukuak dayta.**\n**daytoy** = near me; **dayta** = near the listener.",
+    "hint": "Choose by who's holding it.",
+    "tags": [
+      "deixis",
+      "possession"
+    ]
+  },
+  {
+    "q": "Ask \"Is this yours?\" and answer \"Yes, it's mine.\"",
+    "a": "**Kukuam kadi daytoy?** · **Wen, kukuak.**",
+    "hint": "kukua + owner ending",
+    "tags": [
+      "possession",
+      "questions"
+    ]
+  },
+  {
+    "q": "Say \"Someone came\" and \"No one came.\"",
+    "a": "**Adda ti immay.** · **Awan ti immay.**\n**adda / awan** also make \"someone\" and \"no one\".",
+    "hint": "adda vs awan",
+    "tags": [
+      "existence"
+    ]
+  },
+  {
+    "q": "Ask \"Where's Grandma?\" and, on the phone, \"Where are you?\"",
+    "a": "**Ayanna ni Lola?** · **Ayanmo?**\n**ayan** (location) + an owner ending.",
+    "hint": "ayan…",
+    "tags": [
+      "existence",
+      "questions"
+    ]
+  },
+  {
+    "q": "Say \"I have the key (on me)\" and \"I don't have it (on me).\"",
+    "a": "**Adda ti tulbek kaniak.** · **Awan kaniak.**\nThe owner goes in the oblique (**kaniak**) for \"on me right now\".",
+    "hint": "adda / awan + kaniak",
+    "tags": [
+      "existence",
+      "pronouns"
     ]
   },
   {
