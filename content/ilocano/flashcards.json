@@ -866,6 +866,15 @@
     ]
   },
   {
+    "q": "What does **kita** mean in Ilocano, and why can it trip up a Tagalog speaker?",
+    "a": "In Ilocano, **kita** means **kind, type** or **look, appearance** (and also \"wages\"), and it's the root of **kitaen** (see it). In Tagalog, **kita** is mostly the pronoun pair \"I … you\" (*Mahal kita*). Only the \"wages / income\" sense is shared.",
+    "hint": "Ilocano: kind, look. Tagalog: I-you.",
+    "tags": [
+      "tagalog",
+      "vocabulary"
+    ]
+  },
+  {
     "q": "What is **Biag ni Lam-ang**?",
     "a": "\"The Life of Lam-ang\": the Ilocano epic, whose hero talks at birth and is brought back to life by his rooster and dog.",
     "hint": "An epic.",

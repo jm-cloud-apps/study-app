@@ -70,7 +70,7 @@ Ilocano food is famous and worth knowing by name: **pinakbet** (vegetables stewe
 | **bigat** | heavy | **morning** |
 | **sabong** | cockfight | **flower** |
 | **mano** | the hand-blessing gesture | **how much / how many** |
-| **kita** | we/I-you; income | **to see** (also "kind, type") |
+| **kita** | **I … you** (*ko + ka*); also "seen" and "income" | **kind, type; look, appearance**; also "wages". It's the root of **kitaen** (see it) |
 
 And the near-misses that are actually helpful: **ditoy** (*dito*), **aldaw** (*araw*), **adda** (like *may/mayroon*), **laeng** (*lang*), **gayam** (*pala*), **kano** (*daw*).
 
