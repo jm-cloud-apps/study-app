@@ -35,7 +35,8 @@ Add **maka-** to the root and you get "able to":
 | **gumatang** (buy) | **makagatang** | **nakagatang** |
 | **agsao** (speak) | **makasao** | **nakasao** |
 
-> **Makasaoka iti Ilokano?** — "Can you speak Ilocano?" — **Bassit laeng.** — "Just a little."
+> **Agsasaoka iti Ilokano?** — "Do you speak Ilocano?" (the ongoing form of *agsao*) — **Bassit laeng.** — "Just a little."
+> **Diak makapagsao iti Ilokano.** — "I can't speak Ilocano." (*makapag-* is the "able to" form of *ag-* verbs)
 > **Saanak a makaturog.** — "I can't sleep."
 > **Nakagatangak iti tiket.** — "I managed to buy a ticket."
 
@@ -63,16 +64,20 @@ Remember **di** + **-ko** = **diak** (not *diko*): **Diak ammo** ("I don't know"
 
 ## Don't!
 
-For a negative command, use **dika** (to one person) or **dikay** / **dikayo** (to several):
+For a negative command, put the pronoun on **di**: **dika** (you), **dikayo** (you all). With a "me" in it, the fused ending from lesson 3 appears:
 
-> **Dika agdanag.** — "Don't worry."
 > **Dika mapan.** — "Don't go."
+> **Dinak ig-igaman.** — "Don't touch me."
+
+A gentler way, closer to "please don't", uses **saan** with **koma** ("I wish, should"):
+
+> **Saanmo koma iparuar ti aso.** — "Please don't take the dog out."
 
 ## Small but useful negatives
 
 | Phrase | Meaning |
 |---|---|
-| **Saan pay.** | Not yet. |
+| **Saan pay.** | Not yet. (for "not there yet", **Awan pay.**) |
 | **Saan unay.** | Not very / not really. |
 | **Saan a mabalin.** | Not allowed / can't be done. |
 | **Awan ti problema.** | No problem. |
@@ -99,4 +104,4 @@ Ilocanos rarely say a bare **Saan** to an offer, especially of food. Soften it:
 - **maka-** = able to (**makaturog**, **makasao**); for *-en/-an/i-* verbs it's **ma-** (**makita**, **maawatan**).
 - **saan/haan** + linker; **di** without; **awan** for existence.
 - Pronouns move onto the negative: **Saanak a…**, **Diak…** (never *diko*).
-- **Dika…** = don't. **Saan pay** = not yet. **Diak ammo** = I don't know.
+- **Dika…** = don't (**Dinak ig-igaman** = don't touch me). **Saan pay** = not yet. **Diak ammo** = I don't know.

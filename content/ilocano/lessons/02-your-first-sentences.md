@@ -30,7 +30,9 @@ The first thirty seconds decide how a conversation goes. Ilocano speakers, espec
 - **met** = "too, also". It also softens a reply, so **Naimbag met** feels warmer than a bare *naimbag*.
 - **sika** = you, the stand-alone form you use when "you" is the whole answer.
 
-To an elder, switch to the plural **kayo** and add **apo** (lesson 12): **Naimbag met, apo. Dakayo?**
+You'll hear **Mayat met** ("fine, too") just as often. **mayat** means "fine, willing", and **Mayat met, agyamanak** is a perfectly natural reply.
+
+To an elder, switch to the plural **kayo** and add **apo** (lesson 13): **Naimbag met, apo. Dakayo?**
 
 ## Yes, no, and thank you
 
@@ -41,8 +43,10 @@ To an elder, switch to the plural **kayo** and add **apo** (lesson 12): **Naimba
 | **Agyamanak.** | Thank you. (also spelled *agyamannak*) |
 | **Agyamanak unay.** | Thank you very much. |
 | **Dios ti agngina.** | "God will repay you": a deep, heartfelt thank-you |
-| **Awan ti anianna.** | It's nothing / you're welcome |
-| **Pakawanennak.** | I'm sorry / forgive me. |
+| **Awan ti anyaman na.** | You're welcome / it's nothing |
+| **Pangngaasi.** | Please. (often **Pangngaasim** / **Pangngaasiyo**, "your kindness") |
+| **Pakawanennak.** | Excuse me (to get attention); forgive me |
+| **Dispensarennak.** | I'm sorry. |
 
 > ⚠️ If you know Tagalog: **saan** in Ilocano means **no**, not "where". It's the single most famous trap between the two languages.
 
@@ -51,6 +55,8 @@ To an elder, switch to the plural **kayo** and add **apo** (lesson 12): **Naimba
 > **Ania ti naganmo?** — "What's your name?" (*ania* = what, *nagan* = name, *-mo* = your)
 > **Ti naganko ket Miguel.** — "My name is Miguel."
 > **Siak ni Miguel.** — "I'm Miguel."
+
+> **Naragsakak a maam-ammoka.** — "Nice to meet you." (*naragsak* = happy, *maam-ammo* = to get to know)
 
 **ni** is the marker for a person's name (lesson 4), and **siak** is the stand-alone "I". **ket** links a topic to what's said about it, like a spoken "is" here.
 
@@ -76,6 +82,8 @@ To an elder, switch to the plural **kayo** and add **apo** (lesson 12): **Naimba
 | **Inkamin.** | We're going now. |
 | **Sige.** | OK / bye (very common) |
 | **Kastan.** / **Kasta pay.** | Till then / so long. |
+| **Agpakadaakon.** | Goodbye (I'm taking my leave): the formal one |
+| **Agaluadka.** | Take care. |
 
 The **-n** at the end of *innakon* and *inkamin* means "now, already". It's one of the most useful little pieces of Ilocano (lesson 10).
 

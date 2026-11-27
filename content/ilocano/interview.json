@@ -19,7 +19,7 @@
   {
     "category": "Everyday Situations",
     "q": "You're at a market stall. Ask the price, react that it's expensive, ask for a cheaper one, and buy two.",
-    "a": "> **Manang, mano daytoy?**\n> *(Singkuenta.)*\n> **Ay, nangina met! Adda kadi nalaka?**\n> *(Daytoy, kuarenta.)*\n> **Sige, gumatangak iti dua. Agyamanak!**\n\nNotes:\n- **Manang** for an older woman vendor is friendly, not presumptuous.\n- **mano** = how much; **daytoy** = this (near me). Ask about the item in *her* hand with **dayta**.\n- Prices come back in **Spanish numbers** (*singkuenta*, *kuarenta*) or English: not the native *limapulo*.\n- **gumatangak iti dua**: actor-focus *gumatang* + **-ak**; **iti** because \"two (of them)\" is indefinite.",
+    "a": "> **Manang, mano daytoy?**\n> *(Singkuenta.)*\n> **Ay, nangina met! Adda kadi nalaklaka?**\n> *(Daytoy, kuarenta.)*\n> **Sige, gumatangak iti dua. Agyamanak!**\n\nNotes:\n- **Manang** for an older woman vendor is friendly, not presumptuous.\n- **mano** = how much; **daytoy** = this (near me). Ask about the item in *her* hand with **dayta**.\n- Prices come back in **Spanish numbers** (*singkuenta*, *kuarenta*) or English: not the native *limapulo*.\n- **gumatangak iti dua**: actor-focus *gumatang* + **-ak**; **iti** because \"two (of them)\" is indefinite.\n- **nalaklaka** = cheaper: doubling the first syllable of the root makes a comparative (lesson 6).",
     "tags": [
       "numbers",
       "shopping"
@@ -41,6 +41,22 @@
     "tags": [
       "questions",
       "culture"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You're in Vigan and need to get to the cathedral. Ask a passer-by the way, understand \"turn left, then straight\", then take a tricycle and ask the fare.",
+    "a": "> **Manong, kasano ti mapan idiay katedral?**\n> *(Kumannigidka, sa dumiretsoka. Asideg laeng.)*\n> **Agyamanak, manong!**\n\nOn the tricycle:\n\n> **Manu ti plete inggana idiay katedral?**\n> *(Beinte.)*\n> … **Para, manong! Ditoy laeng. Agyamanak!**\n\nNotes:\n- **Kasano ti mapan idiay ___?** is the all-purpose \"how do I get to ___?\"\n- **Kumannigidka** (turn left) and **dumiretsoka** (go straight) are **-um-** verbs as commands with **-ka**; **sa** = \"then\".\n- **Para!** stops any jeepney or tricycle in the country; **Ditoy laeng** pins the spot.",
+    "tags": [
+      "travel"
+    ]
+  },
+  {
+    "category": "Everyday Situations",
+    "q": "You feel ill on a trip. Tell your host you're sick, that your stomach hurts, and that you need a doctor; then thank them.",
+    "a": "> **Manang, agsakitak. Agsakit ti tianak.**\n> **Masapulko ti doktor.**\n> *(…)*\n> **Agyamanak unay, manang.**\n\nBreaking it down:\n- **Agsakitak** = *ag-* + *sakit* (pain, illness) + *-ak*: \"I'm sick.\"\n- **Agsakit ti tianak** = \"my stomach (*tian* + *-k*) hurts\". Swap the body part: **ulok** (my head).\n- **Masapulko** = \"I need\": *masapul* + *-ko* (lesson 9).\n\nIn a real emergency, the one-word versions carry: **Tulong!** (help) and **Agannadka!** (look out).",
+    "tags": [
+      "emergency"
     ]
   },
   {

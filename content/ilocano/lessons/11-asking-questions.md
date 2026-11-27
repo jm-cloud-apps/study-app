@@ -22,11 +22,11 @@ Answer **Wen** (yes) or **Saan / Haan** (no). Repeating the key word is also nat
 | **Ania?** | What? | **Ania ti naganmo?** — What's your name? |
 | **Siasino?** | Who? | **Siasino dayta?** — Who's that? |
 | **Sadino?** | Where (to / at)? | **Sadino ti papanam?** — Where are you going? |
-| **Ayan** | Where is (it)? | **Ayanna ti banio?** — Where's the bathroom? |
+| **Ayan** | Where is (it)? | **Ayanna ti banio?** / **Ayan ti banio?** — Where's the bathroom? |
 | **Kaano?** | When? | **Kaano ti fiesta?** — When's the fiesta? |
 | **Apay?** | Why? | **Apay?** — Why? |
 | **Kasano?** | How? | **Kasano ti mapan idiay?** — How do you get there? |
-| **Mano?** | How many / how much? | **Mano daytoy?** — How much is this? |
+| **Mano?** / **Manu?** | How many / how much? | **Mano daytoy?** — How much is this? |
 
 > 💡 In speech **ania ti** often shortens to **aniat'**: **Aniat' naganmo?** You'll hear it far more than you'll read it.
 
@@ -66,8 +66,8 @@ With **ania**, **siasino** and **sadino**, Ilocano usually uses **ti** instead: 
 |---|---|
 | **Ania ti Ilokano ti "thank you"?** | What's the Ilocano for "thank you"? |
 | **Ania ti kayat a sawen ti "bigat"?** | What does "bigat" mean? |
-| **In-inayad man.** | Slower, please. |
-| **Ulitem man?** | Could you say it again? |
+| **Agsasaoka iti Inggles?** | Do you speak English? |
+| **Adda kadi tao ditoy nga agsasao iti Inggles?** | Is there someone here who speaks English? |
 
 ## Answering who/what/where
 

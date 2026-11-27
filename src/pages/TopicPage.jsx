@@ -52,6 +52,14 @@ export default function TopicPage() {
               🃏 {cards.due} due · study
             </Link>
           )}
+          {topic.lessons.length > 1 && (
+            <Link
+              to={`/review/${topic.id}`}
+              className="rounded-xl border border-line/10 bg-fill/5 px-4 py-2 font-medium text-body hover:bg-fill/10"
+            >
+              📝 Review sheet
+            </Link>
+          )}
           {topic.interview.length > 0 && (
             <Link
               to={`/interview/${topic.id}`}

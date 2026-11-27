@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { TOPICS, ALL_FLASHCARDS, ALL_INTERVIEW } from '../content/loadContent.js'
-import { topicLessonProgress, getCardStats, getStreak } from '../lib/progress.js'
+import { TOPICS, ALL_FLASHCARDS, ALL_INTERVIEW, getTopic } from '../content/loadContent.js'
+import { topicLessonProgress, getCardStats, getStreak, isLessonRead } from '../lib/progress.js'
+import { getRecentLesson } from '../lib/recent.js'
 import { encouragement } from '../lib/encouragement.js'
 
 function ProgressBar({ value, total, accent }) {
@@ -75,6 +76,47 @@ function TodayStrip({ lessonsRead, lessonsTotal, cards }) {
   )
 }
 
+// "Pick up where you left off": the last lesson opened on this device. If it
+// has since been marked read, point at the next unread lesson in that topic
+// instead; if the whole topic is done, show nothing rather than nag.
+function ResumeCard() {
+  const recent = getRecentLesson()
+  const topic = recent && getTopic(recent.topicId)
+  if (!topic) return null
+  const at = topic.lessons.findIndex((l) => l.slug === recent.slug)
+  if (at === -1) return null
+  let index = at
+  if (isLessonRead(topic.id, topic.lessons[at].slug)) {
+    const after = topic.lessons.findIndex((l, i) => i > at && !isLessonRead(topic.id, l.slug))
+    const any = topic.lessons.findIndex((l) => !isLessonRead(topic.id, l.slug))
+    index = after !== -1 ? after : any
+  }
+  if (index === -1) return null
+  const lesson = topic.lessons[index]
+  return (
+    <Link
+      to={`/topic/${topic.id}/lesson/${lesson.slug}`}
+      className="flex items-center gap-4 rounded-2xl border border-brand/40 bg-brand/10 px-5 py-4 transition hover:bg-brand/20"
+    >
+      <span
+        className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-2xl"
+        style={{ background: `${topic.accent}22` }}
+      >
+        {topic.emoji}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-xs text-brand-soft">
+          {index === at ? 'Pick up where you left off' : 'Next up'} · {topic.title}
+        </span>
+        <span className="block truncate font-medium text-strong">
+          {index + 1}. {lesson.title}
+        </span>
+      </span>
+      <span className="text-faint">→</span>
+    </Link>
+  )
+}
+
 const TONE = {
   brand: 'text-brand',
   success: 'text-success',
@@ -123,7 +165,7 @@ export default function Home({ onOpenSearch }) {
               to="/interview"
               className="rounded-xl border border-line/10 bg-fill/5 px-4 py-2 font-medium text-body hover:bg-fill/10"
             >
-              🎤 Interview prep ({ALL_INTERVIEW.length})
+              🎤 Interview &amp; practice ({ALL_INTERVIEW.length})
             </Link>
           )}
           <button
@@ -137,6 +179,8 @@ export default function Home({ onOpenSearch }) {
           </span>
         </div>
       </section>
+
+      <ResumeCard />
 
       <TodayStrip lessonsRead={lessonsRead} lessonsTotal={totalLessons} cards={cards} />
 

@@ -5,6 +5,7 @@ import TopicPage from './pages/TopicPage.jsx'
 import LessonPage from './pages/LessonPage.jsx'
 import FlashcardsPage from './pages/FlashcardsPage.jsx'
 import InterviewPage from './pages/InterviewPage.jsx'
+import ReviewPage from './pages/ReviewPage.jsx'
 import SearchPalette from './components/SearchPalette.jsx'
 import ThemeToggle from './components/ThemeToggle.jsx'
 import { getStreak, hydrate, resetAllProgress, subscribeProgress } from './lib/progress.js'
@@ -20,7 +21,7 @@ function Header({ onOpenSearch }) {
   const streak = getStreak()
   const { pathname } = useLocation()
   return (
-    <header className="sticky top-0 z-20 border-b border-line/10 bg-ink/80 backdrop-blur">
+    <header className="sticky top-0 z-20 print:hidden border-b border-line/10 bg-ink/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <Link to="/" className="flex items-center gap-2.5 group">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-brand-deep text-lg shadow-lg shadow-brand/20">
@@ -111,6 +112,7 @@ export default function App() {
           <Route path="/" element={<Home onOpenSearch={() => setSearchOpen(true)} />} />
           <Route path="/topic/:topicId" element={<TopicPage />} />
           <Route path="/topic/:topicId/lesson/:slug" element={<LessonPage />} />
+          <Route path="/review/:topicId" element={<ReviewPage />} />
           <Route path="/flashcards" element={<FlashcardsPage />} />
           <Route path="/flashcards/:topicId" element={<FlashcardsPage />} />
           <Route path="/interview" element={<InterviewPage />} />
@@ -136,7 +138,7 @@ function Footer() {
   }, [confirming])
 
   return (
-    <footer className="mx-auto max-w-5xl px-4 py-10 text-center text-xs text-faint">
+    <footer className="mx-auto max-w-5xl px-4 py-10 print:hidden text-center text-xs text-faint">
       StudyForge · your progress stays private in this browser ·{' '}
       <Link to="/" className="hover:text-body">
         home

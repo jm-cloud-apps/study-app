@@ -109,15 +109,17 @@ The currency is the **piso** (peso), usually said with Spanish or English number
 | **Mano dayta?** | How much is that (by you)? |
 | **Nangina!** / **Nangina met!** | That's expensive! |
 | **Nalaka.** | It's cheap. |
-| **Adda kadi nalaka?** | Is there a cheaper one? |
+| **Adda kadi nalaklaka?** | Is there a cheaper one? |
 | **Gumatangak iti dua.** | I'll buy two. |
+| **Alaekon.** | I'll take it. |
+| **Diak kayat.** | I don't want it. |
 | **Agyamanak!** | Thanks! |
 
 At a market stall:
 
 > **A:** Manang, mano daytoy?
 > **B:** Singkuenta.
-> **A:** Ay, nangina met! Adda kadi nalaka?
+> **A:** Ay, nangina met! Adda kadi nalaklaka?
 > **B:** Daytoy, kuarenta.
 > **A:** Sige, gumatangak iti dua. Agyamanak!
 
@@ -140,4 +142,4 @@ At a market stall:
 - Number + linker + noun: **dua a balay**.
 - **Spanish numbers** for clock time (**alas tres**), dates (**dose ti Julio**) and usually prices (**beinte pesos**). English numbers are fine too.
 - **ita** now/today · **idi kalman** yesterday · **intono bigat** tomorrow; **idi** = past, **intono** = future.
-- **Mano daytoy?** · **Nangina!** · **Adda kadi nalaka?**
+- **Mano daytoy?** · **Nangina!** · **Adda kadi nalaklaka?**

@@ -77,7 +77,7 @@ Every lesson should include, roughly in order:
    - **Runnable code/command examples** in fenced blocks with a language tag.
    - **Callouts**: `> ⚠️` for gotchas, `> 💡` for tips, `> 🔑` for the central idea.
 4. **## Check yourself** — 2–3 questions that test understanding (no answers; they prompt reflection).
-5. **## Key takeaways** — a short bullet recap.
+5. **## Key takeaways** — a short bullet recap. Keep this exact heading: the topic's **review sheet** page is built from these sections.
 
 Cross-link sibling topics where it helps learning (e.g. Nginx's HTTPS lesson references the PKI topic). Use plain prose references; there's no special link syntax needed between topics.
 
