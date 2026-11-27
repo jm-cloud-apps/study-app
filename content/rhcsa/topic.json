@@ -8,5 +8,9 @@
   "interviewTitle": "Practice tasks",
   "interviewNoun": "practice tasks",
   "interviewEmoji": "🧪",
-  "interviewIntro": "Exam-shaped tasks with worked solutions. Read the task, do it on a scratch VM (or write out the exact commands), then reveal the solution and compare — including the verification step. Every solution ends the way the exam is graded: does it still hold after a reboot?"
+  "interviewIntro": "Exam-shaped tasks with worked solutions. Read the task, do it on a scratch VM (or write out the exact commands), then reveal the solution and compare — including the verification step. Every solution ends the way the exam is graded: does it still hold after a reboot?",
+  "related": [
+    "rhce",
+    "linux"
+  ]
 }

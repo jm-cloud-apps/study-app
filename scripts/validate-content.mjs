@@ -145,6 +145,18 @@ function validateTopic(topicId) {
     if (meta.accent && !/^#[0-9a-fA-F]{3,8}$/.test(meta.accent)) {
       err(`${topicId}/topic.json`, `accent "${meta.accent}" is not a hex color`)
     }
+    if (meta.related !== undefined) {
+      if (!Array.isArray(meta.related)) {
+        err(`${topicId}/topic.json`, '`related` must be an array of topic ids')
+      } else {
+        for (const r of meta.related) {
+          if (r === topicId) err(`${topicId}/topic.json`, '`related` lists the topic itself')
+          else if (!existsSync(join(CONTENT, String(r), 'topic.json'))) {
+            err(`${topicId}/topic.json`, `related topic "${r}" does not exist`)
+          }
+        }
+      }
+    }
   }
 
   const lessonsDir = join(dir, 'lessons')

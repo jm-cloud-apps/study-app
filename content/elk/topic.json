@@ -4,5 +4,8 @@
   "emoji": "🔍",
   "blurb": "Centralized logging and search with Elasticsearch, Logstash, Kibana and Beats: how the inverted index and sharding work, ingesting with Beats/Logstash, the Query DSL, Kibana dashboards, and operating it with index lifecycle management.",
   "accent": "#22d3ee",
-  "order": 9
+  "order": 9,
+  "related": [
+    "observability"
+  ]
 }
