@@ -19,7 +19,7 @@ into the content.
 - [x] 6. **Speaking drill: time and plans.** No drill uses clock time or *intono*. Add one: ask the time, answer with *alas …*, and make a plan for Saturday. — PR #17
 - [x] 7. **Family cards.** Two cards cover lesson 13's family table. Add *nanang / tatang*, *lola / apong baket*, *lakay / baket* (also husband / wife), and *apo* = grandchild. Added three cards using only the forms Wiktionary confirms (*nanang, tatang, anak, asawa, lakay, baket, apo*); Wiktionary also gives *apo* = grandparent (affectionate). — PR #18
 - [x] 8. **Common-verbs reference (lesson 7).** Lesson 7 teaches *ag-* vs *-um-* but never gives a short list of frequent verbs and their class. Add a table built only from verbs already used in the lessons. Lesson 7 already had a 10-verb table, so this added a **Pattern** column and six verbs the lessons and drills use (*gumatang, agbasa, agdigos, aginana*, plus *agrubuat* and *agsardeng* from the phrasebook). — PR #19
-- [ ] 9. **"Check yourself" answers for lessons 12–14.** The questions have no answers anywhere. Add a short answers section (or cards) so learners can check themselves.
+- [x] 9. **"Check yourself" answers for lessons 12–14.** The questions have no answers anywhere. Add a short answers section (or cards) so learners can check themselves. CONTENT_GUIDE says Check-yourself questions carry **no answers** in the lesson, so this went the card route. Six of the nine questions already had a card; added the two missing ones (L12 Q3 *Agawidakto intono Sabado*, L13 Q1 *Naimbag a bigat, apo! Kumustakayo?*). L14 Q2 hinges on *sa* ("then"), which no source confirms (see below). — PR #20
 - [ ] 10. **Tagalog false-friend card for *kita*.** Lesson 13's false-friends table lists *kita*, but no card covers it.
 
 ## Needs a native speaker
@@ -31,5 +31,6 @@ Words a source gave but that look doubtful, or that no source confirmed. Kept ou
 - **saka** ("foot / leg"): widely used, but Wiktionary has no Ilocano entry for it. Not used.
 - **ita a lawas / maudi a lawas** ("this week" / "last week"): Wikivoyage glosses them the other way round (*maudi a lawas* = "this week"), which contradicts lesson 12's *maudi* = last. By the lesson's own words, *ita a lawas* = this week and *maudi a lawas* = last week, but neither is used until someone checks.
 - **inang, amang, apong baket, apong lakay, annak**: in lesson 13's family table, but Wiktionary has no Ilocano entry for any of them (it gives *ama* for "father"). Left in the lesson, kept off the cards until checked.
+- **sa** ("then", as in *Kumannigidka, sa dumiretsoka*): used in lesson 14's Check yourself and the directions drill, but neither Wiktionary, Wikipedia's grammar page nor the phrasebook confirms it. No card built on it.
 
 ## Done
