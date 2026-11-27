@@ -17,7 +17,7 @@ into the content.
 - [x] 4. **Days and time-word cards (lesson 12).** No card for the parts of the day (*bigat / malem / rabii*), *lawas / bulan / tawen*, or *idi* + time vs *intono* + time. Added three cards; also adds **intono umay a lawas** (next week, Wikivoyage). — PR #15
 - [x] 5. **Speaking drill: a jeepney ride.** The only travel drill is asking directions. Add one for the fare, *Para, manong!* and *Ditoy laeng*. The directions drill already covered the fare, *Para* and *Ditoy laeng*, so this became a **bus terminal drill** instead (which bus, ticket price, buy one, when it leaves, does it stop in Vigan), all from the phrasebook's bus section. — PR #16
 - [x] 6. **Speaking drill: time and plans.** No drill uses clock time or *intono*. Add one: ask the time, answer with *alas …*, and make a plan for Saturday. — PR #17
-- [ ] 7. **Family cards.** Two cards cover lesson 13's family table. Add *nanang / tatang*, *lola / apong baket*, *lakay / baket* (also husband / wife), and *apo* = grandchild.
+- [x] 7. **Family cards.** Two cards cover lesson 13's family table. Add *nanang / tatang*, *lola / apong baket*, *lakay / baket* (also husband / wife), and *apo* = grandchild. Added three cards using only the forms Wiktionary confirms (*nanang, tatang, anak, asawa, lakay, baket, apo*); Wiktionary also gives *apo* = grandparent (affectionate). — PR #18
 - [ ] 8. **Common-verbs reference (lesson 7).** Lesson 7 teaches *ag-* vs *-um-* but never gives a short list of frequent verbs and their class. Add a table built only from verbs already used in the lessons.
 - [ ] 9. **"Check yourself" answers for lessons 12–14.** The questions have no answers anywhere. Add a short answers section (or cards) so learners can check themselves.
 - [ ] 10. **Tagalog false-friend card for *kita*.** Lesson 13's false-friends table lists *kita*, but no card covers it.
@@ -30,5 +30,6 @@ Words a source gave but that look doubtful, or that no source confirmed. Kept ou
 - **ngiwat** ("mouth"): Wiktionary marks its own translation as unchecked (`t-check`). Not used.
 - **saka** ("foot / leg"): widely used, but Wiktionary has no Ilocano entry for it. Not used.
 - **ita a lawas / maudi a lawas** ("this week" / "last week"): Wikivoyage glosses them the other way round (*maudi a lawas* = "this week"), which contradicts lesson 12's *maudi* = last. By the lesson's own words, *ita a lawas* = this week and *maudi a lawas* = last week, but neither is used until someone checks.
+- **inang, amang, apong baket, apong lakay, annak**: in lesson 13's family table, but Wiktionary has no Ilocano entry for any of them (it gives *ama* for "father"). Left in the lesson, kept off the cards until checked.
 
 ## Done
