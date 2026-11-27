@@ -760,6 +760,15 @@
     ]
   },
   {
+    "q": "Say \"I'll go home on Saturday\".",
+    "a": "**Agawidakto intono Sabado.** **agawid** (go home) + **-ak** (I) + **-to** (will), then **intono Sabado** (this coming Saturday). Pronoun first, then **-to**.",
+    "hint": "Same build as Mapanakto (I'll go).",
+    "tags": [
+      "time",
+      "aspect"
+    ]
+  },
+  {
     "q": "Ask \"How much is this?\" and react \"That's expensive!\"",
     "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaklaka?** = Is there a cheaper one?)",
     "hint": "mano = how much.",
@@ -783,6 +792,16 @@
     "hint": "Plural for one.",
     "tags": [
       "politeness"
+    ]
+  },
+  {
+    "q": "Greet your grandmother respectfully in the morning, and ask how she is.",
+    "a": "**Naimbag a bigat, apo! Kumustakayo?** **apo** carries the respect, and the plural **-kayo** for one elder adds more, like Spanish *usted*.",
+    "hint": "Two signals of respect: apo, and kayo for one person.",
+    "tags": [
+      "politeness",
+      "family",
+      "phrases"
     ]
   },
   {
