@@ -862,11 +862,21 @@
   },
   {
     "q": "How do you say \"My head hurts\"?",
-    "a": "**Agsakit ti ulok.** The pattern **Agsakit ti ___-k** (\"my ___ hurts\") works for any body part.",
+    "a": "**Agsakit ti ulok.** The pattern **Agsakit ti ___ + my** works for any body part. \"My\" follows the -ko rule: **-k** after a vowel (*ulok*), **-ko** after a consonant (*tianko*).",
     "hint": "ulo = head.",
     "tags": [
       "emergency",
       "pronouns"
+    ]
+  },
+  {
+    "q": "Say \"My tooth hurts\" and \"My stomach hurts\". Why does one end in -ko?",
+    "a": "**Agsakit ti ngipenko.** · **Agsakit ti tianko.** Both *ngipen* (tooth) and *tian* (belly, stomach) end in a consonant, so \"my\" stays whole as **-ko**. After a vowel it shrinks to **-k**: **Agsakit ti matak** (my eye hurts).",
+    "hint": "Lesson 3: -ko after a consonant, -k after a vowel.",
+    "tags": [
+      "emergency",
+      "pronouns",
+      "vocabulary"
     ]
   },
   {

@@ -91,10 +91,23 @@ You can read almost all of these with what you've learned: **Masapulko** (need, 
 | Ilocano | Meaning |
 |---|---|
 | **Agsakit ti ulok.** | My head hurts. (*ulo* = head) |
-| **Agsakit ti tianak.** | My stomach hurts. (*tian* = stomach) |
+| **Agsakit ti tianko.** | My stomach hurts. (*tian* = belly, stomach) |
 | **Adda kadi agas para iti ___?** | Is there medicine for ___? (*agas* = medicine) |
 
-**Agsakit ti ___-k** ("the ___ of mine hurts") works for any body part, which is the most useful single pattern in this table.
+**Agsakit ti ___ + my** ("the ___ of mine hurts") works for any body part, which makes it the most useful single pattern in this table. "My" is the **-ko** ending from lesson 3, so it follows the same rule: **-k** after a vowel (*ulo* → **ulok**), **-ko** after a consonant (*tian* → **tianko**).
+
+| Body part | Ilocano | "My ___ hurts" |
+|---|---|---|
+| head | **ulo** | **Agsakit ti ulok.** |
+| eye | **mata** | **Agsakit ti matak.** |
+| ear | **lapayag** | **Agsakit ti lapayagko.** |
+| nose | **agong** | **Agsakit ti agongko.** |
+| tooth | **ngipen** | **Agsakit ti ngipenko.** |
+| throat | **karabukob** | **Agsakit ti karabukobko.** |
+| hand | **ima** | **Agsakit ti imak.** |
+| belly, stomach | **tian** | **Agsakit ti tianko.** |
+
+> 💡 You may also hear **buksit** for the stomach: the phrasebook's "stomach medicine" is **agas ti sakit iti buksit**.
 
 ## Taking your leave politely
 
@@ -113,5 +126,5 @@ You can read almost all of these with what you've learned: **Masapulko** (need, 
 - **Para!** stops a jeepney; **Ditoy laeng** = just here; **Manu ti plete?** = how much is the fare?
 - Shopping: **Adda kadi dakdakkel / nalaklaka?** · **Alaekon** (I'll take it) · **Diak kayat**.
 - Emergencies: **Tulong!** · **Agannadka!** · **Naiyaw-awanak** (I'm lost) · **Masapulko ti doktor**.
-- **Agsakit ti ___-k** = my ___ hurts.
+- **Agsakit ti ___-k / -ko** = my ___ hurts: **ulok** (head), **matak** (eye), **ngipenko** (tooth), **tianko** (stomach).
 - Leave with **Agyamanak unay, apo. Agaluadkayo.**
