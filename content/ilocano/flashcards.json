@@ -343,6 +343,25 @@
     ]
   },
   {
+    "q": "Say \"a beautiful house\" two ways. Does the meaning change?",
+    "a": "**napintas a balay** = **balay a napintas**. The words can swap places with the same linker **a** in the middle, and the meaning stays the same. Adjective-first is more common in speech.",
+    "hint": "The linker sits between the two words, whichever comes first.",
+    "tags": [
+      "linker",
+      "adjectives"
+    ]
+  },
+  {
+    "q": "Say \"two houses\", \"three children\" and \"this house\". What joins each pair?",
+    "a": "**dua a balay** · **tallo nga ubbing** · **daytoy a balay**. Numbers and demonstratives join their noun with the same linker as adjectives: **a** before a consonant, **nga** before a vowel (*ubbing* starts with a vowel).",
+    "hint": "The same a / nga glue from lesson 6.",
+    "tags": [
+      "linker",
+      "numbers",
+      "deixis"
+    ]
+  },
+  {
     "q": "How do you say \"very delicious\" and \"so delicious!\"?",
     "a": "**Naimas unay** (very) and **Nagimasen!** (*nag- + root + -en*: an exclamation).",
     "hint": "One word after, one wrap-around.",
