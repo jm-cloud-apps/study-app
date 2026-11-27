@@ -6,6 +6,8 @@
 // pull the latest from the server; every change writes localStorage immediately
 // and pushes the full snapshot back to the server (debounced).
 
+import { TOPICS } from '../content/loadContent.js'
+
 const KEY = 'studyforge.progress.v1'
 const API = '/api/state'
 
@@ -15,16 +17,44 @@ const BOX_INTERVALS_DAYS = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16 }
 
 const EMPTY = () => ({ lessonsRead: {}, cards: {}, streak: { count: 0, last: null } })
 
+// ---- Card-id migration ----
+// Cards used to be keyed by position ("ilocano:12"), so adding a card in the
+// middle of a deck moved every later card's progress onto its neighbour. They
+// are now keyed by their question ("ilocano:c:1x9k2a"). Saved progress under an
+// old positional key is moved to the card that sits at that position today, once.
+// Idempotent: new-style keys never look positional, so re-running is a no-op.
+const LEGACY_TO_ID = new Map()
+for (const topic of TOPICS) {
+  for (const card of topic.flashcards) LEGACY_TO_ID.set(card.legacyId, card.id)
+}
+
+export function migrateCardIds(cards) {
+  let changed = false
+  const out = { ...cards }
+  for (const key of Object.keys(cards)) {
+    const id = LEGACY_TO_ID.get(key)
+    if (!id) continue
+    // If the card already has progress under its new id, that's newer: keep it.
+    if (!out[id]) out[id] = cards[key]
+    delete out[key]
+    changed = true
+  }
+  return { cards: out, changed }
+}
+
 function readLocal() {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return EMPTY()
     const parsed = JSON.parse(raw)
-    return {
+    const { cards, changed } = migrateCardIds(parsed.cards || {})
+    const state = {
       lessonsRead: parsed.lessonsRead || {},
-      cards: parsed.cards || {},
+      cards,
       streak: parsed.streak || { count: 0, last: null },
     }
+    if (changed) localStorage.setItem(KEY, JSON.stringify(state))
+    return state
   } catch {
     return EMPTY()
   }
@@ -80,11 +110,17 @@ export async function hydrate() {
     const res = await fetch(API)
     if (!res.ok) return
     const server = await res.json()
-    cache = {
+    const { cards, changed } = migrateCardIds(server.cards || {})
+    const state = {
       lessonsRead: server.lessonsRead || {},
-      cards: server.cards || {},
+      cards,
       streak: server.streak || { count: 0, last: null },
     }
+    if (changed) {
+      save(state) // writes the cache, pushes the migrated snapshot back, notifies
+      return
+    }
+    cache = state
     try {
       localStorage.setItem(KEY, JSON.stringify(cache))
     } catch {

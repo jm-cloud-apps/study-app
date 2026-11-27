@@ -3,7 +3,7 @@
 // A topic is just a folder containing:
 //   topic.json          metadata { id, title, emoji, blurb, order, accent? }
 //   lessons/*.md        Markdown lessons (ordered by their NN- filename prefix)
-//   flashcards.json     array of { q, a, hint?, tags? }
+//   flashcards.json     array of { q, a, hint?, tags? }  (progress is keyed by q)
 //   interview.json      array of { q, a, category?, tags? }  (mock interview Q&A,
 //                       or exam practice tasks — see topic.json's interview* fields)
 //
@@ -48,6 +48,22 @@ function lessonSlugFromPath(path) {
 function readingMinutes(md) {
   const words = md.trim().split(/\s+/).length
   return Math.max(1, Math.round(words / 200))
+}
+
+// Same normalisation the validator uses for its duplicate check, so trivial
+// whitespace or capitalisation edits don't reset a card.
+function normalizeQuestion(q) {
+  return String(q ?? '').trim().replace(/\s+/g, ' ').toLowerCase()
+}
+
+// FNV-1a (32-bit), as base36: short, stable across builds, no dependencies.
+function hashText(text) {
+  let h = 0x811c9dc5
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i)
+    h = Math.imul(h, 0x01000193)
+  }
+  return (h >>> 0).toString(36)
 }
 
 function buildTopics() {
@@ -99,11 +115,22 @@ function buildTopics() {
   for (const [path, mod] of Object.entries(flashcardFiles)) {
     const id = topicIdFromPath(path)
     if (!id || !topics[id]) continue
-    const cards = (mod.default || mod || []).map((c, i) => ({
-      id: `${id}:${i}`,
-      topicId: id,
-      ...c,
-    }))
+    const used = new Set()
+    const cards = (mod.default || mod || []).map((c, i) => {
+      // Progress is keyed by the card's question, not its position, so adding or
+      // reordering cards never moves progress onto a different card. The
+      // validator rejects duplicate questions; the suffix is only a safety net.
+      let cardId = `${id}:c:${hashText(normalizeQuestion(c.q))}`
+      for (let n = 2; used.has(cardId); n++) cardId = `${id}:c:${hashText(normalizeQuestion(c.q))}-${n}`
+      used.add(cardId)
+      return {
+        ...c,
+        id: cardId,
+        // The old positional id, used once to migrate saved progress.
+        legacyId: `${id}:${i}`,
+        topicId: id,
+      }
+    })
     topics[id].flashcards = cards
   }
 

@@ -102,8 +102,10 @@ function validateCards(topicId, path) {
     if (typeof c?.a !== 'string' || !c.a.trim()) err(at, 'missing a non-empty `a`')
     if (c?.tags && !Array.isArray(c.tags)) err(at, '`tags` must be an array')
     if (typeof c?.q === 'string') {
-      const key = c.q.trim().toLowerCase()
-      if (seen.has(key)) warn(at, `duplicate question (also at index ${seen.get(key)})`)
+      // Progress is keyed by the question text (see src/content/loadContent.js),
+      // so two cards with the same question would share one progress record.
+      const key = c.q.trim().replace(/\s+/g, ' ').toLowerCase()
+      if (seen.has(key)) err(at, `duplicate question (also at index ${seen.get(key)}); progress is keyed by the question, so each must be unique`)
       else seen.set(key, i)
     }
   })

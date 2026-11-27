@@ -106,10 +106,14 @@ An array of card objects:
 
 | Field | Required | Notes |
 |---|---|---|
-| `q` | yes | The question (front). One idea per card. |
+| `q` | yes | The question (front). One idea per card. **Unique within the deck**: a learner's progress on a card is keyed by its question text, so the validator rejects duplicates. |
 | `a` | yes | The answer (back). Complete but concise; `\n` renders as a line break. |
 | `hint` | optional | Shown under the question to scaffold recall. |
 | `tags` | optional | Labels that power the flashcards page's **Focus** filter: a tag on 3+ cards (but not on every card) becomes a chip learners can study by. Use a few consistent tags per topic (e.g. an exam or sub-area), not a unique tag per card. |
+
+### Adding, reordering and editing cards
+
+Progress is tied to the **question text**, not the card's position, so you can add cards anywhere in the deck and reorder freely without touching anyone's progress. Changing a card's `q` makes it a new card (its progress starts again), while edits to `a`, `hint` and `tags` keep it. Capitalisation and whitespace changes to `q` don't count.
 
 ### Card text: what renders, and what doesn't
 
