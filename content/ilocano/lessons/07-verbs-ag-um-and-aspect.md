@@ -92,18 +92,26 @@ You don't need to predict this. Learn each verb with the prefix you hear it used
 
 ## Verbs to start with
 
-| Verb | Meaning | Completed |
-|---|---|---|
-| **mangan** | eat | **nangan** |
-| **uminom** | drink | **imminom** |
-| **mapan** | go | **napan** |
-| **umay** | come | **immay** |
-| **agawid** | go home | **nagawid** |
-| **agtrabaho** | work | **nagtrabaho** |
-| **agadal** | study | **nagadal** |
-| **agsao** | speak | **nagsao** |
-| **agluto** | cook | **nagluto** |
-| **maturog** | sleep | **naturog** |
+| Verb | Meaning | Pattern | Completed |
+|---|---|---|---|
+| **mangan** | eat | mang- | **nangan** |
+| **uminom** | drink | -um- | **imminom** |
+| **mapan** | go | ma- | **napan** |
+| **umay** | come | -um- | **immay** |
+| **gumatang** | buy | -um- | **gimmatang** |
+| **agawid** | go home | ag- | **nagawid** |
+| **agtrabaho** | work | ag- | **nagtrabaho** |
+| **agadal** | study | ag- | **nagadal** |
+| **agbasa** | read | ag- | **nagbasa** |
+| **agsao** | speak | ag- | **nagsao** |
+| **agluto** | cook | ag- | **nagluto** |
+| **agdigos** | take a bath | ag- | **nagdigos** |
+| **aginana** | rest | ag- | **naginana** |
+| **agrubuat** | leave, set off | ag- | **nagrubuat** |
+| **agsardeng** | stop | ag- | **nagsardeng** |
+| **maturog** | sleep | ma- | **naturog** |
+
+The **Pattern** column tells you how the completed form is built: **ag-** → **nag-**, **ma-** → **na-**, **mang-** → **nang-**, and **-um-** → **-imm-**. More than half of this table is **ag-** verbs, and they're the easiest to form. Learn each new verb with the pattern you hear it used with.
 
 > **Nanganka?** — "Have you eaten?" This is the classic Ilocano greeting as much as a question. Answer **Wen, nanganakon** ("Yes, I've eaten already"), and expect to be fed anyway.
 
