@@ -13,7 +13,7 @@ Both, and the distinction is small in practice.
 
 Day to day, people use the names interchangeably, and what you'll learn here is what people actually speak in Metro Manila. If a Filipino asks whether you're learning Tagalog or Filipino, either answer is fine.
 
-> 💡 If your family speaks **Ilocano, Cebuano/Bisaya, Kapampangan, Hiligaynon** or another Philippine language, those are genuinely different languages, not accents — related, but not mutually intelligible. Tagalog will still help you enormously, because it's the language of national TV, music, and most people you'll meet in Manila.
+> 💡 If your family speaks **Ilocano, Cebuano/Bisaya, Kapampangan, Hiligaynon** or another Philippine language, those are genuinely different languages, not accents — related, but not mutually intelligible. Tagalog will still help you enormously, because it's the language of national TV, music, and most people you'll meet in Manila. (StudyForge also has an **Ilocano** topic, built to sit alongside this one.)
 
 ## Three things that will feel strange (and one that's a gift)
 

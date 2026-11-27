@@ -51,7 +51,8 @@ content/<topic-id>/
 | `interviewTitle` | optional | Header for the read-and-reveal segment. Defaults to `"Interview prep"`; an exam topic sets `"Practice tasks"`. |
 | `interviewNoun` | optional | What the topic-page button counts. Defaults to `"interview Q&A"` (e.g. `"practice tasks"`). |
 | `interviewEmoji` | optional | Icon for that segment. Defaults to 🎤. |
-| `interviewIntro` | optional | The paragraph under the header. Defaults to the mock-interview instructions. |
+| `interviewIntro` | optional | The paragraph under the header. Defaults to the mock-interview instructions. A language topic relabels the segment as `"Speaking practice"` (see **Tagalog** and **Ilocano**). |
+| `related` | optional | Array of sibling topic ids shown as **Related topics** chips on the topic page (e.g. Tagalog ↔ Ilocano). The validator errors on an unknown id or the topic itself. |
 
 Must be valid JSON (no comments, no trailing commas).
 

@@ -71,6 +71,10 @@ function buildTopics() {
       interviewNoun: meta.interviewNoun || 'interview Q&A',
       interviewEmoji: meta.interviewEmoji || '🎤',
       interviewIntro: meta.interviewIntro || '',
+      // Optional ids of sibling topics, shown as "Related topics" on the topic
+      // page (Tagalog ↔ Ilocano, CKA prep ↔ Kubernetes). Unknown ids are dropped
+      // at render time; the validator flags them.
+      related: Array.isArray(meta.related) ? meta.related : [],
       lessons: [],
       flashcards: [],
       interview: [],

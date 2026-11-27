@@ -1,0 +1,785 @@
+[
+  {
+    "q": "Where is Ilocano mainly spoken, and how big is it?",
+    "a": "Northern Luzon: the Ilocos provinces, La Union, Abra and much of the Cagayan Valley. It's the **third most spoken native language** of the Philippines (about 8–9 million first-language speakers) and the lingua franca of the Cordillera.",
+    "hint": "North of Manila, and more than one region.",
+    "tags": [
+      "foundations"
+    ]
+  },
+  {
+    "q": "Is Ilocano a dialect of Tagalog?",
+    "a": "No. They're **related but separate languages**: a Tagalog speaker can't follow an Ilocano conversation. The grammar machinery (predicate first, markers, focus) is similar, which helps a lot.",
+    "hint": "Related is not the same as mutually intelligible.",
+    "tags": [
+      "foundations",
+      "tagalog"
+    ]
+  },
+  {
+    "q": "What is 'Samtoy'?",
+    "a": "An old name Ilocanos use for their language, from **sao mi ditoy**, \"our language here\".",
+    "hint": "Three words squeezed into one.",
+    "tags": [
+      "foundations",
+      "culture"
+    ]
+  },
+  {
+    "q": "How do you pronounce doubled consonants like the pp in **uppat** (four)?",
+    "a": "**Hold them**: *oop-pat*, like the k-k in \"book-case\". Doubling changes meaning: **anak** (a child) vs **annak** (children).",
+    "hint": "Don't skip the double.",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "What does a hyphen inside a word like **nalam-ek** (cold) tell you?",
+    "a": "It marks a **glottal stop**: the catch in \"uh-oh\". Say *nalam* + catch + *ek*.",
+    "hint": "Think \"uh-oh\".",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "Why is the letter **e** tricky in Ilocano?",
+    "a": "In native words many speakers (especially outside the Ilocos provinces) say it as a central vowel English lacks; in the Ilocos and in Spanish loans it's a plain *e* as in \"bet\". Copy the speakers around you.",
+    "hint": "It depends on region and on whether the word is a loan.",
+    "tags": [
+      "pronunciation"
+    ]
+  },
+  {
+    "q": "What's the default word order of an Ilocano sentence?",
+    "a": "**Predicate first, subject last**, with no verb \"to be\": **Napintas ni Ana** = beautiful / Ana = \"Ana is beautiful.\"",
+    "hint": "The news leads.",
+    "tags": [
+      "foundations",
+      "syntax"
+    ]
+  },
+  {
+    "q": "How do you ask \"How are you?\" to one person, and to an elder or a group?",
+    "a": "**Kumustaka?** to one person; **Kumustakayo?** to several people or politely to one older person.",
+    "hint": "The pronoun ending changes.",
+    "tags": [
+      "phrases",
+      "politeness"
+    ]
+  },
+  {
+    "q": "Give a natural reply to **Kumustaka?**",
+    "a": "**Naimbag met, agyamanak. Sika?** — \"I'm fine too, thanks. And you?\"",
+    "hint": "Good + too + thanks + you?",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "Say \"Good morning\", \"Good afternoon\" and \"Good evening\".",
+    "a": "**Naimbag a bigat**, **Naimbag a malem**, **Naimbag a rabii**. (And **Naimbag nga aldaw** = good day.)",
+    "hint": "naimbag + linker + time of day.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "How do you say \"Thank you\" in Ilocano, and what's the heartfelt version?",
+    "a": "**Agyamanak** (also spelled *agyamannak*); **Agyamanak unay** = thank you very much. **Dios ti agngina** (\"God will repay you\") is the deep, heartfelt thanks.",
+    "hint": "One everyday, one religious.",
+    "tags": [
+      "phrases",
+      "politeness"
+    ]
+  },
+  {
+    "q": "What do **Wen** and **Saan** mean?",
+    "a": "**Wen** = yes. **Saan** (spoken **Haan**) = **no**.",
+    "hint": "Careful if you know Tagalog.",
+    "tags": [
+      "phrases",
+      "tagalog"
+    ]
+  },
+  {
+    "q": "Ask someone's name, and give yours.",
+    "a": "**Ania ti naganmo?** → **Siak ni ___.** or **Ti naganko ket ___.**",
+    "hint": "ania = what, nagan = name.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "How do you say \"I'm from Vigan\"?",
+    "a": "**Taga-Vigan ak.** (Ask: **Taga-anoka?** — \"Where are you from?\")",
+    "hint": "taga- + place.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "What does **Innakon** mean, and when do you say it?",
+    "a": "\"I'm going now.\" A common goodbye. (**Inkamin** = we're going now.) The **-n** means \"now, already\".",
+    "hint": "A goodbye with the 'already' ending.",
+    "tags": [
+      "phrases",
+      "particles"
+    ]
+  },
+  {
+    "q": "How do you say \"I'm sorry / forgive me\"?",
+    "a": "**Pakawanennak.**",
+    "hint": "pakawan = forgive.",
+    "tags": [
+      "phrases"
+    ]
+  },
+  {
+    "q": "What are the **-ak set** endings (the one the sentence is about)?",
+    "a": "**-ak** I · **-ka** you · *(nothing)* he/she · **-ta** we two · **-tayo** we all · **-kami** we (not you) · **-kayo** you all/polite · **-da** they.",
+    "hint": "Starts with -ak, -ka…",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What is the -ak-set ending for \"he/she\"?",
+    "a": "**Nothing at all.** **Nabannog** alone means \"He/she is tired\". Context tells you who.",
+    "hint": "It's invisible.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What's the difference between **-ta**, **-tayo** and **-kami** (\"we\")?",
+    "a": "**-ta** = you and me only; **-tayo** = all of us including you; **-kami** = us but **not** you.",
+    "hint": "Who is included?",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Why is \"my spouse\" **asawak** but \"my house\" **balayko**?",
+    "a": "**-ko** and **-mo** shrink to **-k** and **-m** after a vowel (*asawa* ends in a vowel); after a consonant they stay whole (*balay*).",
+    "hint": "Look at the last letter of the noun.",
+    "tags": [
+      "pronouns",
+      "possession"
+    ]
+  },
+  {
+    "q": "Give the stand-alone pronouns for I, you, he/she and they.",
+    "a": "**siak**, **sika**, **isu / isuna**, **isuda**. (Also **dakami**, **datayo**, **data**, **dakayo**.)",
+    "hint": "Used when the pronoun is the whole answer.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Where does a pronoun ending attach in a sentence?",
+    "a": "To the **first word**, whatever it is: **Napanak** (I went) but **Saanak a napan** (I didn't go): the -ak jumped onto *saan*.",
+    "hint": "Watch it move.",
+    "tags": [
+      "pronouns",
+      "negation"
+    ]
+  },
+  {
+    "q": "What do **kaniak** and **kenka** mean?",
+    "a": "\"To/for me\" and \"to/for you\", the oblique forms. **Itedmo kaniak** = Give it to me.",
+    "hint": "Used after giving or having.",
+    "tags": [
+      "pronouns"
+    ]
+  },
+  {
+    "q": "Break down **Ay-ayatenka** (I love you).",
+    "a": "**ayaten** (love someone, -en focus) in the ongoing form **ay-ayaten** + **-ka**, a fused \"I → you\" ending.",
+    "hint": "Verb + combined pronoun.",
+    "tags": [
+      "pronouns",
+      "verbs"
+    ]
+  },
+  {
+    "q": "Which marker does the jobs of both Tagalog *ang* and *ng*?",
+    "a": "**ti** (plural **dagiti**). It marks the subject, the owner and the doer; **word order and the verb** tell them apart.",
+    "hint": "Ilocano has fewer markers.",
+    "tags": [
+      "markers",
+      "tagalog"
+    ]
+  },
+  {
+    "q": "What does **iti** mark?",
+    "a": "The **oblique**: place, direction, recipient (**iti eskuelaan** = to the school) and an **indefinite object** (**Nangan iti saba** = He ate a banana).",
+    "hint": "to / at / some.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "What's the difference between **ti saba** and **iti saba** after an actor-focus verb?",
+    "a": "**ti saba** = *the* banana (definite); **iti saba** = *a* banana (indefinite).",
+    "hint": "Markers carry 'the' vs 'a'.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Which markers go in front of a person's name?",
+    "a": "**ni** in the core (**Napintas ni Ana**) and **ken ni** in the oblique (**Itedmo ken ni Ben**). Plurals: **da** / **kada**.",
+    "hint": "Names get their own set.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "Say \"the teacher's house\".",
+    "a": "**ti balay ti maestra**: the owner takes **ti**, like English \"of\".",
+    "hint": "house + marker + owner.",
+    "tags": [
+      "markers",
+      "possession"
+    ]
+  },
+  {
+    "q": "What do **ken**, **ket**, **ngem** and **wenno** mean?",
+    "a": "**ken** = and (between nouns), **ket** = and (between clauses, also links a topic), **ngem** = but / than, **wenno** = or.",
+    "hint": "Joining words.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "How can Ilocano make a noun plural without **dagiti**?",
+    "a": "By **doubling a sound** in the noun: **ubing → ubbing** (children), **lalaki → lallaki** (men), **anak → annak**.",
+    "hint": "Gemination again.",
+    "tags": [
+      "markers"
+    ]
+  },
+  {
+    "q": "What are the three words for \"this/that\"?",
+    "a": "**daytoy** (near me), **dayta** (near **you**, the listener), **daydiay** (far from both).",
+    "hint": "Three distances.",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "Your friend is holding a plate. Do you ask **Ania daytoy?** or **Ania dayta?**",
+    "a": "**Ania dayta?**: **dayta** is \"that, near you\", anchored to the listener.",
+    "hint": "Whose side is it on?",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "What do **ditoy**, **dita** and **idiay** mean?",
+    "a": "here, there (by you), over there. **idiay** also means \"to/in\" a named or far place: **idiay Vigan**.",
+    "hint": "Same three distances.",
+    "tags": [
+      "deixis"
+    ]
+  },
+  {
+    "q": "How do you say \"Do you have a car?\"",
+    "a": "**Adda kadi kotsem?**: **adda** (there is) + **kotse** + **-m** (your). There's no verb \"to have\".",
+    "hint": "there-is + your car.",
+    "tags": [
+      "existence"
+    ]
+  },
+  {
+    "q": "How do you say \"There's no coffee\", and why not use **saan**?",
+    "a": "**Awan ti kape.** **awan** denies existence or having; **saan** negates verbs, adjectives and identities.",
+    "hint": "The opposite of adda.",
+    "tags": [
+      "existence",
+      "negation"
+    ]
+  },
+  {
+    "q": "Ask \"Where's the bathroom?\"",
+    "a": "**Ayanna ti banio?**: **ayan** (location) + **-na** + the thing.",
+    "hint": "ayan + its.",
+    "tags": [
+      "existence",
+      "questions"
+    ]
+  },
+  {
+    "q": "What does **Addadtoyak!** mean, and when do you say it?",
+    "a": "\"I'm here!\": what you call out on arriving at someone's house. (**adda** + **ditoy** + **-ak**)",
+    "hint": "adda + here + I.",
+    "tags": [
+      "existence",
+      "culture"
+    ]
+  },
+  {
+    "q": "How do you say \"mine\" and \"yours\"?",
+    "a": "**kukuak** and **kukuam** (*kukua* = property + owner ending). **kukuana** = his/hers.",
+    "hint": "property + -k / -m.",
+    "tags": [
+      "possession"
+    ]
+  },
+  {
+    "q": "What prefix do most Ilocano adjectives start with?",
+    "a": "**na-**: **napintas** (beautiful), **naimas** (delicious), **nalaing** (clever), **napudot** (hot). Exceptions include **dakkel** (big) and **bassit** (small).",
+    "hint": "Two letters.",
+    "tags": [
+      "adjectives"
+    ]
+  },
+  {
+    "q": "Why is it **naimbag nga aldaw** but **naimbag a bigat**?",
+    "a": "Working rule for the linker: **nga before a vowel** (*aldaw*), **a before a consonant** (*bigat*).",
+    "hint": "Look at the next word's first letter.",
+    "tags": [
+      "linker"
+    ]
+  },
+  {
+    "q": "How do you say \"very delicious\" and \"so delicious!\"?",
+    "a": "**Naimas unay** (very) and **Nagimasen!** (*nag- + root + -en*: an exclamation).",
+    "hint": "One word after, one wrap-around.",
+    "tags": [
+      "adjectives"
+    ]
+  },
+  {
+    "q": "How do you form \"the most ___\"?",
+    "a": "**ka- + root + -an**: **ti kaimasan** (the most delicious), **ti kapudotan** (the hottest).",
+    "hint": "Wrap the root.",
+    "tags": [
+      "adjectives",
+      "comparison"
+    ]
+  },
+  {
+    "q": "Say \"I'm tired\".",
+    "a": "**Nabannogak.**: the adjective **nabannog** + **-ak**. The adjective is the whole predicate.",
+    "hint": "adjective + I.",
+    "tags": [
+      "adjectives",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "What are the main actor-focus verb affixes?",
+    "a": "**ag-** (agbasa, read), **-um-** (gumatang, buy), **mang-** (mangan, eat), and **ma-** for a few verbs (maturog, sleep; mapan, go).",
+    "hint": "Four patterns.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "How do you make the **completed** form of ag-, mang- and ma- verbs?",
+    "a": "Swap **m** for **n**: **ag- → nag-** (nagbasa), **mang- → nang-** (nangan), **ma- → na-** (napan, naturog).",
+    "hint": "One letter changes.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "What's the completed form of an **-um-** verb?",
+    "a": "**-um-** becomes **-imm-**: **gumatang → gimmatang** (bought), **umay → immay** (came), **uminom → imminom** (drank).",
+    "hint": "A double m.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "How do you make the **ongoing** form (\"is doing\")?",
+    "a": "**Double the first syllable of the root**: **agbasa → agbasbasa**, **gumatang → gumatgatang**, **agadal → agad-adal**.",
+    "hint": "Reduplication.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "How is the future shown in Ilocano?",
+    "a": "There's no future form: use the **neutral verb + pronoun + -to** (**-nto** after a vowel): **Mapanakto** (I'll go), **Agawidkayonto** (you'll go home).",
+    "hint": "An ending, after the pronoun.",
+    "tags": [
+      "verbs",
+      "aspect"
+    ]
+  },
+  {
+    "q": "How do you say \"Let's eat!\"",
+    "a": "**Mangantayo!** (or **Mangantayon!**, \"let's eat now\"). Neutral verb + **-tayo**.",
+    "hint": "Neutral verb + we-all.",
+    "tags": [
+      "verbs",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What does **Nanganka?** mean, and how do you answer?",
+    "a": "\"Have you eaten?\": a greeting as much as a question. Answer **Wen, nanganakon** (\"Yes, I've eaten already\").",
+    "hint": "A very Filipino check-in.",
+    "tags": [
+      "verbs",
+      "culture"
+    ]
+  },
+  {
+    "q": "What's the feel difference between **ag-** and **-um-** on the same root?",
+    "a": "**ag-** = repeated, lasting or deliberate; **-um-** = a single action or a change. **agtakder** (be standing) vs **tumakder** (stand up).",
+    "hint": "Habit vs moment.",
+    "tags": [
+      "verbs"
+    ]
+  },
+  {
+    "q": "What do the focus affixes **-en**, **i-** and **-an** focus on?",
+    "a": "**-en**: the thing affected (basaen, read it); **i-**: the thing given/put/said (ited, give it); **-an**: the person or place targeted (suratan, write to someone).",
+    "hint": "Three kinds of 'thing'.",
+    "tags": [
+      "focus",
+      "verbs"
+    ]
+  },
+  {
+    "q": "What's the difference between **Nagbasaak iti libro** and **Binasak ti libro**?",
+    "a": "Same event. The first focuses on **me** and the book is indefinite (*a* book); the second focuses on **the book** (definite), with me as the doer in the -ko set.",
+    "hint": "Which noun is the spotlight?",
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "q": "How do you form the completed form of an **-en** verb?",
+    "a": "Infix **-in-** and drop **-en**: **basaen → binasa**, **gatangen → ginatang**, **aramiden → inaramid**.",
+    "hint": "An infix replaces the suffix.",
+    "tags": [
+      "focus",
+      "aspect"
+    ]
+  },
+  {
+    "q": "What happens when **-en** meets **-ko** or **-mo**?",
+    "a": "They fuse: **-en + ko → -ek**, **-en + mo → -em**. **Ania ti aramidem?** = What are you doing?",
+    "hint": "Not *aramidenmo*.",
+    "tags": [
+      "focus",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "In **Dinalusak ti sala** (I cleaned the living room), what is the **-ak**?",
+    "a": "Not the -ak \"I\" set: it's **-an + -ko** fused (\"by me\"). **-an + mo → -am**.",
+    "hint": "The verb is a -an verb.",
+    "tags": [
+      "focus",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "How do you say \"Give it to me\" and \"Help me\"?",
+    "a": "**Itedmo kaniak.** (i- verb *ited*) and **Tulongannak.** (*tulongan* + fused \"you → me\").",
+    "hint": "Two different foci.",
+    "tags": [
+      "focus",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What's the completed form of **ited** (give) and **ibaga** (say)?",
+    "a": "**inted** and **imbaga**: **i- → in-**, usually **im-** before *b/p*.",
+    "hint": "i- becomes in-.",
+    "tags": [
+      "focus",
+      "aspect"
+    ]
+  },
+  {
+    "q": "Say \"I want coffee\" and \"I need help\".",
+    "a": "**Kayatko ti kape.** and **Masapulko ti tulong.**: the wanter takes the **-ko** set.",
+    "hint": "kayat / masapul + -ko.",
+    "tags": [
+      "pseudo-verbs"
+    ]
+  },
+  {
+    "q": "How do you say \"I don't know\"?",
+    "a": "**Diak ammo.**: **di** + **-k**. Never *diko*.",
+    "hint": "di + I.",
+    "tags": [
+      "pseudo-verbs",
+      "negation"
+    ]
+  },
+  {
+    "q": "What does **maka-** do to a verb?",
+    "a": "Makes it \"be able to\": **makaturog** (be able to sleep), **makasao** (be able to speak). Completed: **naka-**.",
+    "hint": "Potential.",
+    "tags": [
+      "pseudo-verbs",
+      "verbs"
+    ]
+  },
+  {
+    "q": "Ask \"Can you speak Ilocano?\" and reply \"Just a little\".",
+    "a": "**Makasaoka iti Ilokano?** → **Bassit laeng.**",
+    "hint": "maka- + speak + you.",
+    "tags": [
+      "pseudo-verbs",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Say \"I don't understand\" two ways.",
+    "a": "**Saanko a maawatan.** or **Diak maawatan.**",
+    "hint": "saan + linker, or di without.",
+    "tags": [
+      "pseudo-verbs",
+      "negation"
+    ]
+  },
+  {
+    "q": "What's the difference between **saan** and **di** as negatives?",
+    "a": "**saan** (or *haan*) needs a linker: **Saanak a napan**. **di** doesn't: **Diak napan**. Both mean \"I didn't go\".",
+    "hint": "One needs glue.",
+    "tags": [
+      "negation"
+    ]
+  },
+  {
+    "q": "How do you say \"Don't worry\"?",
+    "a": "**Dika agdanag.**: **dika** = don't (to one person).",
+    "hint": "di + ka.",
+    "tags": [
+      "negation",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What do **Saan pay** and **Awan ti problema** mean?",
+    "a": "\"Not yet\" and \"No problem\".",
+    "hint": "pay = yet; awan = there isn't.",
+    "tags": [
+      "negation",
+      "phrases"
+    ]
+  },
+  {
+    "q": "How do you politely refuse more food?",
+    "a": "**Nanganakon, agyamanak.** (\"I've already eaten, thanks\"), or **Bassit laeng, apo** (\"just a little\") if refusing outright would be rude.",
+    "hint": "Rarely a bare 'no'.",
+    "tags": [
+      "culture",
+      "politeness"
+    ]
+  },
+  {
+    "q": "What does the ending **-n** (*-en*, *-on*) add, as in **Nanganakon**?",
+    "a": "\"**Already / now**\": **Nanganakon** = I've eaten already; **Mapantayon** = let's go now.",
+    "hint": "A tiny time word.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What does **kadi** do?",
+    "a": "Marks a **yes/no question**, like Tagalog *ba*: **Adda kadi kape?** = Is there coffee?",
+    "hint": "Question particle.",
+    "tags": [
+      "particles",
+      "questions"
+    ]
+  },
+  {
+    "q": "What does **man** do in **Itedmo man kaniak**?",
+    "a": "**Softens a request**: \"Could you give it to me?\" instead of a flat command.",
+    "hint": "A please-word.",
+    "tags": [
+      "particles",
+      "politeness"
+    ]
+  },
+  {
+    "q": "What do **gayam**, **kano** and **ngata** mean?",
+    "a": "**gayam** = so it turns out (*pala*); **kano** = reportedly (*daw*); **ngata** = maybe/probably (*yata*).",
+    "hint": "How you know something.",
+    "tags": [
+      "particles",
+      "tagalog"
+    ]
+  },
+  {
+    "q": "What do **ngamin** and **ngarud** mean?",
+    "a": "**ngamin** = because, you see (gives a reason); **ngarud** = so, then, indeed (**Wen ngarud!** = Yes, of course!).",
+    "hint": "Reason vs conclusion.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "What do **met**, **laeng** and **pay** mean?",
+    "a": "**met** = too/also, and a softener; **laeng** = only, just; **pay** = still, yet, more (**Maysa pay** = one more).",
+    "hint": "Small but constant.",
+    "tags": [
+      "particles"
+    ]
+  },
+  {
+    "q": "Where do particles go in the sentence?",
+    "a": "**After the first word and its pronoun ending**: **Nabannogak met.** · **Nanganka kadin?**",
+    "hint": "Same slot as the pronouns.",
+    "tags": [
+      "particles",
+      "syntax"
+    ]
+  },
+  {
+    "q": "Give the Ilocano for what, who, where (to), when, why, how, how much.",
+    "a": "**Ania**, **Siasino**, **Sadino**, **Kaano**, **Apay**, **Kasano**, **Mano**. (**Ayan** = where something is.)",
+    "hint": "Eight question words.",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "What does **Papanam?** mean, and how do you answer?",
+    "a": "\"Where are you going?\": a friendly check-in. Answer lightly: **Idiay tiendaan** (to the market) or **Idiay laeng** (just over there).",
+    "hint": "papanan + -m.",
+    "tags": [
+      "questions",
+      "culture"
+    ]
+  },
+  {
+    "q": "How do you ask \"When?\" about the past vs the future?",
+    "a": "**Idi kaano?** (past) vs **Inton kaano?** (future).",
+    "hint": "idi looks back, inton forward.",
+    "tags": [
+      "questions",
+      "time"
+    ]
+  },
+  {
+    "q": "What's **Aniat' naganmo?**",
+    "a": "A spoken contraction of **Ania ti naganmo?**: \"What's your name?\"",
+    "hint": "ania + ti.",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "Count 1–5 in Ilocano.",
+    "a": "**maysa, dua, tallo, uppat, lima.**",
+    "hint": "Hold the doubles.",
+    "tags": [
+      "numbers"
+    ]
+  },
+  {
+    "q": "Count 6–10 in Ilocano.",
+    "a": "**innem, pito, walo, siam, sangapulo.**",
+    "hint": "10 = one ten.",
+    "tags": [
+      "numbers"
+    ]
+  },
+  {
+    "q": "How do you say 20, 100 and 1,000?",
+    "a": "**duapulo**, **sangagasut**, **sangaribu**. (**sanga-** = one, before a unit.)",
+    "hint": "two tens, one hundred, one thousand.",
+    "tags": [
+      "numbers"
+    ]
+  },
+  {
+    "q": "Which number system do Ilocanos use to tell the time?",
+    "a": "**Spanish**: **alas tres** (3 o'clock), **alas siete y medya** (7:30). *Tallo nga oras* would mean \"three hours\".",
+    "hint": "Same as Tagalog.",
+    "tags": [
+      "numbers",
+      "time"
+    ]
+  },
+  {
+    "q": "Say \"yesterday\", \"now/today\" and \"tomorrow\".",
+    "a": "**idi kalman**, **ita**, **intono bigat**.",
+    "hint": "idi = past, intono = future.",
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "q": "Ask \"How much is this?\" and react \"That's expensive!\"",
+    "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaka?** = Is there a cheaper one?)",
+    "hint": "mano = how much.",
+    "tags": [
+      "numbers",
+      "phrases"
+    ]
+  },
+  {
+    "q": "What is **apo** used for?",
+    "a": "**Respect**, like Tagalog *po*: **Wen, apo**, **Agyamanak, apo**. It also means **grandchild**, and is a title of honour (**Apo Dios**).",
+    "hint": "Three meanings.",
+    "tags": [
+      "politeness",
+      "culture"
+    ]
+  },
+  {
+    "q": "How else do you show respect to one older person?",
+    "a": "Use the **plural kayo** instead of ka: **Kumustakayo, apo?** (a T-V distinction, like *usted*).",
+    "hint": "Plural for one.",
+    "tags": [
+      "politeness"
+    ]
+  },
+  {
+    "q": "What do **manong**, **manang** and **ading** mean?",
+    "a": "Older brother/any older man, older sister/any older woman, younger sibling/anyone younger. Used warmly with strangers too.",
+    "hint": "Ilocano words now used nationwide.",
+    "tags": [
+      "culture",
+      "family"
+    ]
+  },
+  {
+    "q": "What do **kabsat**, **uliteg**, **ikit** and **kasinsin** mean?",
+    "a": "sibling, uncle, aunt, cousin.",
+    "hint": "Family words.",
+    "tags": [
+      "family"
+    ]
+  },
+  {
+    "q": "Name three Ilocano dishes.",
+    "a": "**pinakbet** (vegetables with bagoong), **dinengdeng** (vegetable broth), **bagnet** (crispy pork), also **Vigan longganisa**, **empanada**, and **basi** (sugarcane wine).",
+    "hint": "Ilocos food is famous.",
+    "tags": [
+      "culture"
+    ]
+  },
+  {
+    "q": "What are the Ilocano meanings of **bigat**, **sabong** and **mano**?",
+    "a": "**bigat** = morning (not 'heavy'), **sabong** = flower (not 'cockfight'), **mano** = how much/many (not the blessing gesture).",
+    "hint": "False friends with Tagalog.",
+    "tags": [
+      "tagalog",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "What is **Biag ni Lam-ang**?",
+    "a": "\"The Life of Lam-ang\": the Ilocano epic, whose hero talks at birth and is brought back to life by his rooster and dog.",
+    "hint": "An epic.",
+    "tags": [
+      "culture"
+    ]
+  }
+]

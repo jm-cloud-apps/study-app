@@ -8,5 +8,10 @@
   "interviewTitle": "Practice tasks",
   "interviewNoun": "practice tasks",
   "interviewEmoji": "🧪",
-  "interviewIntro": "Exam-shaped tasks with worked solutions, grouped by exam. Read the task, do it on a practice cluster (kind, minikube, or a kubeadm lab), then reveal the solution and compare — especially the verification step. Every solution ends the way the grader checks: is the object in the right namespace, on the right host, in the state the task described?"
+  "interviewIntro": "Exam-shaped tasks with worked solutions, grouped by exam. Read the task, do it on a practice cluster (kind, minikube, or a kubeadm lab), then reveal the solution and compare — especially the verification step. Every solution ends the way the grader checks: is the object in the right namespace, on the right host, in the state the task described?",
+  "related": [
+    "kubernetes",
+    "containers",
+    "openshift"
+  ]
 }

@@ -1,0 +1,15 @@
+{
+  "id": "ilocano",
+  "title": "Ilocano",
+  "emoji": "🏺",
+  "blurb": "Learn Ilocano (Iloko) from zero: its sounds and doubled consonants, the ti/ni/iti markers, the -ak and -ko pronoun sets, verb focus and aspect, the particles that make it sound native, and what changes if you already know Tagalog.",
+  "accent": "#b45309",
+  "order": 11.1,
+  "related": [
+    "tagalog"
+  ],
+  "interviewTitle": "Speaking practice",
+  "interviewNoun": "speaking drills",
+  "interviewEmoji": "🗣️",
+  "interviewIntro": "Situations to answer out loud, with model answers. Read the prompt, say your answer aloud (really aloud: speaking is a different skill from reading), then reveal the model answer and compare."
+}

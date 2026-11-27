@@ -8,5 +8,9 @@
   "interviewTitle": "Practice tasks",
   "interviewNoun": "practice tasks",
   "interviewEmoji": "🧪",
-  "interviewIntro": "Exam-shaped automation tasks with worked solutions. Read the task, write the playbook yourself, then reveal the solution and compare — especially the verification step. Every solution asks the question the exam asks: is it idempotent, and does a second run report zero changes?"
+  "interviewIntro": "Exam-shaped automation tasks with worked solutions. Read the task, write the playbook yourself, then reveal the solution and compare — especially the verification step. Every solution asks the question the exam asks: is it idempotent, and does a second run report zero changes?",
+  "related": [
+    "rhcsa",
+    "linux"
+  ]
 }

@@ -4,5 +4,12 @@
   "emoji": "🇵🇭",
   "blurb": "Learn to actually speak Filipino from zero: the sound system, the ang/ng/sa markers that hold every sentence together, pronouns, the verb focus system and aspect, enclitic particles, numbers and time, politeness and family, and the natural Taglish people really speak.",
   "accent": "#dc2626",
-  "order": 11
+  "order": 11,
+  "related": [
+    "ilocano"
+  ],
+  "interviewTitle": "Speaking practice",
+  "interviewNoun": "speaking drills",
+  "interviewEmoji": "🗣️",
+  "interviewIntro": "Situations to answer out loud, with model answers. Read the prompt, say your answer aloud (really aloud: speaking is a different skill from reading), then reveal the model answer and compare."
 }
