@@ -999,6 +999,78 @@
     ]
   },
   {
+    "q": "Turn \"There's coffee\" and \"You're tired\" into yes/no questions.",
+    "a": "**Adda kadi kape?** · **Nabannogka kadi?**\n**kadi** goes after the first word (and its ending); rising intonation alone also works.",
+    "hint": "One small word",
+    "tags": [
+      "questions",
+      "particles"
+    ]
+  },
+  {
+    "q": "Ask \"Who's that?\" and \"When's the fiesta?\"",
+    "a": "**Siasino dayta?** · **Kaano ti fiesta?**",
+    "hint": "siasino / kaano",
+    "tags": [
+      "questions"
+    ]
+  },
+  {
+    "q": "Ask \"Why did you come?\" and \"How do you know?\"",
+    "a": "**Apay nga immayka?** · **Kasano nga ammom?**\nThe question word comes first, joined by the linker **nga**; the pronoun stays on the verb.",
+    "hint": "Question word + nga",
+    "tags": [
+      "questions",
+      "linker"
+    ]
+  },
+  {
+    "q": "Ask \"Where are you from?\" and answer \"I'm from Laoag.\"",
+    "a": "**Taga-anoka?** · **Taga-Laoag ak.**",
+    "hint": "taga- = from",
+    "tags": [
+      "questions",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Someone asks **Ania ti aramidem?** Answer \"Nothing, just resting.\"",
+    "a": "**Awan, aginanaak laeng.**\n**awan** = nothing; **laeng** = just.",
+    "hint": "awan … laeng",
+    "tags": [
+      "questions",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Ask \"What's the Ilocano for 'thank you'?\" and \"What does 'bigat' mean?\"",
+    "a": "**Ania ti Ilokano ti \"thank you\"?** · **Ania ti kayat a sawen ti \"bigat\"?**\nThe two questions that keep a conversation going while you learn.",
+    "hint": "Ania ti…",
+    "tags": [
+      "questions",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Ask \"Do you speak English?\" and \"Is there someone here who speaks English?\"",
+    "a": "**Agsasaoka iti Inggles?** · **Adda kadi tao ditoy nga agsasao iti Inggles?**\n**agsasao** is the ongoing form of *agsao* (speak).",
+    "hint": "agsasao…",
+    "tags": [
+      "questions",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Ask \"How many children do you have?\" and answer \"Three.\"",
+    "a": "**Mano ti annakmo?** · **Tallo.**\n**mano** = how many; **annak** = children (offspring) + **-mo**.",
+    "hint": "mano + annak",
+    "tags": [
+      "questions",
+      "numbers",
+      "family"
+    ]
+  },
+  {
     "q": "Count 1–5 in Ilocano.",
     "a": "**maysa, dua, tallo, uppat, lima.**",
     "hint": "Hold the doubles.",
@@ -1078,6 +1150,33 @@
     "q": "Ask \"How much is this?\" and react \"That's expensive!\"",
     "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaklaka?** = Is there a cheaper one?)",
     "hint": "mano = how much.",
+    "tags": [
+      "numbers",
+      "phrases"
+    ]
+  },
+  {
+    "q": "Ask \"What time is it now?\" and answer \"Two o'clock.\"",
+    "a": "**Ania nga oras ita?** · **Alas dos.**\nClock time uses Spanish numbers.",
+    "hint": "alas + Spanish number",
+    "tags": [
+      "time",
+      "numbers"
+    ]
+  },
+  {
+    "q": "Ask \"How old are you?\"",
+    "a": "**Mano ti tawenmo?**\nLiterally \"how many are your years?\" (*tawen* = year).",
+    "hint": "mano + tawen",
+    "tags": [
+      "numbers",
+      "questions"
+    ]
+  },
+  {
+    "q": "Say \"This is my first visit.\"",
+    "a": "**Daytoy ti umuna a panagbisitak.**\n**umuna** = first, joined to the noun by the linker **a**.",
+    "hint": "umuna a…",
     "tags": [
       "numbers",
       "phrases"
@@ -1312,6 +1411,23 @@
     "tags": [
       "phrases",
       "politeness"
+    ]
+  },
+  {
+    "q": "At a bus stop, ask \"Where does this bus go?\" Then ask \"Can you show me where it is on the map?\"",
+    "a": "**Sadino ti papanan daytoy a bus?** · **Mabalin nga pakitam kaniak ayanna idiay mapa?**",
+    "hint": "sadino… / mabalin…",
+    "tags": [
+      "travel",
+      "questions"
+    ]
+  },
+  {
+    "q": "Say \"I need your help\" and \"I've had an accident.\"",
+    "a": "**Kasapulak ti tulongmo.** · **Naaksidenteak.**",
+    "hint": "Emergency phrases",
+    "tags": [
+      "emergency"
     ]
   }
 ]
