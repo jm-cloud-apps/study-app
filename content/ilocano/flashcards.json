@@ -803,6 +803,33 @@
     ]
   },
   {
+    "q": "Say \"mother\", \"father\", \"child\" and \"spouse\".",
+    "a": "**nanang** · **tatang** · **anak** · **asawa**. With \"my\": **nanangko**, **tatangko** (consonant, so **-ko**), **anakko**, **asawak** (vowel, so **-k**).",
+    "hint": "The -k / -ko rule from lesson 3.",
+    "tags": [
+      "family",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "What do **lakay** and **baket** mean? How do you say \"my husband\"?",
+    "a": "**lakay** = old man, and affectionately **husband**; **baket** = old woman, and affectionately **wife**. \"My husband\" is **ni lakayko**; \"my wife\" is **ni baketko**.",
+    "hint": "Both end in a consonant, so they take -ko.",
+    "tags": [
+      "family",
+      "vocabulary"
+    ]
+  },
+  {
+    "q": "Give three uses of **apo**.",
+    "a": "1. **Respect**, like Tagalog *po*: **Wen, apo.** 2. **grandchild**. 3. Affectionately, a **grandparent**, and as a title of honour (**Apo Dios**). Context tells you which.",
+    "hint": "Respect, grandchild, grandparent.",
+    "tags": [
+      "family",
+      "politeness"
+    ]
+  },
+  {
     "q": "Name three Ilocano dishes.",
     "a": "**pinakbet** (vegetables with bagoong), **dinengdeng** (vegetable broth), **bagnet** (crispy pork), also **Vigan longganisa**, **empanada**, and **basi** (sugarcane wine).",
     "hint": "Ilocos food is famous.",
