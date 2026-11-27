@@ -67,11 +67,23 @@ Adjective-first is more common in speech.
 
 ## Comparing: ngem
 
-**ngem** ("but") also means "**than**". Put **ad-adda** ("more") before the adjective:
+🔑 **To say "more ___", double the first syllable of the root**, the same move that makes verbs ongoing:
 
-> **Ad-adda a napudot ditoy ngem idiay Baguio.** — "It's hotter here than in Baguio."
+| Plain | Comparative | Meaning |
+|---|---|---|
+| **dakkel** | **dakdakkel** | bigger |
+| **bassit** | **basbassit** | smaller |
+| **nalaka** | **nalaklaka** | cheaper |
+| **nadalus** | **nadaldalus** | cleaner |
+| **naulimek** | **naul-ulimek** | quieter |
 
-In casual speech people often skip **ad-adda** and let **ngem** do the work, or simply contrast: **Napudot ditoy, ngem nalam-ek idiay Baguio.** ("It's hot here, but cold in Baguio.")
+> **Adda kadi dakdakkel?** — "Do you have a bigger one?"
+
+**ngem** ("but") also works as "**than**":
+
+> **Dakdakkel ti balayda ngem ti balaymi.** — "Their house is bigger than ours."
+
+For "more" of a quantity, use **ad-adu** (from **adu**, many): **Ad-adu pay a libro ti nabasak.** — "I've read more books."
 
 ## Compliments you'll actually use
 
@@ -97,5 +109,5 @@ In casual speech people often skip **ad-adda** and let **ngem** do the work, or 
 - An adjective can be the whole predicate: **Nabannogak.** = I'm tired.
 - Join adjective and noun with **a / nga**: roughly **nga before a vowel**, **a before a consonant**.
 - **unay** = very; **nag-…-en** = "so …!"; **ka-…-an** = the most.
-- **ngem** = but / than; **ad-adda** = more.
+- **Comparative = doubled syllable**: *dakkel → dakdakkel* (bigger), *nalaka → nalaklaka* (cheaper); **ngem** = but / than.
 - Compliment the food: **Naimas!**

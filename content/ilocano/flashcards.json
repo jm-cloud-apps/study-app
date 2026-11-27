@@ -69,7 +69,7 @@
   },
   {
     "q": "Give a natural reply to **Kumustaka?**",
-    "a": "**Naimbag met, agyamanak. Sika?** — \"I'm fine too, thanks. And you?\"",
+    "a": "**Naimbag met, agyamanak. Sika?** or **Mayat met, agyamanak. Sika?** — \"I'm fine too, thanks. And you?\"",
     "hint": "Good + too + thanks + you?",
     "tags": [
       "phrases"
@@ -127,9 +127,9 @@
     ]
   },
   {
-    "q": "How do you say \"I'm sorry / forgive me\"?",
-    "a": "**Pakawanennak.**",
-    "hint": "pakawan = forgive.",
+    "q": "How do you say \"Excuse me\" (to get attention) and \"I'm sorry\"?",
+    "a": "**Pakawanennak** (excuse me / forgive me) and **Dispensarennak** (I'm sorry).",
+    "hint": "One from 'forgive', one from Spanish.",
     "tags": [
       "phrases"
     ]
@@ -302,7 +302,7 @@
   },
   {
     "q": "Ask \"Where's the bathroom?\"",
-    "a": "**Ayanna ti banio?**: **ayan** (location) + **-na** + the thing.",
+    "a": "**Ayanna ti banio?** (or the shorter **Ayan ti banio?**): **ayan** = location.",
     "hint": "ayan + its.",
     "tags": [
       "existence",
@@ -527,9 +527,9 @@
     ]
   },
   {
-    "q": "Ask \"Can you speak Ilocano?\" and reply \"Just a little\".",
-    "a": "**Makasaoka iti Ilokano?** → **Bassit laeng.**",
-    "hint": "maka- + speak + you.",
+    "q": "Ask \"Do you speak Ilocano?\" and reply \"Just a little\".",
+    "a": "**Agsasaoka iti Ilokano?** → **Bassit laeng.** (*agsasao* is the ongoing form of *agsao*, speak.)",
+    "hint": "ongoing speak + you.",
     "tags": [
       "pseudo-verbs",
       "phrases"
@@ -553,9 +553,9 @@
     ]
   },
   {
-    "q": "How do you say \"Don't worry\"?",
-    "a": "**Dika agdanag.**: **dika** = don't (to one person).",
-    "hint": "di + ka.",
+    "q": "How do you make a negative command (\"don't …\")?",
+    "a": "Put the pronoun on **di**: **Dika mapan** (Don't go), **Dikayo…** to several people. With a 'me' in it: **Dinak ig-igaman** (Don't touch me).",
+    "hint": "di + the pronoun.",
     "tags": [
       "negation",
       "phrases"
@@ -716,7 +716,7 @@
   },
   {
     "q": "Ask \"How much is this?\" and react \"That's expensive!\"",
-    "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaka?** = Is there a cheaper one?)",
+    "a": "**Mano daytoy?** → **Nangina met!** (Then: **Adda kadi nalaklaka?** = Is there a cheaper one?)",
     "hint": "mano = how much.",
     "tags": [
       "numbers",
@@ -780,6 +780,102 @@
     "hint": "An epic.",
     "tags": [
       "culture"
+    ]
+  },
+  {
+    "q": "How do you say \"bigger\", \"cheaper\" and \"Their house is bigger than ours\"?",
+    "a": "Double the root's first syllable: **dakdakkel** (bigger), **nalaklaka** (cheaper). **Dakdakkel ti balayda ngem ti balaymi.** (**ngem** = than)",
+    "hint": "The same doubling as ongoing verbs.",
+    "tags": [
+      "adjectives",
+      "comparison"
+    ]
+  },
+  {
+    "q": "How do you say \"Please\" and \"Nice to meet you\"?",
+    "a": "**Pangngaasim** / **Pangngaasiyo** (please, to one / politely), and **Naragsakak a maam-ammoka** (nice to meet you).",
+    "hint": "naragsak = happy.",
+    "tags": [
+      "phrases",
+      "politeness"
+    ]
+  },
+  {
+    "q": "Ask \"How do I get to the market?\"",
+    "a": "**Kasano ti mapan idiay tiendaan?**",
+    "hint": "kasano = how; mapan = go.",
+    "tags": [
+      "travel",
+      "questions"
+    ]
+  },
+  {
+    "q": "What do **Dumiretsoka**, **Kumannigidka** and **Kumannawanka** mean?",
+    "a": "Go straight ahead, turn left, turn right. Each is an **-um-** verb used as a command with **-ka**.",
+    "hint": "Directions.",
+    "tags": [
+      "travel",
+      "verbs"
+    ]
+  },
+  {
+    "q": "How do you stop a jeepney to get off?",
+    "a": "**Para!** (friendlier: **Para, manong!**), and **Ditoy laeng** = just here.",
+    "hint": "One word, used nationwide.",
+    "tags": [
+      "travel"
+    ]
+  },
+  {
+    "q": "Ask \"How much is the fare to Vigan?\"",
+    "a": "**Manu ti plete inggana idiay Vigan?** (*plete* = fare, *inggana* = until/up to)",
+    "hint": "manu = mano.",
+    "tags": [
+      "travel",
+      "numbers"
+    ]
+  },
+  {
+    "q": "What does **Alaekon** mean, and how is it built?",
+    "a": "\"I'll take it (now).\" **alaen** (take it) + **-k** fused to **-ek** + **-on** (now).",
+    "hint": "-en verb + me + already.",
+    "tags": [
+      "phrases",
+      "focus"
+    ]
+  },
+  {
+    "q": "Say \"Help!\", \"Look out!\" and \"I'm lost\".",
+    "a": "**Tulong!** · **Agannadka!** · **Naiyaw-awanak.**",
+    "hint": "Emergency phrases.",
+    "tags": [
+      "emergency"
+    ]
+  },
+  {
+    "q": "Say \"I'm sick\" and \"I need a doctor\".",
+    "a": "**Agsakitak.** and **Masapulko ti doktor.**",
+    "hint": "ag- + sakit; masapul + -ko.",
+    "tags": [
+      "emergency"
+    ]
+  },
+  {
+    "q": "How do you say \"My head hurts\"?",
+    "a": "**Agsakit ti ulok.** The pattern **Agsakit ti ___-k** (\"my ___ hurts\") works for any body part.",
+    "hint": "ulo = head.",
+    "tags": [
+      "emergency",
+      "pronouns"
+    ]
+  },
+  {
+    "q": "How do you say \"Take care\" and the formal \"Goodbye\"?",
+    "a": "**Agaluadka** (to one; **Agaluadkayo** to several or politely) and **Agpakadaakon** (\"I'm taking my leave now\").",
+    "hint": "Leaving politely.",
+    "tags": [
+      "phrases",
+      "politeness"
     ]
   }
 ]

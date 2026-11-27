@@ -91,7 +91,7 @@ Notice that **awan** is followed by **ti**: "absent is the coffee."
 
 To ask where something is, use **ayan** ("location") with an owner ending:
 
-> **Ayanna ti banio?** — "Where's the bathroom?" (*literally* "its location, the bathroom")
+> **Ayanna ti banio?** — "Where's the bathroom?" (*literally* "its location, the bathroom"). Phrasebooks also give the shorter **Ayan ti banio?**, and both are heard.
 > **Ayanna ni Lola?** — "Where's Grandma?"
 > **Ayanmo?** — "Where are you?" (on the phone)
 
